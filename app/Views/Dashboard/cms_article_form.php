@@ -82,24 +82,23 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
+<script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        tinymce.init({
-            selector: '#article_content',
-            height: 400,
-            menubar: false,
-            plugins: [
-                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                'insertdatetime', 'media', 'table', 'help', 'wordcount'
+    ClassicEditor
+        .create(document.querySelector('#article_content'), {
+            toolbar: [
+                'heading', '|', 'bold', 'italic', 'underline', '|',
+                'alignment', '|', 'bulletedList', 'numberedList', '|',
+                'outdent', 'indent', '|',
+                'link', 'blockQuote', 'codeBlock', '|',
+                'undo', 'redo'
             ],
-            toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | code preview fullscreen',
-            content_style: 'body { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 14px; line-height: 1.6; }',
-            automatic_uploads: true,
-            images_upload_url: '/admin/cms/upload-image',
-            relative_urls: false,
-            remove_script_host: false,
-            valid_elements: 'p[class],strong,em,ul,ol,li,h1,h2,h3,h4,h5,h6,a[href|title|target|title],span,img[!src|class|align|width|height]',
-            valid_children: '+body[span],+p[span],+div[span],+span[div]',
-            content_style: 'body { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 14px; line-height: 1.6; }'
+        })
+        .then(editor => {
+            window.articleEditor = editor;
+        })
+        .catch(error => {
+            console.error(error);
         });
+</script>
+<?= $this->endSection() ?>

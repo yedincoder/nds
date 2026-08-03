@@ -23,7 +23,7 @@ class DummyDataSeeder extends Seeder
             'cart_items', 'carts', 'customer_addresses', 'login_attempts', 'activity_logs',
             'audit_logs', 'settings', 'service_packages', 'services', 'service_categories',
             'product_files', 'product_images', 'product_prices', 'products', 'product_categories',
-            'pages', 'article_tags', 'articles', 'tags', 'categories',
+            'pages', 'article_tags', 'articles', 'tags', 'categories', 'testimonials',
         ];
         foreach ($tables as $t) {
             $db->query('SET FOREIGN_KEY_CHECKS = 0');
@@ -402,6 +402,25 @@ class DummyDataSeeder extends Seeder
         ]);
         echo "[+] articles\n";
 
+        // 36. testimonials
+        $dummyTestimonials = [
+            ['customer_name' => 'Ahmad Rizky', 'company' => 'PT Teknologi Nusantara', 'position' => 'CTO', 'title' => 'Platform Terbaik untuk Startup', 'message' => 'NgAppID membantu kami membangun MVP dalam 2 minggu. Fitur yang disediakan lengkap dan mudah dikustomisasi. Highly recommended!', 'rating' => 5, 'status' => 'approved', 'featured' => 1],
+            ['customer_name' => 'Siti Nurhaliza', 'company' => 'CV Digital Kreatif', 'position' => 'CEO', 'title' => 'Solusi E-Commerce yang Lengkap', 'message' => 'Integrasi payment gateway dengan Midtrans sangat mulus. Invoice dan billing system juga sudah ready to use. Sangat puas!', 'rating' => 5, 'status' => 'approved', 'featured' => 1],
+            ['customer_name' => 'Budi Santoso', 'company' => 'Freelance Developer', 'position' => 'Full Stack Developer', 'title' => 'Code Base yang Bersih', 'message' => 'Arsitektur codebase-nya clean dan mengikuti best practice. Membantu saya belajar structure project yang baik untuk production.', 'rating' => 4, 'status' => 'approved', 'featured' => 0],
+            ['customer_name' => 'Diana Putri', 'company' => 'Online Store ID', 'position' => 'Founder', 'title' => 'Support Team yang Responsif', 'message' => 'Tim support NgAppID sangat responsif dan membantu. Ketika kami ada issue di production, mereka langsung merespon dan menyelesaikan.', 'rating' => 5, 'status' => 'approved', 'featured' => 1],
+            ['customer_name' => 'Rudi Hartono', 'company' => 'Tech Startup XYZ', 'position' => 'Product Manager', 'title' => 'Fitur Client Area yang Bagus', 'message' => 'Client area untuk customer management, invoice, dan download produk sangat memudahkan workflow kami. Customer juga senang karena semua terintegrasi.', 'rating' => 4, 'status' => 'pending', 'featured' => 0],
+        ];
+
+        foreach ($dummyTestimonials as $t) {
+            $db->table('testimonials')->insert(array_merge($t, [
+                'uuid' => $this->uuid(),
+                'user_id' => $this->userId,
+                'customer_email' => strtolower(str_replace(' ', '.', $t['customer_name'])) . '@email.com',
+                'created_at' => $now, 'updated_at' => $now,
+            ]));
+        }
+        echo "[+] testimonials (5 dummies)\n";
+
         echo "\n=== Selesai: 1 dummy per tabel user/customer related ===\n";
     }
 
@@ -412,10 +431,10 @@ class DummyDataSeeder extends Seeder
         $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
 
         return sprintf('%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x',
-            $data[0], $data[1], $data[2], $data[3],
-            $data[4], $data[5], $data[6], $data[7],
-            $data[8], $data[9], $data[10], $data[11],
-            $data[12], $data[13], $data[14], $data[15]
+            ord($data[0]), ord($data[1]), ord($data[2]), ord($data[3]),
+            ord($data[4]), ord($data[5]), ord($data[6]), ord($data[7]),
+            ord($data[8]), ord($data[9]), ord($data[10]), ord($data[11]),
+            ord($data[12]), ord($data[13]), ord($data[14]), ord($data[15])
         );
     }
 }

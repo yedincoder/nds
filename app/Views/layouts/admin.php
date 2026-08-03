@@ -704,6 +704,12 @@
                     <span>Billing</span>
                 </a>
             </li>
+            <li class="<?= strpos(uri_string(), 'admin/testimonials') === 0 ? 'active' : '' ?>">
+                <a href="/admin/testimonials">
+                    <i class="fas fa-quote-left"></i>
+                    <span>Testimonials</span>
+                </a>
+            </li>
 
             <li class="menu-header">DUKUNGAN</li>
             <li class="<?= strpos(uri_string(), 'admin/support') === 0 ? 'active' : '' ?>">

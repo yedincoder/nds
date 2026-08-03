@@ -123,6 +123,15 @@ $routes->group('admin', ['filter' => 'permission:users.read'], function ($routes
     $routes->get('billing', '\App\Modules\Billing\Controllers\BillingController::index');
     $routes->get('auth', '\App\Modules\Authentication\Controllers\AuthController::index');
     
+    // Testimonials
+    $routes->get('testimonials', '\App\Modules\Testimonial\Controllers\Admin\TestimonialController::index');
+    $routes->get('testimonials/create', '\App\Modules\Testimonial\Controllers\Admin\TestimonialController::create');
+    $routes->post('testimonials/create', '\App\Modules\Testimonial\Controllers\Admin\TestimonialController::store');
+    $routes->get('testimonials/edit/(:num)', '\App\Modules\Testimonial\Controllers\Admin\TestimonialController::edit/$1');
+    $routes->post('testimonials/update/(:num)', '\App\Modules\Testimonial\Controllers\Admin\TestimonialController::update/$1');
+    $routes->get('testimonials/status/(:num)', '\App\Modules\Testimonial\Controllers\Admin\TestimonialController::toggleStatus/$1');
+    $routes->get('testimonials/delete/(:num)', '\App\Modules\Testimonial\Controllers\Admin\TestimonialController::delete/$1');
+    
     // CMS Management
     $routes->group('cms', function ($routes) {
         $routes->get('dashboard', '\App\Modules\CMS\Controllers\Admin\DashboardController::index');

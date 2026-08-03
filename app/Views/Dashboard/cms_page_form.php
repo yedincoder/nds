@@ -74,23 +74,23 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
 <script>
-tinymce.init({
-    selector: '#page_content',
-    height: 400,
-    menubar: false,
-    plugins: [
-        'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-        'insertdatetime', 'media', 'table', 'help', 'wordcount'
-    ],
-    toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | code preview fullscreen',
-    content_style: 'body { font-family: Inter, Helvetica, Arial, sans-serif; font-size: 14px; }',
-    automatic_uploads: true,
-    images_upload_url: '/admin/cms/upload-image',
-    relative_urls: false,
-    remove_script_host: false,
-});
+    ClassicEditor
+        .create(document.querySelector('#page_content'), {
+            toolbar: [
+                'heading', '|', 'bold', 'italic', 'underline', '|',
+                'alignment', '|', 'bulletedList', 'numberedList', '|',
+                'outdent', 'indent', '|',
+                'link', 'blockQuote', 'codeBlock', '|',
+                'undo', 'redo'
+            ],
+        })
+        .then(editor => {
+            window.pageEditor = editor;
+        })
+        .catch(error => {
+            console.error(error);
+        });
 </script>
 <?= $this->endSection() ?>
