@@ -138,7 +138,7 @@ class AdminDashboardController extends BaseController
         $payments = $db->table('transactions t')
             ->select('t.*, i.invoice_number, u.username, u.email')
             ->join('invoices i', 'i.id = t.invoice_id', 'left')
-            ->join('users u', 'u.id = t.user_id', 'left')
+            ->join('users u', 'u.id = i.user_id', 'left')
             ->orderBy('t.created_at', 'DESC')
             ->limit($perPage, $offset)
             ->get()
