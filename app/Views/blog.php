@@ -16,110 +16,49 @@
 
 <section class="py-5">
     <div class="container">
+        <?php if (!empty($categories)): ?>
+        <div class="text-center mb-5">
+            <?php foreach ($categories as $cat): ?>
+            <a href="/blog" class="btn btn-outline-primary btn-sm me-2 mb-2"><?= esc($cat->name) ?></a>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+
         <div class="text-center mb-5">
             <h2 class="section-title">Artikel Terbaru</h2>
             <p class="section-subtitle">Wawasan, tips, dan update teknologi terbaru dari tim kami</p>
         </div>
         <div class="row g-4">
+            <?php if (!empty($articles)): ?>
+            <?php foreach ($articles as $article): ?>
             <div class="col-md-6 col-lg-4">
                 <div class="product-card h-100">
                     <div class="product-img">
-                        <i class="fas fa-code"></i>
+                        <?php if (!empty($article->thumbnail)): ?>
+                        <img src="<?= esc($article->thumbnail) ?>" alt="<?= esc($article->title) ?>" style="width:100%;height:100%;object-fit:cover;">
+                        <?php else: ?>
+                        <i class="fas fa-newspaper fa-4x"></i>
+                        <?php endif; ?>
                     </div>
                     <div class="card-body">
-                        <span class="badge bg-primary mb-2">Development</span>
-                        <h5>Best Practices CodeIgniter 4</h5>
-                        <p class="text-muted mb-3">Panduan lengkap best practices pengembangan aplikasi dengan CodeIgniter 4.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="text-muted">15 Jan 2026</small>
-                            <a href="#" class="btn btn-sm btn-primary">Baca Selengkapnya</a>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <?php if (!empty($article->category_name)): ?>
+                            <span class="badge-category"><?= esc($article->category_name) ?></span>
+                            <?php endif; ?>
+                            <small class="text-muted"><?= date('d M Y', strtotime($article->published_at ?? '')) ?></small>
                         </div>
+                        <h5><?= esc($article->title) ?></h5>
+                        <p class="text-muted mb-3"><?= esc(substr($article->excerpt ?? '', 0, 100)) ?></p>
+                        <a href="/blog" class="btn btn-sm btn-primary">Baca Selengkapnya</a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="product-card h-100">
-                    <div class="product-img" style="background: linear-gradient(135deg, var(--accent), #9B59B6)">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <div class="card-body">
-                        <span class="badge bg-info mb-2">Security</span>
-                        <h5>Security Best Practices Web App</h5>
-                        <p class="text-muted mb-3">10 langkah keamanan wajib untuk melindungi aplikasi web dari serangan.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="text-muted">10 Jan 2026</small>
-                            <a href="#" class="btn btn-sm btn-primary">Baca Selengkapnya</a>
-                        </div>
-                    </div>
-                </div>
+            <?php endforeach; ?>
+            <?php else: ?>
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">Belum ada artikel yang dipublikasikan.</p>
             </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="product-card h-100">
-                    <div class="product-img" style="background: linear-gradient(135deg, var(--success), #2ECC71)">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-                    <div class="card-body">
-                        <span class="badge bg-success mb-2">Performance</span>
-                        <h5>Optimasi Performa Web App</h5>
-                        <p class="text-muted mb-3">Teknik optimasi performa aplikasi web untuk loading time yang lebih cepat.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="text-muted">05 Jan 2026</small>
-                            <a href="#" class="btn btn-sm btn-primary">Baca Selengkapnya</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="product-card h-100">
-                    <div class="product-img" style="background: linear-gradient(135deg, var(--warning), var(--danger))">
-                        <i class="fas fa-database"></i>
-                    </div>
-                    <div class="card-body">
-                        <span class="badge bg-warning text-dark mb-2">Database</span>
-                        <h5>Optimasi Query Database</h5>
-                        <p class="text-muted mb-3">Teknik optimasi query MySQL/PostgreSQL untuk performa database maksimal.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="text-muted">28 Dec 2025</small>
-                            <a href="#" class="btn btn-sm btn-primary">Baca Selengkapnya</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="product-card h-100">
-                    <div class="product-img" style="background: linear-gradient(135deg, var(--accent), #9B59B6)">
-                        <i class="fas fa-cloud"></i>
-                    </div>
-                    <div class="card-body">
-                        <span class="badge bg-info mb-2">Cloud</span>
-                        <h5>Deploy Aplikasi ke AWS</h5>
-                        <p class="text-muted mb-3">Panduan lengkap deploy aplikasi CodeIgniter ke AWS dengan CI/CD.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="text-muted">22 Dec 2025</small>
-                            <a href="#" class="btn btn-sm btn-primary">Baca Selengkapnya</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="product-card h-100">
-                    <div class="product-img" style="background: linear-gradient(135deg, var(--warning), var(--danger))">
-                        <i class="fas fa-code-branch"></i>
-                    </div>
-                    <div class="card-body">
-                        <span class="badge bg-warning text-dark mb-2">DevOps</span>
-                        <h5>CI/CD Pipeline dengan GitHub Actions</h5>
-                        <p class="text-muted mb-3">Setup pipeline otomatis untuk testing dan deployment aplikasi.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="text-muted">15 Dec 2025</small>
-                            <a href="#" class="btn btn-sm btn-primary">Baca Selengkapnya</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="text-center mt-4">
-            <a href="/blog" class="btn btn-outline-primary">Lihat Semua Artikel</a>
+            <?php endif; ?>
         </div>
     </div>
 </section>

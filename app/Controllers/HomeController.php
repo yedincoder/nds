@@ -3,38 +3,156 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
+use App\Modules\Payment\Models\TransactionModel;
+use App\Modules\Payment\Models\PaymentMethodModel;
 
 class HomeController extends BaseController
 {
     public function index(): string
     {
-        return view('welcome_message', ['title' => 'Home', 'page' => 'home']);
+        $db = \Config\Database::connect();
+        $now = date('Y-m-d H:i:s');
+
+        // Stats
+        $stats = [
+            'total_products'  => $db->table('products')->where('status', 'active')->countAllResults(),
+            'total_services'  => $db->table('services')->where('status', 'active')->countAllResults(),
+            'total_portfolios'=> $db->table('portfolios')->whereIn('status', ['published','featured'])->countAllResults(),
+            'happy_clients'   => $db->table('users')
+                ->join('user_roles ur', 'ur.user_id = users.id')
+                ->join('roles r', 'r.id = ur.role_id')
+                ->where('r.slug', 'customer')
+                ->where('users.status', 'active')
+                ->countAllResults(),
+            'support_tickets' => $db->table('tickets')->countAllResults(),
+            'uptime'          => '99.9',
+        ];
+
+        // Services (limit 3)
+        $services = $db->table('services s')
+            ->select('s.name, s.slug, s.description, s.thumbnail, s.price, s.price_type')
+            ->join('service_categories sc', 'sc.id = s.category_id', 'left')
+            ->where('s.status', 'active')
+            ->orderBy('s.created_at', 'DESC')
+            ->limit(3)
+            ->get()
+            ->getResult();
+
+        // Products (limit 3)
+        $products = $db->table('products p')
+            ->select('p.name, p.slug, p.short_description, p.thumbnail, pp.price, pp.discount_price')
+            ->join('product_prices pp', 'pp.product_id = p.id', 'left')
+            ->where('p.status', 'active')
+            ->orderBy('p.created_at', 'DESC')
+            ->limit(3)
+            ->get()
+            ->getResult();
+
+        // Testimonials (approved only)
+        $testimonials = $db->table('testimonials')
+            ->where('status', 'approved')
+            ->orderBy('featured', 'DESC')
+            ->orderBy('created_at', 'DESC')
+            ->limit(5)
+            ->get()
+            ->getResult();
+
+        // Services icons map
+        $serviceIcons = ['fas fa-code', 'fas fa-mobile-alt', 'fas fa-cloud', 'fas fa-shopping-cart', 'fas fa-shield-alt', 'fas fa-headset', 'fas fa-database', 'fas fa-chart-line'];
+        $serviceColors = ['primary', 'info', 'danger', 'warning', 'primary', 'info', 'danger', 'warning'];
+
+        $data = [
+            'title'  => 'NgAppID - Digital Platform',
+            'page'   => 'home',
+            'stats'  => $stats,
+            'services' => $services,
+            'products' => $products,
+            'testimonials' => $testimonials,
+            'serviceIcons' => $serviceIcons,
+            'serviceColors' => $serviceColors,
+        ];
+
+        return view('welcome_message', $data);
     }
 
     public function about(): string
     {
-        return view('about', ['title' => 'About Us', 'page' => 'about']);
+        $db = \Config\Database::connect();
+
+        $stats = [
+            'total_products'  => $db->table('products')->where('status', 'active')->countAllResults(),
+            'total_services'  => $db->table('services')->where('status', 'active')->countAllResults(),
+            'total_portfolios'=> $db->table('portfolios')->whereIn('status', ['published','featured'])->countAllResults(),
+            'total_articles'  => $db->table('articles')->where('status', 'published')->countAllResults(),
+        ];
+
+        return view('about', ['title' => 'About Us', 'page' => 'about', 'stats' => $stats]);
     }
 
     public function services(): string
     {
-        return view('services', ['title' => 'Our Services', 'page' => 'services']);
+        $db = \Config\Database::connect();
+
+        $services = $db->table('services s')
+            ->select('s.name, s.slug, s.description, s.thumbnail, s.price, s.price_type, sc.name as category_name')
+            ->join('service_categories sc', 'sc.id = s.category_id', 'left')
+            ->where('s.status', 'active')
+            ->orderBy('s.created_at', 'DESC')
+            ->get()
+            ->getResult();
+
+        return view('services', ['title' => 'Our Services', 'page' => 'services', 'services' => $services]);
     }
 
     public function products(): string
     {
-        return view('products', ['title' => 'Our Products', 'page' => 'products']);
+        $db = \Config\Database::connect();
+
+        $products = $db->table('products p')
+            ->select('p.name, p.slug, p.short_description, p.description, p.thumbnail, pp.price, pp.discount_price, pc.name as category_name')
+            ->join('product_prices pp', 'pp.product_id = p.id', 'left')
+            ->join('product_categories pc', 'pc.id = p.category_id', 'left')
+            ->where('p.status', 'active')
+            ->orderBy('p.created_at', 'DESC')
+            ->get()
+            ->getResult();
+
+        return view('products', ['title' => 'Our Products', 'page' => 'products', 'products' => $products]);
     }
 
     public function portfolio(): string
     {
-        return view('portfolio', ['title' => 'Our Portfolio', 'page' => 'portfolio']);
+        $db = \Config\Database::connect();
+
+        $portfolios = $db->table('portfolios')
+            ->where('status', 'published')
+            ->orWhere('status', 'featured')
+            ->orderBy('created_at', 'DESC')
+            ->get()
+            ->getResult();
+
+        return view('portfolio', ['title' => 'Our Portfolio', 'page' => 'portfolio', 'portfolios' => $portfolios]);
     }
 
     public function blog(): string
     {
-        return view('blog', ['title' => 'Our Blog', 'page' => 'blog']);
+        $db = \Config\Database::connect();
+
+        $articles = $db->table('articles a')
+            ->select('a.id, a.title, a.slug, a.excerpt, a.thumbnail, a.published_at, c.name as category_name, a.author_id')
+            ->join('categories c', 'c.id = a.category_id', 'left')
+            ->where('a.status', 'published')
+            ->orderBy('a.published_at', 'DESC')
+            ->get()
+            ->getResult();
+
+        $categories = $db->table('categories')
+            ->where('type', 'article')
+            ->orderBy('name', 'ASC')
+            ->get()
+            ->getResult();
+
+        return view('blog', ['title' => 'Blog', 'page' => 'blog', 'articles' => $articles, 'categories' => $categories]);
     }
 
     public function contact(): string

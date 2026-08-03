@@ -22,27 +22,27 @@
                 <p class="text-muted mb-4">Punya pertanyaan atau butuh konsultasi? Jangan ragu untuk menghubungi kami.</p>
 
                 <div class="d-flex align-items-start mb-4">
-                    <div class="feature-icon me-3" style="background: rgba(26,187,156,0.1); color: var(--primary)">
+                    <div class="feature-icon me-3" style="background: rgba(230,92,0,0.1); color: var(--primary); width: 50px; height: 50px;">
                         <i class="fas fa-map-marker-alt"></i>
                     </div>
                     <div>
                         <h6 class="fw-bold mb-1">Alamat</h6>
-                        <p class="text-muted mb-0">Jl. Teknologi No. 123, Jakarta Selatan, Indonesia</p>
+                        <p class="text-muted mb-0">Jl. RA. Kartini No.23L, Rangkasbitung, Lebak, Banten 42314</p>
                     </div>
                 </div>
 
                 <div class="d-flex align-items-start mb-4">
-                    <div class="feature-icon me-3" style="background: rgba(52,152,219,0.1); color: var(--accent)">
+                    <div class="feature-icon me-3" style="background: rgba(230,92,0,0.1); color: var(--primary); width: 50px; height: 50px;">
                         <i class="fas fa-phone-alt"></i>
                     </div>
                     <div>
-                        <h6 class="fw-bold mb-1">Telepon</h6>
-                        <p class="text-muted mb-0">+62 123 456 789</p>
+                        <h6 class="fw-bold mb-1">Telepon / WhatsApp</h6>
+                        <p class="text-muted mb-0">08977487315</p>
                     </div>
                 </div>
 
                 <div class="d-flex align-items-start mb-4">
-                    <div class="feature-icon me-3" style="background: rgba(231,76,60,0.1); color: var(--danger)">
+                    <div class="feature-icon me-3" style="background: rgba(230,92,0,0.1); color: var(--primary); width: 50px; height: 50px;">
                         <i class="fas fa-envelope"></i>
                     </div>
                     <div>
@@ -51,8 +51,8 @@
                     </div>
                 </div>
 
-                <div class="d-flex align-items-start">
-                    <div class="feature-icon me-3" style="background: rgba(243,156,18,0.1); color: var(--warning)">
+                <div class="d-flex align-items-start mb-4">
+                    <div class="feature-icon me-3" style="background: rgba(230,92,0,0.1); color: var(--primary); width: 50px; height: 50px;">
                         <i class="fas fa-clock"></i>
                     </div>
                     <div>

@@ -21,71 +21,42 @@
             <p class="section-subtitle">Kami menyediakan berbagai layanan untuk memenuhi kebutuhan bisnis digital Anda</p>
         </div>
         <div class="row g-4">
+            <?php if (!empty($services)): ?>
+            <?php foreach ($services as $idx => $service): ?>
             <div class="col-md-6 col-lg-4">
                 <div class="feature-card h-100">
-                    <div class="feature-icon" style="background: rgba(26,187,156,0.1); color: var(--primary)">
-                        <i class="fas fa-code"></i>
+                    <div class="feature-icon">
+                        <?php if (!empty($service->thumbnail)): ?>
+                        <img src="<?= esc($service->thumbnail) ?>" alt="<?= esc($service->name) ?>" style="width:64px;height:64px;border-radius:16px;object-fit:cover;">
+                        <?php else: ?>
+                        <i class="fas fa-cogs"></i>
+                        <?php endif; ?>
                     </div>
-                    <h5>Web Development</h5>
-                    <p>Pengembangan aplikasi web profesional menggunakan framework modern seperti CodeIgniter, Laravel, React, dan Vue.js.</p>
-                    <a href="/contact" class="btn btn-outline-primary btn-sm">Konsultasi Gratis</a>
+                    <h5><?= esc($service->name) ?></h5>
+                    <p><?= esc($service->description) ?></p>
+                    <div class="mt-3">
+                        <span class="price" style="font-size:16px;color:var(--primary);font-weight:700;">
+                            <?php if (!empty($service->price)): ?>
+                                Mulai dari Rp <?= number_format($service->price, 0, ',', '.') ?>
+                            <?php else: ?>
+                                Custom
+                            <?php endif; ?>
+                        </span>
+                    </div>
+                    <a href="/contact" class="btn btn-sm btn-primary mt-3">Konsultasi Gratis</a>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-card h-100">
-                    <div class="feature-icon" style="background: rgba(52,152,219,0.1); color: var(--accent)">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h5>Mobile Development</h5>
-                    <p>Pembuatan aplikasi mobile native dan hybrid untuk Android dan iOS dengan performa optimal.</p>
-                    <a href="/contact" class="btn btn-outline-primary btn-sm">Konsultasi Gratis</a>
-                </div>
+            <?php endforeach; ?>
+            <?php else: ?>
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">Belum ada layanan yang tersedia.</p>
             </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-card h-100">
-                    <div class="feature-icon" style="background: rgba(231,76,60,0.1); color: var(--danger)">
-                        <i class="fas fa-cloud"></i>
-                    </div>
-                    <h5>Cloud Solutions</h5>
-                    <p>Infrastruktur cloud yang scalable dengan deployment otomatis dan monitoring 24/7.</p>
-                    <a href="/contact" class="btn btn-outline-primary btn-sm">Konsultasi Gratis</a>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-card h-100">
-                    <div class="feature-icon" style="background: rgba(243,156,18,0.1); color: var(--warning)">
-                        <i class="fas fa-shopping-cart"></i>
-                    </div>
-                    <h5>E-Commerce Development</h5>
-                    <p>Platform toko online lengkap dengan manajemen produk, keranjang belanja, dan integrasi pembayaran.</p>
-                    <a href="/contact" class="btn btn-outline-primary btn-sm">Konsultasi Gratis</a>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-card h-100">
-                    <div class="feature-icon" style="background: rgba(26,187,156,0.1); color: var(--primary)">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h5>Security Audit</h5>
-                    <p>Audit keamanan aplikasi web dan mobile untuk memastikan perlindungan data yang optimal.</p>
-                    <a href="/contact" class="btn btn-outline-primary btn-sm">Konsultasi Gratis</a>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-card h-100">
-                    <div class="feature-icon" style="background: rgba(52,152,219,0.1); color: var(--accent)">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h5>IT Consulting</h5>
-                    <p>Konsultasi teknologi informasi untuk membantu bisnis Anda mengadopsi solusi digital yang tepat.</p>
-                    <a href="/contact" class="btn btn-outline-primary btn-sm">Konsultasi Gratis</a>
-                </div>
-            </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>
 
-<section class="py-5" style="background: var(--light-bg)">
+<section class="py-5" style="background: var(--orange-soft)">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6">
@@ -120,7 +91,9 @@
                 </div>
             </div>
             <div class="col-lg-6 text-center">
-                <i class="fas fa-handshake fa-8x" style="color: var(--primary); opacity: 0.3;"></i>
+                <div class="feature-icon" style="width: 120px; height: 120px; font-size: 50px; background: #fff; color: var(--primary);">
+                    <i class="fas fa-handshake"></i>
+                </div>
             </div>
         </div>
     </div>
@@ -129,8 +102,8 @@
 <section class="cta-section">
     <div class="container text-center">
         <h2 class="text-white mb-3">Butuh Konsultasi?</h2>
-        <p class="text-white mb-4" style="opacity: 0.9">Hubungi kami untuk mendiskusikan kebutuhan project Anda.</p>
-        <a href="/contact" class="btn btn-light btn-lg">Hubungi Kami</a>
+        <p class="text-white mb-4" style="opacity: 0.9;">Hubungi kami untuk mendiskusikan kebutuhan project Anda.</p>
+        <a href="/contact" class="btn btn-cta">Hubungi Kami</a>
     </div>
 </section>
 

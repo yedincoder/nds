@@ -15,9 +15,9 @@ class MidtransConfig extends BaseConfig
     {
         parent::__construct();
         
-        $this->serverKey = getenv('MIDTRANS_SERVER_KEY') ?: '';
-        $this->clientKey = getenv('MIDTRANS_CLIENT_KEY') ?: '';
+        $this->serverKey = getenv('MIDTRANS_SERVER_KEY');
+        $this->clientKey = getenv('MIDTRANS_CLIENT_KEY');
         $this->isProduction = getenv('MIDTRANS_IS_PRODUCTION') === 'true';
-        $this->merchantId = getenv('MIDTRANS_MERCHANT_ID') ?: '';
+        $this->merchantId = getenv('MIDTRANS_MERCHANT_ID');
     }
 }

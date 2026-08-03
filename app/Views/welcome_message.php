@@ -9,8 +9,8 @@
                 <h1>Platform <span>Digital</span> Modern untuk Bisnis Anda</h1>
                 <p>NgAppID adalah solusi lengkap untuk pengembangan aplikasi profesional, penjualan produk digital, sistem billing, dan dukungan pelanggan terintegrasi.</p>
                 <div class="d-flex gap-3">
-                    <a href="/products" class="btn btn-primary">Lihat Produk</a>
-                    <a href="/about" class="btn btn-outline-light">Pelajari Lebih Lanjut</a>
+                    <a href="/products" class="btn btn-primary"><i class="fas fa-box me-1"></i>Lihat Produk</a>
+                    <a href="/services" class="btn btn-outline-light"><i class="fas fa-cogs me-1"></i>Layanan Kami</a>
                 </div>
             </div>
             <div class="col-lg-6 text-center">
@@ -24,27 +24,31 @@
     <div class="container">
         <div class="row g-4">
             <div class="col-md-3">
-                <div class="card text-center p-4" style="border-top: 3px solid var(--primary)">
-                    <h3 class="fw-bold" style="color: var(--primary)">100+</h3>
-                    <p class="text-muted mb-0">Produk Digital</p>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-box"></i></div>
+                    <h3><?= esc($stats['total_products'] ?? 0) ?>+</h3>
+                    <p><i class="fas fa-box me-2"></i>Produk Digital</p>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-center p-4" style="border-top: 3px solid var(--accent)">
-                    <h3 class="fw-bold" style="color: var(--accent)">500+</h3>
-                    <p class="text-muted mb-0">Klien Puas</p>
+                <div class="stat-card" style="border-left-color: var(--info);">
+                    <div class="stat-icon" style="background: rgba(52,152,219,0.1); color: var(--info);"><i class="fas fa-cogs"></i></div>
+                    <h3><?= esc($stats['total_services'] ?? 0) ?>+</h3>
+                    <p><i class="fas fa-cogs me-2"></i>Layanan Tersedia</p>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-center p-4" style="border-top: 3px solid var(--success)">
-                    <h3 class="fw-bold" style="color: var(--success)">24/7</h3>
-                    <p class="text-muted mb-0">Dukungan Teknis</p>
+                <div class="stat-card" style="border-left-color: var(--danger);">
+                    <div class="stat-icon" style="background: rgba(231,76,60,0.1); color: var(--danger);"><i class="fas fa-briefcase"></i></div>
+                    <h3><?= esc($stats['total_portfolios'] ?? 0) ?>+</h3>
+                    <p><i class="fas fa-briefcase me-2"></i>Proyek Selesai</p>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-center p-4" style="border-top: 3px solid var(--danger)">
-                    <h3 class="fw-bold" style="color: var(--danger)">99.9%</h3>
-                    <p class="text-muted mb-0">Uptime Server</p>
+                <div class="stat-card" style="border-left-color: var(--warning);">
+                    <div class="stat-icon" style="background: rgba(243,156,18,0.1); color: var(--warning);"><i class="fas fa-users"></i></div>
+                    <h3><?= esc($stats['happy_clients'] ?? 0) ?>+</h3>
+                    <p><i class="fas fa-users me-2"></i>Klien Puas</p>
                 </div>
             </div>
         </div>
@@ -55,119 +59,53 @@
     <div class="container">
         <div class="text-center mb-5">
             <h2 class="section-title">Layanan Kami</h2>
-            <p class="section-subtitle">Solusi digital lengkap untuk kebutuhan bisnis Anda</p>
+            <p class="section-subtitle">Kami menyediakan berbagai layanan untuk memenuhi kebutuhan bisnis digital Anda</p>
         </div>
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="feature-card">
-                    <div class="feature-icon" style="background: rgba(26,187,156,0.1); color: var(--primary)">
-                        <i class="fas fa-code"></i>
+            <?php foreach ($services as $idx => $service): ?>
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon" style="background: rgba(<?= $idx === 0 ? '230,92,0,0.1' : ($idx === 1 ? '52,152,219,0.1' : '231,76,60,0.1') ?>); color: <?= $idx === 0 ? 'var(--primary)' : ($idx === 1 ? 'var(--info)' : 'var(--danger)') ?>;">
+                        <i class="<?= $serviceIcons[$idx % count($serviceIcons)] ?? 'fas fa-cogs' ?>"></i>
                     </div>
-                    <h5>Web Development</h5>
-                    <p>Pengembangan aplikasi web profesional dengan teknologi terkini dan arsitektur modern.</p>
+                    <h5><?= esc($service->name) ?></h5>
+                    <p class="small"><?= esc($service->description) ?></p>
+                    <a href="/services" class="btn btn-sm btn-outline-primary mt-2">Selengkapnya</a>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="feature-card">
-                    <div class="feature-icon" style="background: rgba(52,152,219,0.1); color: var(--accent)">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h5>Mobile Apps</h5>
-                    <p>Pembuatan aplikasi mobile untuk Android dan iOS dengan performa optimal.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="feature-card">
-                    <div class="feature-icon" style="background: rgba(231,76,60,0.1); color: var(--danger)">
-                        <i class="fas fa-cloud"></i>
-                    </div>
-                    <h5>Cloud Solutions</h5>
-                    <p>Infrastruktur cloud yang scalable dan aman untuk menjalankan aplikasi Anda.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="feature-card">
-                    <div class="feature-icon" style="background: rgba(243,156,18,0.1); color: var(--warning)">
-                        <i class="fas fa-shopping-cart"></i>
-                    </div>
-                    <h5>E-Commerce</h5>
-                    <p>Platform e-commerce lengkap dengan integrasi pembayaran dan manajemen produk.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="feature-card">
-                    <div class="feature-icon" style="background: rgba(26,187,156,0.1); color: var(--primary)">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h5>Security Audit</h5>
-                    <p>Audit keamanan aplikasi untuk memastikan perlindungan data yang optimal.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="feature-card">
-                    <div class="feature-icon" style="background: rgba(52,152,219,0.1); color: var(--accent)">
-                        <i class="fas fa-headset"></i>
-                    </div>
-                    <h5>24/7 Support</h5>
-                    <p>Dukungan teknis profesional yang siap membantu Anda kapan saja.</p>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>
 
-<section class="py-5">
+<section class="py-5" style="background: var(--light-bg)">
     <div class="container">
         <div class="text-center mb-5">
             <h2 class="section-title">Produk Unggulan</h2>
-            <p class="section-subtitle">Produk digital berkualitas untuk kebutuhan Anda</p>
+            <p class="section-subtitle">Produk digital berkualitas untuk kebutuhan bisnis Anda</p>
         </div>
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="product-card">
+            <?php foreach ($products as $product): ?>
+            <div class="col-md-6 col-lg-4">
+                <div class="product-card h-100">
                     <div class="product-img">
-                        <i class="fas fa-laptop-code"></i>
+                        <?php if (!empty($product->thumbnail)): ?>
+                        <img src="<?= esc($product->thumbnail) ?>" alt="<?= esc($product->name) ?>" style="width:100%;height:100%;object-fit:cover;">
+                        <?php else: ?>
+                        <i class="fas fa-box fa-4x"></i>
+                        <?php endif; ?>
                     </div>
                     <div class="card-body">
-                        <h5>Web Application Starter</h5>
-                        <p class="text-muted mb-3">Template aplikasi web lengkap dengan autentikasi dan dashboard.</p>
+                        <h5><?= esc($product->name) ?></h5>
+                        <p class="text-muted mb-3"><?= esc($product->short_description ?? '') ?></p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <span class="price">Rp 2.500.000</span>
-                            <a href="/products" class="btn btn-sm btn-primary">Lihat Detail</a>
+                            <span class="price">Rp <?= number_format($product->price ?? 0, 0, ',', '.') ?></span>
+                            <a href="/products" class="btn btn-sm btn-primary">Beli</a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="product-card">
-                    <div class="product-img" style="background: linear-gradient(135deg, var(--accent), #9B59B6)">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <div class="card-body">
-                        <h5>Mobile App Framework</h5>
-                        <p class="text-muted mb-3">Framework hybrid untuk aplikasi Android dan iOS.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="price">Rp 3.500.000</span>
-                            <a href="/products" class="btn btn-sm btn-primary">Lihat Detail</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="product-card">
-                    <div class="product-img" style="background: linear-gradient(135deg, var(--warning), var(--danger))">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-                    <div class="card-body">
-                        <h5>E-Commerce Suite</h5>
-                        <p class="text-muted mb-3">Paket lengkap untuk membangun toko online profesional.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="price">Rp 5.000.000</span>
-                            <a href="/products" class="btn btn-sm btn-primary">Lihat Detail</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
         <div class="text-center mt-4">
             <a href="/products" class="btn btn-outline-primary">Lihat Semua Produk</a>
@@ -175,11 +113,47 @@
     </div>
 </section>
 
+<section class="py-5" style="background: #fff">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Testimonial</h2>
+            <p class="section-subtitle">Apa kata klien kami tentang layanan kami</p>
+        </div>
+        <div class="row g-4">
+            <?php foreach ($testimonials as $idx => $t): ?>
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="star">
+                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                            <i class="fas fa-star star <?= $i <= ($t->rating ?? 5) ? '' : 'text-muted' ?>"></i>
+                        <?php endfor; ?>
+                    </div>
+                    <p style="font-style: italic; color: var(--text-muted); line-height: 1.7;">"<?= esc(substr($t->message, 0, 120)) ?>..."</p>
+                    <div class="d-flex align-items-center mt-3">
+                        <?php if (!empty($t->avatar)): ?>
+                        <img src="<?= esc($t->avatar) ?>" class="rounded-circle me-2" width="40" height="40" alt="">
+                        <?php else: ?>
+                        <div class="rounded-circle me-2 d-flex align-items-center justify-content-center" style="width:40px;height:40px;background:var(--orange-soft);color:var(--primary);font-weight:600;font-size:14px;">
+                            <?= esc(strtoupper(substr($t->customer_name ?? '?', 0, 1))) ?>
+                        </div>
+                        <?php endif; ?>
+                        <div>
+                            <strong class="text-dark"><?= esc($t->customer_name ?? '') ?></strong>
+                            <?php if (!empty($t->company)): ?><br><small class="text-muted"><?= esc($t->company) ?></small><?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+
 <section class="cta-section">
     <div class="container text-center">
         <h2 class="text-white mb-3">Siap Memulai Proyek Anda?</h2>
-        <p class="text-white mb-4" style="opacity: 0.9">Konsultasikan kebutuhan digital bisnis Anda dengan tim ahli kami.</p>
-        <a href="/contact" class="btn btn-light btn-lg">Hubungi Kami Sekarang</a>
+        <p class="text-white mb-4" style="opacity: 0.9;">Konsultasikan kebutuhan digital bisnis PT. YEDIN DIGITAL MANDIRI dengan tim ahli kami.</p>
+        <a href="/contact" class="btn btn-cta">Hubungi Kami Sekarang</a>
     </div>
 </section>
 
