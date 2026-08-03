@@ -1,0 +1,294 @@
+# ==============================================================================
+# FILE        : 10-PHASE-07.md
+# PROJECT     : NgAppID Development Standard (NDS)
+# PHASE       : 07
+# NAME        : FOLDER STRUCTURE
+# VERSION     : 1.0.0
+# STATUS      : FINAL
+# ==============================================================================
+# DESCRIPTION
+==============================================================================
+Phase-07 merupakan tahap pendefinisian struktur folder project NgAppID.
+Phase ini bertujuan menentukan organisasi file, module, component, dan resource agar project memiliki struktur yang konsisten, mudah dipahami, mudah dikembangkan, dan mudah dipelihara.
+Pada Phase ini TIDAK BOLEH membuat kode.
+Struktur folder yang dibuat pada Phase ini menjadi standar seluruh implementasi project.
+==============================================================================
+OBJECTIVE
+==============================================================================
+Mendefinisikan:
+1. Project Root Structure.
+2. Application Structure.
+3. Module Structure.
+4. Backend Structure.
+5. Frontend Structure.
+6. Database Structure.
+7. Public Asset Structure.
+8. Storage Structure.
+9. Documentation Structure.
+10. Testing Structure.
+==============================================================================
+FOLDER PRINCIPLE
+==============================================================================
+Struktur folder harus mengikuti:
+1. Clean Architecture.
+2. Modular Development.
+3. Separation of Concern.
+4. Consistent Naming.
+5. Maintainable Structure.
+6. Scalable Organization.
+7. Documentation First.
+==============================================================================
+PROJECT ROOT STRUCTURE
+==============================================================================
+ngappid/
+├── app/
+├── bootstrap/
+├── config/
+├── database/
+├── docs/
+├── modules/
+├── public/
+├── resources/
+├── routes/
+├── storage/
+├── tests/
+├── writable/
+├── .env
+├── composer.json
+├── package.json
+├── README.md
+└── CHANGELOG.md
+==============================================================================
+APPLICATION STRUCTURE
+==============================================================================
+app/
+├── Controllers/
+├── Models/
+├── Services/
+├── Libraries/
+├── Helpers/
+├── Middleware/
+├── Validation/
+├── Exceptions/
+└── Config/
+==============================================================================
+MODULE STRUCTURE
+==============================================================================
+modules/
+└── ModuleName/
+    ├── Controllers/
+    ├── Models/
+    ├── Services/
+    ├── Views/
+    ├── Database/
+    │   ├── Migrations/
+    │   └── Seeders/
+    ├── Language/
+    ├── Routes/
+    ├── Config/
+    ├── Tests/
+    └── README.md
+==============================================================================
+CORE MODULE FOLDER
+==============================================================================
+modules/
+├── Authentication/
+├── Authorization/
+├── CMS/
+├── Product/
+├── Service/
+├── Portfolio/
+├── Blog/
+├── Cart/
+├── Checkout/
+├── Billing/
+├── Invoice/
+├── Payment/
+├── Midtrans/
+├── ClientArea/
+├── Dashboard/
+├── Customer/
+├── Support/
+├── Notification/
+├── MediaManager/
+├── Settings/
+└── API/
+==============================================================================
+CONTROLLER STRUCTURE
+==============================================================================
+Controller bertugas:
+1. Menerima request.
+2. Memanggil validation.
+3. Memanggil service.
+4. Menghasilkan response.
+Controller tidak boleh:
+1. Query database langsung.
+2. Business logic panjang.
+3. Manipulasi data kompleks.
+==============================================================================
+SERVICE STRUCTURE
+==============================================================================
+Service bertugas:
+1. Business Logic.
+2. Workflow Process.
+3. Transaction Process.
+4. External API Process.
+5. Data Processing.
+==============================================================================
+MODEL STRUCTURE
+==============================================================================
+Model bertugas:
+1. Database CRUD.
+2. Query Builder.
+3. Relationship.
+4. Pagination.
+5. Soft Delete.
+==============================================================================
+VIEW STRUCTURE
+==============================================================================
+Views menggunakan:
+1. Template Layout.
+2. Component Based View.
+3. Reusable Component.
+Struktur:
+Views/
+├── layouts/
+├── components/
+├── pages/
+└── partials/
+==============================================================================
+DATABASE STRUCTURE
+==============================================================================
+database/
+├── migrations/
+├── seeders/
+└── factories/
+==============================================================================
+PUBLIC STRUCTURE
+==============================================================================
+public/
+├── assets/
+│   ├── css/
+│   ├── js/
+│   ├── images/
+│   └── vendor/
+├── uploads/
+├── favicon.ico
+└── index.php
+==============================================================================
+RESOURCE STRUCTURE
+==============================================================================
+resources/
+├── css/
+├── js/
+├── images/
+├── email/
+└── templates/
+==============================================================================
+STORAGE STRUCTURE
+==============================================================================
+storage/
+├── logs/
+├── cache/
+├── sessions/
+├── uploads/
+└── backups/
+==============================================================================
+DOCUMENTATION STRUCTURE
+==============================================================================
+docs/
+├── installation/
+├── configuration/
+├── architecture/
+├── database/
+├── api/
+├── deployment/
+├── developer/
+└── user/
+==============================================================================
+TESTING STRUCTURE
+==============================================================================
+tests/
+├── Unit/
+├── Feature/
+├── Integration/
+├── Security/
+└── Performance/
+==============================================================================
+NAMING CONVENTION
+==============================================================================
+Folder:
+Menggunakan PascalCase atau lowercase sesuai framework.
+File:
+Menggunakan PascalCase.
+Class:
+Menggunakan PascalCase.
+Method:
+Menggunakan camelCase.
+Database:
+Menggunakan snake_case.
+==============================================================================
+FOLDER SECURITY RULE
+==============================================================================
+1. File konfigurasi tidak boleh berada pada public folder.
+2. Upload file harus melalui storage.
+3. Folder writable harus memiliki permission sesuai kebutuhan.
+4. Source code tidak boleh dapat diakses langsung.
+5. Environment file harus aman.
+==============================================================================
+FOLDER DEVELOPMENT RULE
+==============================================================================
+RULE-001 : Setiap module wajib memiliki struktur standar.
+RULE-002 : Tidak boleh membuat folder tanpa fungsi jelas.
+RULE-003 : Tidak boleh menyimpan file random pada root.
+RULE-004 : Setiap perubahan struktur harus terdokumentasi.
+RULE-005 : Struktur folder harus konsisten seluruh project.
+==============================================================================
+OUTPUT PHASE
+==============================================================================
+Phase-07 menghasilkan:
+1. Project Root Structure.
+2. Application Structure.
+3. Module Structure.
+4. Database Structure.
+5. Public Structure.
+6. Documentation Structure.
+7. Testing Structure.
+8. Naming Convention.
+9. Folder Rule.
+==============================================================================
+CHECKLIST
+==============================================================================
+[ ] Project root dibuat.
+[ ] Application structure dibuat.
+[ ] Module structure dibuat.
+[ ] Database structure dibuat.
+[ ] Public structure dibuat.
+[ ] Storage structure dibuat.
+[ ] Documentation structure dibuat.
+[ ] Testing structure dibuat.
+[ ] Naming convention dibuat.
+[ ] Tidak ada coding.
+==============================================================================
+ACCEPTANCE CRITERIA
+==============================================================================
+Phase dinyatakan selesai apabila:
+✓ Struktur folder project telah ditentukan.
+✓ Struktur module telah ditentukan.
+✓ Struktur backend telah ditentukan.
+✓ Struktur database telah ditentukan.
+✓ Struktur dokumentasi telah ditentukan.
+✓ Naming convention telah ditentukan.
+✓ Tidak terdapat coding.
+✓ Tidak terdapat implementasi.
+✓ Siap masuk Phase-08 UI/UX.
+==============================================================================
+STATUS
+==============================================================================
+PHASE STATUS
+SELESAI
+NEXT PHASE
+11-PHASE-08.md
+==============================================================================
+END OF FILE
+==============================================================================

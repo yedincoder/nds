@@ -1,0 +1,431 @@
+# ==============================================================================
+# FILE        : 09-PHASE-06.md
+# PROJECT     : NgAppID Development Standard (NDS)
+# PHASE       : 06
+# NAME        : MODULE
+# VERSION     : 1.0.0
+# STATUS      : FINAL
+# ==============================================================================
+# DESCRIPTION
+==============================================================================
+Phase-06 merupakan tahap pendefinisian Module System NgAppID.
+Phase ini bertujuan menentukan pembagian fitur menjadi module yang terstruktur, modular, reusable, dan mudah dikembangkan.
+Pada Phase ini TIDAK BOLEH membuat kode.
+Setiap module harus memiliki tanggung jawab yang jelas sesuai dengan arsitektur sistem.
+# ==============================================================================
+# OBJECTIVE
+==============================================================================
+Mendefinisikan:
+1. Module Architecture.
+2. Module Structure.
+3. Module Responsibility.
+4. Module Dependency.
+5. Module Workflow.
+6. Module Access Control.
+7. Module Integration.
+8. Module Development Rule.
+9. Module Documentation.
+10. Module Acceptance Criteria.
+# ==============================================================================
+# MODULE ARCHITECTURE
+==============================================================================
+NgAppID menggunakan Modular Architecture.
+Setiap Business Module berada pada:
+app/Modules/
+Setiap module memiliki:
+1. Controller.
+2. Model.
+3. Service.
+4. View.
+5. Migration.
+6. Seeder.
+7. Language.
+8. Route.
+9. Documentation.
+10. Config.
+11. Libraries.
+12. Helpers.
+13. Tests.
+14. README.md.
+# ==============================================================================
+# MODULE STRUCTURE
+==============================================================================
+Struktur standar:
+nds/
+└── app/
+    └── Modules/
+        └── ModuleName/
+            ├── Config/
+            ├── Controllers/
+            ├── Models/
+            ├── Services/
+            ├── Database/
+            │   ├── Migrations/
+            │   └── Seeds/
+            ├── Views/
+            ├── Routes/
+            ├── Language/
+            ├── Libraries/
+            ├── Helpers/
+            ├── Tests/
+            └── README.md
+Contoh:
+nds
+└── app/
+    └── Modules/
+        └── Product/
+            ├── Controllers/
+            ├── Models/
+            ├── Services/
+            ├── Database/
+            ├── Views/
+            ├── Routes/
+            └── README.md
+# ==============================================================================
+# MODULE PRINCIPLE
+==============================================================================
+Module harus mengikuti:
+1. Single Responsibility Principle.
+2. Separation of Concern.
+3. Reusable Component.
+4. Loose Coupling.
+5. High Cohesion.
+6. Secure Development.
+7. Maintainable Structure.
+# ==============================================================================
+# CORE MODULE LIST
+==============================================================================
+01. Authentication Module.
+02. Authorization Module.
+03. CMS Module.
+04. Product Module.
+05. Service Module.
+06. Portfolio Module.
+07. Blog Module.
+08. Cart Module.
+09. Checkout Module.
+10. Billing Module.
+11. Invoice Module.
+12. Payment Module.
+13. Midtrans Module.
+14. Client Area Module.
+15. Dashboard Module.
+16. Customer Module.
+17. Support Ticket Module.
+18. Notification Module.
+19. Media Manager Module.
+20. Settings Module.
+21. REST API Module.
+# ==============================================================================
+# AUTHENTICATION MODULE
+==============================================================================
+Responsibility:
+Mengelola proses autentikasi pengguna.
+Feature:
+1. Register.
+2. Login.
+3. Logout.
+4. Password Management.
+5. Session Management.
+Dependency:
+User Module.
+# ==============================================================================
+# AUTHORIZATION MODULE
+==============================================================================
+Responsibility:
+Mengelola hak akses pengguna.
+Feature:
+1. Role Management.
+2. Permission Management.
+3. Access Control.
+4. Menu Permission.
+Dependency:
+Authentication Module.
+# ==============================================================================
+# CMS MODULE
+==============================================================================
+Responsibility:
+Mengelola konten website.
+Feature:
+1. Page Management.
+2. Category Management.
+3. Article Management.
+4. Media Management.
+5. Menu Management.
+Dependency:
+Authentication Module.
+Authorization Module.
+# ==============================================================================
+# PRODUCT MODULE
+==============================================================================
+Responsibility:
+Mengelola produk digital.
+Feature:
+1. Product CRUD.
+2. Product Category.
+3. Product File.
+4. Product Price.
+5. Product Status.
+Dependency:
+CMS Module.
+# ==============================================================================
+# SERVICE MODULE
+==============================================================================
+Responsibility:
+Mengelola layanan software.
+Feature:
+1. Service CRUD.
+2. Service Category.
+3. Service Package.
+4. Service Information.
+Dependency:
+CMS Module.
+# ==============================================================================
+# PORTFOLIO MODULE
+==============================================================================
+Responsibility:
+Mengelola hasil project.
+Feature:
+1. Portfolio CRUD.
+2. Portfolio Category.
+3. Portfolio Gallery.
+4. Portfolio Detail.
+# ==============================================================================
+# BLOG MODULE
+==============================================================================
+Responsibility:
+Mengelola artikel dan informasi.
+Feature:
+1. Article.
+2. Category.
+3. Tag.
+4. Comment.
+5. SEO Metadata.
+# ==============================================================================
+# CART MODULE
+==============================================================================
+Responsibility:
+Mengelola keranjang pembelian.
+Feature:
+1. Add Product.
+2. Remove Product.
+3. Update Quantity.
+4. Cart Calculation.
+Dependency:
+Product Module.
+# ==============================================================================
+# CHECKOUT MODULE
+==============================================================================
+Responsibility:
+Mengelola proses checkout.
+Feature:
+1. Customer Information.
+2. Order Creation.
+3. Address Management.
+4. Order Validation.
+Dependency:
+Cart Module.
+Customer Module.
+# ==============================================================================
+# BILLING MODULE
+==============================================================================
+Responsibility:
+Mengelola sistem tagihan.
+Feature:
+1. Billing Creation.
+2. Billing Status.
+3. Billing History.
+Dependency:
+Order Module.
+# ==============================================================================
+# INVOICE MODULE
+==============================================================================
+Responsibility:
+Mengelola invoice transaksi.
+Feature:
+1. Invoice Generation.
+2. Invoice Number.
+3. Invoice Status.
+4. Invoice Download.
+Dependency:
+Billing Module.
+# ==============================================================================
+# PAYMENT MODULE
+==============================================================================
+Responsibility:
+Mengelola pembayaran.
+Feature:
+1. Payment Creation.
+2. Payment Verification.
+3. Payment Status.
+4. Payment History.
+Dependency:
+Invoice Module.
+# ==============================================================================
+# MIDTRANS MODULE
+==============================================================================
+Responsibility:
+Integrasi payment gateway.
+Feature:
+1. Payment Request.
+2. Callback Handler.
+3. Webhook Handler.
+4. Transaction Validation.
+Dependency:
+Payment Module.
+# ==============================================================================
+# CLIENT AREA MODULE
+==============================================================================
+Responsibility:
+Menyediakan area pelanggan.
+Feature:
+1. Customer Dashboard.
+2. Order History.
+3. Invoice History.
+4. Download Product.
+5. Support Ticket.
+Dependency:
+Authentication Module.
+Order Module.
+# ==============================================================================
+# CUSTOMER MODULE
+==============================================================================
+Responsibility:
+Mengelola data pelanggan.
+Feature:
+1. Customer Profile.
+2. Customer Address.
+3. Customer Activity.
+# ==============================================================================
+# SUPPORT TICKET MODULE
+==============================================================================
+Responsibility:
+Mengelola layanan support.
+Feature:
+1. Ticket Creation.
+2. Ticket Reply.
+3. Ticket Status.
+4. Ticket Attachment.
+# ==============================================================================
+# NOTIFICATION MODULE
+==============================================================================
+Responsibility:
+Mengelola notifikasi sistem.
+Feature:
+1. Email Notification.
+2. System Notification.
+3. Transaction Notification.
+# ==============================================================================
+# MEDIA MANAGER MODULE
+==============================================================================
+Responsibility:
+Mengelola file media.
+Feature:
+1. Upload File.
+2. File Management.
+3. File Validation.
+4. File Storage.
+# ==============================================================================
+# SETTINGS MODULE
+==============================================================================
+Responsibility:
+Mengelola konfigurasi sistem.
+Feature:
+1. General Settings.
+2. Email Settings.
+3. Payment Settings.
+4. System Configuration.
+# ==============================================================================
+# REST API MODULE
+==============================================================================
+Responsibility:
+Menyediakan komunikasi eksternal.
+Feature:
+1. API Endpoint.
+2. API Authentication.
+3. API Response.
+4. API Documentation.
+# ==============================================================================
+# MODULE DEPENDENCY
+==============================================================================
+Authentication.
+↓
+Authorization.
+↓
+CMS.
+↓
+Product.
+↓
+Cart.
+↓
+Checkout.
+↓
+Billing.
+↓
+Invoice.
+↓
+Payment.
+↓
+Midtrans.
+↓
+Client Area.
+↓
+REST API.
+# ==============================================================================
+# MODULE DEVELOPMENT RULE
+==============================================================================
+RULE-001 : Setiap module wajib memiliki dokumentasi.
+RULE-002 : Setiap module wajib memiliki service layer.
+RULE-003 : Controller tidak boleh memiliki business logic.
+RULE-004 : Model hanya menangani database.
+RULE-005 : Module tidak boleh memiliki dependency tidak diperlukan.
+RULE-006 : Setiap module wajib memiliki testing.
+RULE-007 : Setiap perubahan database wajib menggunakan migration.
+RULE-008 : Data awal wajib menggunakan seeder.
+# ==============================================================================
+# OUTPUT PHASE
+==============================================================================
+Phase-06 menghasilkan:
+1. Module Architecture.
+2. Module Structure.
+3. Module List.
+4. Module Responsibility.
+5. Module Dependency.
+6. Module Workflow.
+7. Module Development Rule.
+8. Module Documentation Standard.
+# ==============================================================================
+# CHECKLIST
+==============================================================================
+[ ] Module architecture dibuat.
+[ ] Module structure dibuat.
+[ ] Module list dibuat.
+[ ] Module responsibility dibuat.
+[ ] Module dependency dibuat.
+[ ] Module workflow dibuat.
+[ ] Module rule dibuat.
+[ ] Tidak ada coding.
+[ ] Tidak ada implementasi module.
+# ==============================================================================
+# ACCEPTANCE CRITERIA
+==============================================================================
+Phase dinyatakan selesai apabila:
+✓ Seluruh module telah didefinisikan.
+✓ Struktur module telah ditentukan.
+✓ Responsibility setiap module telah dibuat.
+✓ Dependency module telah ditentukan.
+✓ Workflow module telah dibuat.
+✓ Development rule telah dibuat.
+✓ Tidak terdapat coding.
+✓ Tidak terdapat implementasi.
+✓ Siap masuk Phase-07 Folder.
+# ==============================================================================
+# STATUS
+==============================================================================
+PHASE STATUS
+SELESAI
+NEXT PHASE
+10-PHASE-07.md
+# ==============================================================================
+# END OF FILE
+# ==============================================================================

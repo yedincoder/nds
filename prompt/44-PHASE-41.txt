@@ -1,0 +1,322 @@
+# ==============================================================================
+# FILE        : 44-PHASE-41.md
+# PROJECT     : NgAppID Development Standard (NDS)
+# PHASE       : 41
+# NAME        : PRODUCTION DEPLOYMENT
+# VERSION     : 1.0.0
+# STATUS      : FINAL
+# ==============================================================================
+# DESCRIPTION
+==============================================================================
+Phase-41 merupakan tahap Production Deployment NgAppID.
+Phase ini bertujuan melakukan proses deployment aplikasi dari lingkungan development menuju server production.
+Pada Phase ini seluruh source code, database, konfigurasi environment, service, dan integrasi eksternal dipersiapkan agar aplikasi dapat berjalan secara resmi untuk pengguna.
+Seluruh proses deployment harus dilakukan secara terkontrol, aman, terdokumentasi, dan memiliki mekanisme rollback apabila terjadi masalah.
+==============================================================================
+OBJECTIVE
+==============================================================================
+Mendefinisikan:
+
+1. Production Environment Setup.
+2. Source Code Deployment.
+3. Database Deployment.
+4. Environment Configuration.
+5. Service Configuration.
+6. Domain Configuration.
+7. SSL Configuration.
+8. Application Optimization.
+9. Production Testing.
+10. Deployment Documentation.
+==============================================================================
+PRODUCTION ARCHITECTURE
+==============================================================================
+Environment:
+
+Server:
+
+Ubuntu Server.
+
+
+Web Server:
+
+Nginx.
+
+
+Application:
+
+CodeIgniter 4.
+
+
+Runtime:
+
+PHP 8.3+.
+
+
+Database:
+
+MariaDB 10.5+.
+
+
+Cache:
+
+Redis.
+
+
+Version Control:
+
+Git.
+==============================================================================
+PRODUCTION PRINCIPLE
+==============================================================================
+Deployment harus mengikuti:
+
+1. Secure Deployment.
+2. Version Controlled.
+3. Backup Before Deployment.
+4. Minimal Downtime.
+5. Rollback Ready.
+6. Documented Process.
+==============================================================================
+PRODUCTION PREPARATION
+==============================================================================
+Preparation:
+
+1. Server Verification.
+2. Domain Verification.
+3. SSL Verification.
+4. Database Preparation.
+5. Environment Preparation.
+6. Backup Preparation.
+==============================================================================
+SOURCE CODE DEPLOYMENT
+==============================================================================
+Process:
+
+1. Clone Repository.
+2. Checkout Production Branch.
+3. Install Dependency.
+4. Configure Permission.
+5. Optimize Application.
+6. Clear Development Cache.
+==============================================================================
+COMPOSER INSTALLATION
+==============================================================================
+Requirement:
+
+1. Install Production Dependency.
+2. Remove Development Package.
+3. Optimize Autoloader.
+4. Verify Package Version.
+==============================================================================
+ENVIRONMENT CONFIGURATION
+==============================================================================
+Configuration:
+
+1. Application URL.
+2. Database Connection.
+3. Redis Connection.
+4. SMTP Configuration.
+5. Payment Gateway Configuration.
+6. API Configuration.
+7. Logging Configuration.
+==============================================================================
+DATABASE DEPLOYMENT
+==============================================================================
+Process:
+
+1. Create Database.
+2. Create Database User.
+3. Configure Permission.
+4. Run Migration.
+5. Run Seeder.
+6. Verify Database Structure.
+==============================================================================
+FILE PERMISSION
+==============================================================================
+Permission:
+
+Writable:
+
+1. writable/cache.
+2. writable/logs.
+3. writable/session.
+4. writable/uploads.
+
+
+Protected:
+
+1. Application Source.
+2. Configuration File.
+==============================================================================
+NGINX PRODUCTION CONFIGURATION
+==============================================================================
+Configuration:
+
+1. Domain Mapping.
+2. Document Root.
+3. PHP-FPM Connection.
+4. Static Asset Handling.
+5. Compression.
+6. Security Header.
+==============================================================================
+SSL CONFIGURATION
+==============================================================================
+SSL:
+
+Requirement:
+
+1. HTTPS Enabled.
+2. Certificate Installed.
+3. Auto Renewal Enabled.
+4. HTTP Redirect HTTPS.
+==============================================================================
+APPLICATION OPTIMIZATION
+==============================================================================
+Optimization:
+
+1. Enable Production Mode.
+2. Enable Cache.
+3. Enable OPcache.
+4. Optimize Autoload.
+5. Optimize Configuration.
+6. Disable Debug Mode.
+==============================================================================
+INTEGRATION CONFIGURATION
+==============================================================================
+Integration:
+
+1. Midtrans Payment.
+2. SMTP Email.
+3. Redis Cache.
+4. REST API.
+5. Webhook.
+==============================================================================
+PRODUCTION TESTING
+==============================================================================
+Testing:
+
+1. Homepage Test.
+2. Authentication Test.
+3. Client Area Test.
+4. Admin Panel Test.
+5. Payment Test.
+6. API Test.
+7. Webhook Test.
+8. Email Test.
+9. Upload Test.
+==============================================================================
+ROLLBACK STRATEGY
+==============================================================================
+Rollback:
+
+1. Backup Database.
+2. Backup Source Code.
+3. Version Tagging.
+4. Restore Procedure.
+5. Service Recovery.
+==============================================================================
+DEPLOYMENT SECURITY
+==============================================================================
+Security:
+
+1. Environment Protection.
+2. Secret Protection.
+3. File Permission.
+4. Server Access Control.
+5. Database Security.
+6. Log Protection.
+==============================================================================
+DEPLOYMENT DATABASE REQUIREMENT
+==============================================================================
+Table:
+
+1. Deployment Logs.
+2. Release Versions.
+3. Migration History.
+==============================================================================
+DEPLOYMENT LOG TABLE
+==============================================================================
+Field:
+
+1. id.
+2. version.
+3. deployed_by.
+4. deployment_status.
+5. deployment_time.
+6. created_at.
+==============================================================================
+RELEASE VERSION TABLE
+==============================================================================
+Field:
+
+1. id.
+2. version_number.
+3. release_note.
+4. status.
+5. created_at.
+==============================================================================
+IMPLEMENTATION RULE
+==============================================================================
+RULE-001 : Production deployment harus melalui testing.
+RULE-002 : Database backup wajib dilakukan sebelum perubahan.
+RULE-003 : Debug mode harus nonaktif.
+RULE-004 : Semua secret harus berada pada environment configuration.
+RULE-005 : Deployment harus memiliki rollback plan.
+RULE-006 : Semua aktivitas deployment harus tercatat.
+==============================================================================
+OUTPUT PHASE
+==============================================================================
+Phase-41 menghasilkan:
+
+1. Production Environment.
+2. Deployed Application.
+3. Production Database.
+4. SSL Configuration.
+5. Payment Integration.
+6. API Integration.
+7. Deployment Log.
+8. Rollback Procedure.
+9. Production Documentation.
+==============================================================================
+CHECKLIST
+==============================================================================
+[ ] Production server siap.
+[ ] Source code deployed.
+[ ] Dependency terinstall.
+[ ] Environment configured.
+[ ] Database deployed.
+[ ] Migration berhasil.
+[ ] Seeder berhasil.
+[ ] SSL aktif.
+[ ] Payment berjalan.
+[ ] API berjalan.
+[ ] Backup tersedia.
+[ ] Dokumentasi dibuat.
+==============================================================================
+ACCEPTANCE CRITERIA
+==============================================================================
+Phase dinyatakan selesai apabila:
+
+✓ Aplikasi berjalan pada production.
+✓ Database berjalan.
+✓ SSL aktif.
+✓ Payment aktif.
+✓ API aktif.
+✓ Webhook aktif.
+✓ Tidak ada critical error.
+✓ Rollback tersedia.
+✓ Dokumentasi deployment tersedia.
+✓ Siap masuk Phase-42 Monitoring.
+==============================================================================
+STATUS
+==============================================================================
+PHASE STATUS
+
+SELESAI
+
+NEXT PHASE
+
+45-PHASE-42.md
+==============================================================================
+END OF FILE
+==============================================================================

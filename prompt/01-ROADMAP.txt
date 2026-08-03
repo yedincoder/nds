@@ -1,0 +1,244 @@
+# ==============================================================================
+# FILE        : 01-ROADMAP.md
+# PROJECT     : NgAppID Development Standard (NDS)
+# VERSION     : 1.0.0
+# STATUS      : FINAL (LOCKED)
+# AUTHOR      : NgAppID
+# ==============================================================================
+# ROADMAP DEVELOPMENT
+# ==============================================================================
+Dokumen ini adalah roadmap resmi pengembangan project NgAppID.
+STATUS:
+LOCKED
+Roadmap ini tidak boleh diubah selama proses pengembangan berlangsung.
+Perubahan roadmap hanya diperbolehkan pada major version berikutnya.
+Contoh:
+- NDS v2.0
+- NDS v3.0
+Tidak diperbolehkan pada:
+- NDS v1.x
+# ==============================================================================
+# ROADMAP PRINCIPLE
+# ==============================================================================
+Seluruh project mengikuti Software Development Life Cycle (SDLC).
+Aturan:
+1. Urutan pengerjaan wajib mengikuti roadmap.
+2. Tidak boleh melompati Phase.
+3. Tidak boleh mengubah urutan Phase.
+4. Tidak boleh menggabungkan beberapa Phase menjadi satu.
+5. Setiap Phase wajib selesai sebelum melanjutkan Phase berikutnya.
+# ==============================================================================
+# LEVEL-00 : PROJECT PLANNING
+# ==============================================================================
+Tujuan:
+Menentukan arah dan dasar project.
+Phase-00 : Project Blueprint
+Output:
+- Gambaran Project.
+- Visi.
+- Misi.
+- Target.
+- Scope.
+----------------------------------------
+Phase-01 : Business Requirement
+Output:
+- Business Requirement Document (BRD).
+----------------------------------------
+Phase-02 : Product Requirement
+Output:
+- Product Requirement Document (PRD).
+----------------------------------------
+Phase-03 : Software Requirement
+Output:
+- Software Requirement Specification (SRS).
+# ==============================================================================
+# LEVEL-01 : SYSTEM DESIGN
+# ==============================================================================
+Tujuan:
+Merancang sistem sebelum proses coding.
+Phase-04 : System Architecture
+----------------------------------------
+Phase-05 : Database Architecture
+----------------------------------------
+Phase-06 : Module Architecture
+----------------------------------------
+Phase-07 : Folder Architecture
+----------------------------------------
+Phase-08 : UI / UX Architecture
+Output:
+- Architecture Complete.
+# ==============================================================================
+# LEVEL-02 : PROJECT FOUNDATION
+# ==============================================================================
+Tujuan:
+Mempersiapkan pondasi project.
+Phase-09 : Project Initialization
+----------------------------------------
+Phase-10 : Development Environment
+----------------------------------------
+Phase-11 : Authentication
+----------------------------------------
+Phase-12 : Authorization
+Output:
+- Foundation Complete.
+# ==============================================================================
+# LEVEL-03 : CORE MODULE
+# ==============================================================================
+Tujuan:
+Membangun fitur utama aplikasi.
+Phase-13 : CMS
+----------------------------------------
+Phase-14 : Product
+----------------------------------------
+Phase-15 : Service
+----------------------------------------
+Phase-16 : Blog
+----------------------------------------
+Phase-17 : Portfolio
+Output:
+- Core Module Complete.
+# ==============================================================================
+# LEVEL-04 : ECOMMERCE
+# ==============================================================================
+Tujuan:
+Membangun sistem transaksi dan penjualan.
+Phase-18 : Shopping Cart
+----------------------------------------
+Phase-19 : Checkout
+----------------------------------------
+Phase-20 : Billing
+----------------------------------------
+Phase-21 : Payment
+----------------------------------------
+Phase-22 : Midtrans Integration
+Output:
+- Ecommerce Complete.
+# ==============================================================================
+# LEVEL-05 : CLIENT AREA
+# ==============================================================================
+Tujuan:
+Membangun dashboard pelanggan.
+Phase-23 : Dashboard
+----------------------------------------
+Phase-24 : Order
+----------------------------------------
+Phase-25 : Invoice
+----------------------------------------
+Phase-26 : Download
+----------------------------------------
+Phase-27 : Support Ticket
+Output:
+- Client Area Complete.
+# ==============================================================================
+# LEVEL-06 : ADMIN PANEL
+# ==============================================================================
+Tujuan:
+Membangun dashboard administrator.
+Phase-28 : Dashboard
+----------------------------------------
+Phase-29 : Customer
+----------------------------------------
+Phase-30 : Product Management
+----------------------------------------
+Phase-31 : Billing Management
+----------------------------------------
+Phase-32 : Report
+----------------------------------------
+Phase-33 : System Settings
+Output:
+- Admin Panel Complete.
+# ==============================================================================
+# LEVEL-07 : API
+# ==============================================================================
+Tujuan:
+Menyediakan layanan API.
+Phase-34 : REST API
+----------------------------------------
+Phase-35 : API Authentication
+----------------------------------------
+Phase-36 : Webhook
+Output:
+- API Complete.
+# ==============================================================================
+# LEVEL-08 : QUALITY ASSURANCE
+# ==============================================================================
+Tujuan:
+Menjamin kualitas aplikasi.
+Phase-37 : Security Review
+----------------------------------------
+Phase-38 : Performance Optimization
+----------------------------------------
+Phase-39 : Testing
+Output:
+- Quality Passed.
+# ==============================================================================
+# LEVEL-09 : DEPLOYMENT
+# ==============================================================================
+Tujuan:
+Mempersiapkan aplikasi menuju production.
+Phase-40 : Server Configuration
+----------------------------------------
+Phase-41 : Production Deployment
+----------------------------------------
+Phase-42 : Monitoring
+Output:
+- Production Ready.
+# ==============================================================================
+# LEVEL-10 : DOCUMENTATION
+# ==============================================================================
+Tujuan:
+Membuat dokumentasi lengkap project.
+Phase-43 : User Guide
+----------------------------------------
+Phase-44 : Developer Guide
+----------------------------------------
+Phase-45 : API Documentation
+Output:
+- Documentation Complete.
+# ==============================================================================
+# PROJECT COMPLETION
+# ==============================================================================
+Setelah seluruh Phase selesai:
+1. Final Code Review.
+2. Final Database Review.
+3. Final UI Review.
+4. Final Security Review.
+5. Final Performance Review.
+6. Final Documentation Review.
+7. Release Candidate (RC).
+8. Production Release.
+9. Version 1.0.0 Released.
+# ==============================================================================
+# RULES
+# ==============================================================================
+1. Seluruh Phase WAJIB dikerjakan secara berurutan.
+2. Tidak boleh mengerjakan Phase berikutnya sebelum Phase sebelumnya selesai.
+3. Setiap Phase wajib memiliki:
+- Tujuan.
+- Scope.
+- Output.
+- Checklist.
+- Acceptance Criteria.
+- Dokumentasi.
+4. Jika terjadi perubahan requirement di tengah project:
+JANGAN mengubah roadmap.
+Gunakan:
+CHANGE REQUEST
+Perubahan dicatat sebagai:
+- Future Improvement.
+- Next Major Version.
+5. Roadmap ini adalah satu-satunya acuan resmi pengembangan.
+# ==============================================================================
+# STATUS
+# ==============================================================================
+ROADMAP STATUS:
+LOCKED
+VERSION:
+1.0.0
+LAST UPDATE:
+2026-08-02
+NEXT DOCUMENT:
+02-NDS-STANDARD.md
+# ==============================================================================
+# END OF FILE
+# ==============================================================================
