@@ -9,7 +9,7 @@ class HomeController extends BaseController
 {
     public function index(): string
     {
-        return view('welcome_message');
+        return view('welcome_message', ['title' => 'Home', 'page' => 'home']);
     }
 
     public function about(): string

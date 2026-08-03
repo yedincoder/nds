@@ -29,24 +29,9 @@ $routes->group('auth', function ($routes) {
 // ================================================================
 // CMS / BLOG / PORTFOLIO
 // ================================================================
-$routes->get('blog', '\App\Modules\Blog\Controllers\BlogController::index');
-$routes->get('blog/search', '\App\Modules\Blog\Controllers\BlogController::search');
-$routes->get('blog/(:any)', '\App\Modules\Blog\Controllers\BlogController::detail/$1');
 $routes->get('articles', '\App\Modules\CMS\Controllers\ArticleController::index');
 $routes->get('article/(:any)', '\App\Modules\CMS\Controllers\ArticleController::detail/$1');
 $routes->get('page/(:any)', '\App\Modules\CMS\Controllers\PageController::page/$1');
-$routes->get('portfolio', '\App\Modules\Portfolio\Controllers\PortfolioController::index');
-$routes->get('portfolio/(:any)', '\App\Modules\Portfolio\Controllers\PortfolioController::detail/$1');
-
-// ================================================================
-// PRODUCTS & SERVICES
-// ================================================================
-$routes->get('products', '\App\Modules\Product\Controllers\ProductController::index');
-$routes->get('products/(:any)', '\App\Modules\Product\Controllers\ProductController::detail/$1');
-$routes->get('product/category/(:any)', '\App\Modules\Product\Controllers\ProductController::category/$1');
-$routes->get('services', '\App\Modules\Service\Controllers\ServiceController::index');
-$routes->get('services/(:any)', '\App\Modules\Service\Controllers\ServiceController::detail/$1');
-$routes->post('services/(:any)/quote', '\App\Modules\Service\Controllers\ServiceController::requestQuote/$1');
 
 // ================================================================
 // ECOMMERCE
