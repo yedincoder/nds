@@ -544,6 +544,18 @@
                     <span>Reports</span>
                 </a>
             </li>
+            <li class="<?= uri_string() == 'admin/portfolio' ? 'active' : '' ?>">
+                <a href="/admin/portfolio">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Portfolio</span>
+                </a>
+            </li>
+            <li class="<?= uri_string() == 'admin/services' ? 'active' : '' ?>">
+                <a href="/admin/services">
+                    <i class="fas fa-cogs"></i>
+                    <span>Services</span>
+                </a>
+            </li>
             <li class="<?= strpos(uri_string(), 'admin/cms') === 0 ? 'active' : '' ?>">
                 <a href="/admin/cms/dashboard">
                     <i class="fas fa-newspaper"></i>
