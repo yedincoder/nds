@@ -6,35 +6,60 @@
     <h3>CMS Dashboard</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item active">CMS Dashboard</li>
+            <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item active">CMS</li>
         </ol>
     </nav>
 </div>
 
-<!-- Statistics -->
+<!-- Statistics - 1 row x 4 columns -->
 <div class="row mb-4">
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="stat-card" style="border-left-color: #1ABB9C;">
-            <h3><?= number_format($stats['pages']?? 0)?></h3>
-            <p><i class="fas fa-file-alt me-2"></i>Total Pages</p>
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:var(--primary-soft);color:var(--primary)"><i class="fas fa-file-alt"></i></div>
+                    <div class="kpi-label">Total Pages</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['pages'] ?? 0) ?></div>
+            <div class="kpi-subtext">Halaman website</div>
         </div>
     </div>
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="stat-card" style="border-left-color: #3498DB;">
-            <h3><?= number_format($stats['articles']?? 0)?></h3>
-            <p><i class="fas fa-edit me-2"></i>Total Articles</p>
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:rgba(56,189,248,.12);color:#0284c7"><i class="fas fa-edit"></i></div>
+                    <div class="kpi-label">Total Articles</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['articles'] ?? 0) ?></div>
+            <div class="kpi-subtext">Artikel & tutorial</div>
         </div>
     </div>
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="stat-card" style="border-left-color: #E74C3E;">
-            <h3><?= number_format($stats['categories']?? 0)?></h3>
-            <p><i class="fas fa-folder me-2"></i>Categories</p>
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:rgba(239,68,68,.12);color:#dc2626"><i class="fas fa-folder"></i></div>
+                    <div class="kpi-label">Categories</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['categories'] ?? 0) ?></div>
+            <div class="kpi-subtext">Kategori konten</div>
         </div>
     </div>
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="stat-card" style="border-left-color: #F39C12;">
-            <h3><?= number_format($stats['tags']?? 0)?></h3>
-            <p><i class="fas fa-tags me-2"></i>Tags</p>
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:rgba(245,158,11,.14);color:#b45309"><i class="fas fa-tags"></i></div>
+                    <div class="kpi-label">Tags</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['tags'] ?? 0) ?></div>
+            <div class="kpi-subtext">Label konten</div>
         </div>
     </div>
 </div>
@@ -44,35 +69,27 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-0">CMS Quick Actions</h5>
+                <div class="card-title">CMS Quick Actions</div>
             </div>
             <div class="card-body">
-                <a href="/admin/cms/pages" class="btn btn-primary me-2 mb-2">
-                    <i class="fas fa-file-alt me-1"></i> Manage Pages
-                </a>
-                <a href="/admin/cms/articles" class="btn btn-primary me-2 mb-2">
-                    <i class="fas fa-edit me-1"></i> Manage Articles
-                </a>
-                <a href="/admin/cms/categories" class="btn btn-primary me-2 mb-2">
-                    <i class="fas fa-folder me-1"></i> Manage Categories
-                </a>
-                <a href="/admin/cms/tags" class="btn btn-primary mb-2">
-                    <i class="fas fa-tags me-1"></i> Manage Tags
-                </a>
+                <a href="/admin/cms/pages" class="btn btn-primary me-2 mb-2"><i class="fas fa-file-alt me-1"></i> Manage Pages</a>
+                <a href="/admin/cms/articles" class="btn btn-outline-primary me-2 mb-2"><i class="fas fa-edit me-1"></i> Manage Articles</a>
+                <a href="/admin/cms/categories" class="btn btn-outline-primary me-2 mb-2"><i class="fas fa-folder me-1"></i> Categories</a>
+                <a href="/admin/cms/tags" class="btn btn-outline-primary mb-2"><i class="fas fa-tags me-1"></i> Tags</a>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Recent Pages -->
+<!-- Recent Pages & Articles -->
 <div class="row">
     <div class="col-xl-8 col-lg-12">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">Recent Pages</h5>
-                <a href="/admin/cms/pages" class="btn btn-sm btn-primary">View All</a>
+            <div class="card-header">
+                <div class="card-title">Recent Pages</div>
+                <a href="/admin/cms/pages" class="btn btn-sm btn-outline-primary">View All</a>
             </div>
-            <div class="card-body">
+            <div class="card-body" style="padding:8px 16px">
                 <?php if (!empty($recent_pages)):?>
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -87,26 +104,23 @@
                         <tbody>
                             <?php foreach ($recent_pages as $page):?>
                             <tr>
-                                <td><?= esc($page->title?? '-')?></td>
-                                <td><?= esc($page->slug?? '-')?></td>
+                                <td><strong><?= esc($page->title ?? '-') ?></strong></td>
+                                <td><?= esc($page->slug ?? '-') ?></td>
                                 <td>
                                     <?php
-                                    $statusClass = match($page->status?? 'draft') {
-                                        'draft' => 'bg-warning',
+                                    $statusClass = match($page->status ?? 'draft') {
+                                        'draft' => 'bg-secondary',
                                         'published' => 'bg-success',
-                                        'archived' => 'bg-secondary',
+                                        'archived' => 'bg-warning',
                                         default => 'bg-secondary'
                                     };
                                     ?>
-                                    <span class="badge <?= $statusClass?>"><?= esc(ucfirst($page->status?? 'draft'))?></span>
+                                    <span class="badge <?= $statusClass ?>"><?= esc(ucfirst($page->status ?? 'draft')) ?></span>
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <a href="/admin/cms/pages/edit/<?= $page->id?>" class="btn btn-sm btn-outline-primary" title="Edit"><i class="fas fa-edit"></i></a>
-                                        <form action="<?= site_url('/admin/cms/pages/delete/'. $page->id)?>" method="POST" style="display:inline">
-                                            <input type="hidden" name="id" value="<?= $page->id?>">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure?')"><i class="fas fa-trash"></i></button>
-                                        </form>
+                                        <a href="/admin/cms/pages/<?= $page->id ?>/edit" class="btn btn-sm btn-outline-primary" title="Edit"><i class="fas fa-edit"></i></a>
+                                        <a href="/admin/cms/pages/<?= $page->id ?>/delete" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure?')"><i class="fas fa-trash"></i></a>
                                     </div>
                                 </td>
                             </tr>
@@ -116,8 +130,8 @@
                 </div>
                 <?php else:?>
                 <div class="text-center py-4">
-                    <i class="fas fa-file-alt fa-3x mb-3" style="color: var(--text-primary); opacity: 0.3;"></i>
-                    <p class="mb-0">No pages yet</p>
+                    <i class="fas fa-file-alt fa-2x mb-2" style="color:var(--t-muted);opacity:.3"></i>
+                    <p class="mb-0 text-muted">Belum ada halaman</p>
                 </div>
                 <?php endif;?>
             </div>
@@ -125,46 +139,33 @@
     </div>
     <div class="col-xl-4 col-lg-12">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">Recent Articles</h5>
-                <a href="/admin/cms/articles" class="btn btn-sm btn-primary">View All</a>
+            <div class="card-header">
+                <div class="card-title">Recent Articles</div>
+                <a href="/admin/cms/articles" class="btn btn-sm btn-outline-primary">View All</a>
             </div>
             <div class="card-body">
                 <?php if (!empty($recent_articles)):?>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Author</th>
-                                <th>Published</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($recent_articles as $article):?>
-                            <tr>
-                                <td><?= esc($article->title?? '-')?></td>
-                                <td><?= esc($article->author?? '-')?></td>
-                                <td><?= date('d M Y', strtotime($article->published_at?? date('Y-m-d')))?></td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <a href="/admin/cms/articles/edit/<?= $article->id?>" class="btn btn-sm btn-outline-primary" title="Edit"><i class="fas fa-edit"></i></a>
-                                        <form action="<?= site_url('/admin/cms/articles/delete/'.$article->id)?>" method="POST" style="display:inline">
-                                            <input type="hidden" name="id" value="<?= $article->id?>">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure?')"><i class="fas fa-trash"></i></button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php endforeach;?>
-                        </tbody>
-                    </table>
+                <?php foreach ($recent_articles as $article):?>
+                <div class="py-2 border-bottom">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <strong style="font-size:13px"><?= esc($article->title ?? '-') ?></strong>
+                        <?php
+                        $aClass = match($article->status ?? 'pending') {
+                            'published' => 'bg-success',
+                            'pending' => 'bg-warning',
+                            'archived' => 'bg-secondary',
+                            default => 'bg-secondary'
+                        };
+                        ?>
+                        <span class="badge <?= $aClass ?>"><?= esc(ucfirst($article->status ?? 'pending')) ?></span>
+                    </div>
+                    <small class="text-muted"><?= esc($article->author ?? '') ?> · <?= date('d M Y', strtotime($article->published_at ?? $article->created_at ?? date('Y-m-d'))) ?></small>
                 </div>
+                <?php endforeach;?>
                 <?php else:?>
                 <div class="text-center py-4">
-                    <i class="fas fa-edit fa-3x mb-3" style="color: var(--text-primary); opacity: 0.3;"></i>
-                    <p class="mb-0">No articles yet</p>
+                    <i class="fas fa-edit fa-2x mb-2" style="color:var(--t-muted);opacity:.3"></i>
+                    <p class="mb-0 text-muted">Belum ada artikel</p>
                 </div>
                 <?php endif;?>
             </div>
@@ -172,10 +173,4 @@
     </div>
 </div>
 
-<?= $this->endSection()?>
-
-<?= $this->section('scripts')?>
-<script>
-// CMS-specific JavaScript
-</script>
 <?= $this->endSection()?>

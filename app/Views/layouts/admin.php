@@ -207,6 +207,10 @@
             .shell.sidebar-open .d-sidebar, body.sidebar-open .d-sidebar { transform:translateX(0); }
         }
         .sidebar-footer a { color:var(--t-muted); text-decoration:none; }
+        .kpi-identity { align-items:center; display:flex; gap:10px; }
+        .kpi-subtext { color:var(--t-muted); font-size:12px; }
+        .kpi-card .kpi-value { font-size:28px; }
+        .kpi-card:hover { border-color:var(--primary); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.08); }
     </style>
 </head>
 <body data-active="<?= esc($page ?? 'dashboard') ?>" data-crumbs="Admin | <?= esc($title ?? 'Dashboard') ?>">

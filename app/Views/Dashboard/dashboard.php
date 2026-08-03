@@ -11,77 +11,106 @@
     </nav>
 </div>
 
-<!-- Stats Cards -->
+<!-- Stats Cards - 1 row x 4 columns -->
 <div class="row mb-4">
-    <div class="col-xl-3 col-md-6 mb-3">
-        <div class="stat-card" style="border-left: 4px solid #E65C00;">
-            <h3 style="color:#E65C00"><?= number_format($stats['total_customers'] ?? 0) ?></h3>
-            <p><i class="fas fa-users me-2"></i>Customers</p>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:var(--primary-soft);color:var(--primary)"><i class="fas fa-users"></i></div>
+                    <div class="kpi-label">Customers</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['total_customers'] ?? 0) ?></div>
+            <div class="kpi-subtext">Total pelanggan terdaftar</div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-3">
-        <div class="stat-card" style="border-left: 4px solid #3498DB;">
-            <h3 style="color:#3498DB"><?= number_format($stats['total_orders'] ?? 0) ?></h3>
-            <p><i class="fas fa-shopping-cart me-2"></i>Total Orders</p>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:rgba(56,189,248,.12);color:#0284c7"><i class="fas fa-shopping-cart"></i></div>
+                    <div class="kpi-label">Orders</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['total_orders'] ?? 0) ?></div>
+            <div class="kpi-subtext"><?= $stats['pending_orders'] ?? 0 ?> pending</div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-3">
-        <div class="stat-card" style="border-left: 4px solid #26B99A;">
-            <h3 style="color:#26B99A">Rp <?= number_format($stats['total_revenue'] ?? 0, 0, ',', '.') ?></h3>
-            <p><i class="fas fa-money-bill me-2"></i>Revenue</p>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:rgba(16,185,129,.12);color:#059669"><i class="fas fa-money-bill-wave"></i></div>
+                    <div class="kpi-label">Revenue</div>
+                </div>
+            </div>
+            <div class="kpi-value" style="font-size:20px">Rp <?= number_format($stats['total_revenue'] ?? 0, 0, ',', '.') ?></div>
+            <div class="kpi-subtext"><?= $stats['total_payments'] ?? 0 ?> pembayaran sukses</div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-3">
-        <div class="stat-card" style="border-left: 4px solid #F39C12;">
-            <h3 style="color:#F39C12"><?= number_format($stats['pending_orders'] ?? 0) ?></h3>
-            <p><i class="fas fa-clock me-2"></i>Pending Orders</p>
-        </div>
-    </div>
-</div>
-<div class="row mb-4">
-    <div class="col-xl-3 col-md-6 mb-3">
-        <div class="stat-card" style="border-left: 4px solid #8E44AD;">
-            <h3 style="color:#8E44AD"><?= number_format($stats['total_products'] ?? 0) ?></h3>
-            <p><i class="fas fa-box me-2"></i>Products</p>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-3">
-        <div class="stat-card" style="border-left: 4px solid #E67E22;">
-            <h3 style="color:#E67E22"><?= number_format($stats['total_services'] ?? 0) ?></h3>
-            <p><i class="fas fa-cogs me-2"></i>Services</p>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-3">
-        <div class="stat-card" style="border-left: 4px solid #E74C3C;">
-            <h3 style="color:#E74C3C"><?= number_format($stats['pending_tickets'] ?? 0) ?></h3>
-            <p><i class="fas fa-headset me-2"></i>Open Tickets</p>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-3">
-        <div class="stat-card" style="border-left: 4px solid #1ABC9C;">
-            <h3 style="color:#1ABC9C"><?= number_format($stats['total_testimonials'] ?? 0) ?></h3>
-            <p><i class="fas fa-quote-left me-2"></i>Testimonials</p>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:rgba(245,158,11,.14);color:#b45309"><i class="fas fa-clock"></i></div>
+                    <div class="kpi-label">Pending Orders</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['pending_orders'] ?? 0) ?></div>
+            <div class="kpi-subtext"><?= $stats['pending_invoices'] ?? 0 ?> invoice belum bayar</div>
         </div>
     </div>
 </div>
 
-<!-- Quick Actions -->
+<!-- Stats Cards - row 2 -->
 <div class="row mb-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Quick Actions</h5>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:var(--primary-soft);color:var(--primary)"><i class="fas fa-box"></i></div>
+                    <div class="kpi-label">Products</div>
+                </div>
             </div>
-            <div class="card-body">
-                <a href="/admin/products/create" class="btn btn-outline-primary me-2 mb-2"><i class="fas fa-plus me-1"></i> Product</a>
-                <a href="/admin/services" class="btn btn-outline-primary me-2 mb-2"><i class="fas fa-cogs me-1"></i> Service</a>
-                <a href="/admin/portfolio" class="btn btn-outline-primary me-2 mb-2"><i class="fas fa-briefcase me-1"></i> Portfolio</a>
-                <a href="/admin/testimonials" class="btn btn-outline-primary me-2 mb-2"><i class="fas fa-quote-left me-1"></i> Testimonials</a>
-                <a href="/admin/cms/pages/create" class="btn btn-outline-primary me-2 mb-2"><i class="fas fa-file-alt me-1"></i> Add Page</a>
-                <a href="/admin/cms/articles/create" class="btn btn-outline-primary me-2 mb-2"><i class="fas fa-newspaper me-1"></i> Add Article</a>
-                <a href="/admin/customers" class="btn btn-outline-primary me-2 mb-2"><i class="fas fa-users me-1"></i> Customers</a>
-                <a href="/admin/reports" class="btn btn-outline-primary me-2 mb-2"><i class="fas fa-chart-line me-1"></i> Reports</a>
+            <div class="kpi-value"><?= number_format($stats['total_products'] ?? 0) ?></div>
+            <div class="kpi-subtext">Produk aktif</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:var(--primary-soft);color:var(--primary)"><i class="fas fa-cogs"></i></div>
+                    <div class="kpi-label">Services</div>
+                </div>
             </div>
+            <div class="kpi-value"><?= number_format($stats['total_services'] ?? 0) ?></div>
+            <div class="kpi-subtext">Layanan aktif</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:rgba(239,68,68,.12);color:#dc2626"><i class="fas fa-headset"></i></div>
+                    <div class="kpi-label">Open Tickets</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['pending_tickets'] ?? 0) ?></div>
+            <div class="kpi-subtext">Ticket belum selesai</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:var(--primary-soft);color:var(--primary)"><i class="fas fa-quote-left"></i></div>
+                    <div class="kpi-label">Testimonials</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['total_testimonials'] ?? 0) ?></div>
+            <div class="kpi-subtext">Testimoni disetujui</div>
         </div>
     </div>
 </div>
@@ -90,8 +119,8 @@
 <div class="row mb-4">
     <div class="col-xl-8 col-lg-7">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">Revenue (6 Bulan Terakhir)</h5>
+            <div class="card-header">
+                <div class="card-title">Revenue (6 Bulan Terakhir)</div>
             </div>
             <div class="card-body">
                 <canvas id="revenueChart" height="120"></canvas>
@@ -101,15 +130,15 @@
     <div class="col-xl-4 col-lg-5">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-0">Order Status</h5>
+                <div class="card-title">Order Status</div>
             </div>
             <div class="card-body">
                 <?php
                 $orderColors = [
-                    'completed' => '#26B99A', 'paid' => '#26B99A',
-                    'processing' => '#3498DB', 'pending' => '#F39C12',
-                    'waiting_payment' => '#E67E22', 'cancelled' => '#E74C3C',
-                    'expired' => '#95A5A6',
+                    'completed' => '#059669', 'paid' => '#059669',
+                    'processing' => '#0284c7', 'pending' => '#d97706',
+                    'waiting_payment' => '#ea580c', 'cancelled' => '#dc2626',
+                    'expired' => '#64748b',
                 ];
                 $orderLabels = [
                     'completed' => 'Completed', 'paid' => 'Paid',
@@ -120,39 +149,39 @@
                 $totalOrders = array_sum($orderStatus) ?: 1;
                 foreach ($orderStatus as $status => $count):
                     $pct = round(($count / $totalOrders) * 100);
-                    $color = $orderColors[$status] ?? '#95A5A6';
+                    $color = $orderColors[$status] ?? '#64748b';
                     $label = $orderLabels[$status] ?? ucfirst($status);
                 ?>
                 <div class="mb-3">
                     <div class="d-flex justify-content-between mb-1">
-                        <span><?= $label ?></span>
-                        <span style="color:<?= $color ?>"><?= $count ?> (<?= $pct ?>%)</span>
+                        <span style="color:var(--t-base);font-size:13px"><?= $label ?></span>
+                        <span style="color:<?= $color ?>;font-size:13px"><?= $count ?> (<?= $pct ?>%)</span>
                     </div>
-                    <div class="progress" style="height: 8px;">
+                    <div class="progress">
                         <div class="progress-bar" style="width:<?= $pct ?>%; background:<?= $color ?>"></div>
                     </div>
                 </div>
                 <?php endforeach; ?>
                 <?php if (empty($orderStatus)): ?>
-                <p class="text-muted text-center">No orders yet</p>
+                <p class="text-muted text-center">Belum ada order</p>
                 <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Recent Orders -->
+<!-- Recent Orders & Payments -->
 <div class="row mb-4">
     <div class="col-xl-8 col-lg-7">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">Recent Orders</h5>
+            <div class="card-header">
+                <div class="card-title">Recent Orders</div>
                 <a href="/admin/orders" class="btn btn-sm btn-outline-primary">View All</a>
             </div>
-            <div class="card-body">
+            <div class="card-body" style="padding:8px 16px">
                 <?php if (!empty($recentOrders)): ?>
                 <div class="table-responsive">
-                    <table class="table table-hover table-sm">
+                    <table class="table table-hover">
                         <thead>
                             <tr><th>Order #</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr>
                         </thead>
@@ -164,7 +193,7 @@
                                 <td>Rp <?= number_format($order->total ?? 0, 0, ',', '.') ?></td>
                                 <td>
                                     <?php $sc = match($order->status ?? '') {
-                                        'paid','completed' => 'bg-success', 'pending' => 'bg-warning text-dark',
+                                        'paid','completed' => 'bg-success', 'pending' => 'bg-warning',
                                         'processing' => 'bg-info', 'cancelled' => 'bg-danger',
                                         default => 'bg-secondary'
                                     }; ?>
@@ -177,7 +206,7 @@
                     </table>
                 </div>
                 <?php else: ?>
-                <div class="text-center py-4"><i class="fas fa-inbox fa-2x mb-2" style="color:#73879C;opacity:0.3;"></i><p class="mb-0">No recent orders</p></div>
+                <div class="text-center py-4"><p class="mb-0">Belum ada order</p></div>
                 <?php endif; ?>
             </div>
         </div>
@@ -185,8 +214,8 @@
 
     <div class="col-xl-4 col-lg-5">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">Recent Payments</h5>
+            <div class="card-header">
+                <div class="card-title">Recent Payments</div>
                 <a href="/admin/payments" class="btn btn-sm btn-outline-primary">View All</a>
             </div>
             <div class="card-body">
@@ -198,32 +227,32 @@
                         <br><small class="text-muted">Rp <?= number_format($pm->amount ?? 0, 0, ',', '.') ?></small>
                     </div>
                     <?php $pmc = match($pm->status ?? '') {
-                        'success' => 'bg-success', 'pending' => 'bg-warning text-dark',
+                        'success' => 'bg-success', 'pending' => 'bg-warning',
                         'failed' => 'bg-danger', default => 'bg-secondary'
                     }; ?>
                     <span class="badge <?= $pmc ?>"><?= ucfirst($pm->status ?? '') ?></span>
                 </div>
                 <?php endforeach; ?>
                 <?php else: ?>
-                <p class="text-muted text-center">No payments yet</p>
+                <p class="text-muted text-center">Belum ada pembayaran</p>
                 <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Recent Invoices & Recent Tickets -->
+<!-- Recent Invoices & Tickets -->
 <div class="row mb-4">
     <div class="col-xl-7">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">Recent Invoices</h5>
+            <div class="card-header">
+                <div class="card-title">Recent Invoices</div>
                 <a href="/admin/invoices" class="btn btn-sm btn-outline-primary">View All</a>
             </div>
-            <div class="card-body">
+            <div class="card-body" style="padding:8px 16px">
                 <?php if (!empty($recentInvoices)): ?>
                 <div class="table-responsive">
-                    <table class="table table-hover table-sm">
+                    <table class="table table-hover">
                         <thead>
                             <tr><th>Invoice #</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr>
                         </thead>
@@ -235,7 +264,7 @@
                                 <td>Rp <?= number_format($inv->total ?? 0, 0, ',', '.') ?></td>
                                 <td>
                                     <?php $ic = match($inv->status ?? '') {
-                                        'paid' => 'bg-success', 'unpaid' => 'bg-warning text-dark',
+                                        'paid' => 'bg-success', 'unpaid' => 'bg-warning',
                                         'expired' => 'bg-danger', default => 'bg-secondary'
                                     }; ?>
                                     <span class="badge <?= $ic ?>"><?= ucfirst($inv->status ?? 'draft') ?></span>
@@ -247,15 +276,15 @@
                     </table>
                 </div>
                 <?php else: ?>
-                <p class="text-muted text-center">No invoices yet</p>
+                <p class="text-muted text-center">Belum ada invoice</p>
                 <?php endif; ?>
             </div>
         </div>
     </div>
     <div class="col-xl-5">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">Recent Tickets</h5>
+            <div class="card-header">
+                <div class="card-title">Recent Tickets</div>
                 <a href="/admin/support" class="btn btn-sm btn-outline-primary">View All</a>
             </div>
             <div class="card-body">
@@ -267,7 +296,7 @@
                         <br><small class="text-muted"><?= esc($tk->username ?? '') ?> · <?= date('d M Y', strtotime($tk->created_at ?? '')) ?></small>
                     </div>
                     <?php $tkc = match($tk->status ?? '') {
-                        'open' => 'bg-warning text-dark', 'waiting_response' => 'bg-info',
+                        'open' => 'bg-warning', 'waiting_response' => 'bg-info',
                         'resolved' => 'bg-success', 'closed' => 'bg-secondary',
                         default => 'bg-secondary'
                     }; ?>
@@ -275,19 +304,19 @@
                 </div>
                 <?php endforeach; ?>
                 <?php else: ?>
-                <p class="text-muted text-center">No tickets yet</p>
+                <p class="text-muted text-center">Belum ada ticket</p>
                 <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Recent Testimonials & Top Products -->
+<!-- Testimonials & Top Products -->
 <div class="row mb-4">
     <div class="col-xl-5">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">Recent Testimonials</h5>
+            <div class="card-header">
+                <div class="card-title">Recent Testimonials</div>
                 <a href="/admin/testimonials" class="btn btn-sm btn-outline-primary">View All</a>
             </div>
             <div class="card-body">
@@ -296,11 +325,11 @@
                 <div class="py-2 border-bottom">
                     <div class="d-flex align-items-center mb-1">
                         <?php for ($i = 1; $i <= 5; $i++): ?>
-                            <i class="fas fa-star" style="font-size:11px; color:<?= $i <= ($tm->rating ?? 5) ? '#F39C12' : '#ddd' ?>"></i>
+                            <i class="fas fa-star" style="font-size:11px; color:<?= $i <= ($tm->rating ?? 5) ? '#f59e0b' : '#e2e8f0' ?>"></i>
                         <?php endfor; ?>
                         <span class="ms-2 fw-bold" style="font-size:13px"><?= esc($tm->customer_name ?? '') ?></span>
                         <?php $tmc = match($tm->status ?? '') {
-                            'approved' => 'bg-success', 'rejected' => 'bg-danger', default => 'bg-warning text-dark'
+                            'approved' => 'bg-success', 'rejected' => 'bg-danger', default => 'bg-warning'
                         }; ?>
                         <span class="badge <?= $tmc ?> ms-2" style="font-size:10px"><?= ucfirst($tm->status ?? '') ?></span>
                     </div>
@@ -308,21 +337,21 @@
                 </div>
                 <?php endforeach; ?>
                 <?php else: ?>
-                <p class="text-muted text-center">No testimonials yet</p>
+                <p class="text-muted text-center">Belum ada testimoni</p>
                 <?php endif; ?>
             </div>
         </div>
     </div>
     <div class="col-xl-7">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">Top Products</h5>
+            <div class="card-header">
+                <div class="card-title">Top Products</div>
                 <a href="/admin/products" class="btn btn-sm btn-outline-primary">View All</a>
             </div>
-            <div class="card-body">
+            <div class="card-body" style="padding:8px 16px">
                 <?php if (!empty($topProducts)): ?>
                 <div class="table-responsive">
-                    <table class="table table-hover table-sm">
+                    <table class="table table-hover">
                         <thead>
                             <tr><th>Product</th><th>Sold</th><th>Status</th></tr>
                         </thead>
@@ -343,7 +372,7 @@
                     </table>
                 </div>
                 <?php else: ?>
-                <p class="text-muted text-center">No products yet</p>
+                <p class="text-muted text-center">Belum ada produk</p>
                 <?php endif; ?>
             </div>
         </div>
@@ -355,12 +384,12 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-0">Recent Activity</h5>
+                <div class="card-title">Recent Activity</div>
             </div>
-            <div class="card-body">
+            <div class="card-body" style="padding:8px 16px">
                 <?php if (!empty($recentActivity)): ?>
                 <div class="table-responsive">
-                    <table class="table table-hover table-sm">
+                    <table class="table table-hover">
                         <thead>
                             <tr><th>User</th><th>Action</th><th>Description</th><th>Time</th></tr>
                         </thead>
@@ -377,7 +406,7 @@
                     </table>
                 </div>
                 <?php else: ?>
-                <p class="text-muted text-center">No activity yet</p>
+                <p class="text-muted text-center">Belum ada aktivitas</p>
                 <?php endif; ?>
             </div>
         </div>
@@ -392,7 +421,6 @@
 const revenueData = <?= json_encode($revenueChart ?? []) ?>;
 const labels = revenueData.map(d => d.month);
 const values = revenueData.map(d => d.revenue);
-
 new Chart(document.getElementById('revenueChart'), {
     type: 'bar',
     data: {
@@ -412,17 +440,13 @@ new Chart(document.getElementById('revenueChart'), {
         plugins: {
             legend: { display: false },
             tooltip: {
-                callbacks: {
-                    label: ctx => 'Rp ' + ctx.raw.toLocaleString('id-ID')
-                }
+                callbacks: { label: ctx => 'Rp ' + ctx.raw.toLocaleString('id-ID') }
             }
         },
         scales: {
             y: {
                 beginAtZero: true,
-                ticks: {
-                    callback: v => 'Rp ' + v.toLocaleString('id-ID')
-                },
+                ticks: { callback: v => 'Rp ' + v.toLocaleString('id-ID') },
                 grid: { color: 'rgba(0,0,0,0.05)' }
             },
             x: { grid: { display: false } }
