@@ -22,7 +22,7 @@ class AdminDashboardController extends BaseController
             'total_portfolios' => $db->table('portfolios')->whereIn('status', ['published', 'featured'])->countAllResults(),
             'total_orders'     => $db->table('orders')->countAllResults(),
             'total_invoices'   => $db->table('invoices')->countAllResults(),
-            'total_revenue'    => $db->table('transactions')->where('status', 'success')->sum('amount') ?? 0,
+            'total_revenue'    => $db->table('transactions')->where('status', 'success')->selectSum('amount')->get()->getRow()->amount ?? 0,
             'pending_orders'   => $db->table('orders')->where('status', 'pending')->orWhere('status', 'waiting_payment')->countAllResults(),
             'pending_invoices' => $db->table('invoices')->where('status', 'unpaid')->countAllResults(),
             'pending_tickets'  => $db->table('tickets')->whereIn('status', ['open', 'waiting_response'])->countAllResults(),
@@ -315,7 +315,7 @@ class AdminDashboardController extends BaseController
         $data = [
             'title' => 'Reports',
             'stats' => [
-                'total_revenue'      => $db->table('transactions')->where('status', 'success')->sum('amount') ?? 0,
+                'total_revenue'      => $db->table('transactions')->where('status', 'success')->selectSum('amount')->get()->getRow()->amount ?? 0,
                 'total_orders'       => $db->table('orders')->countAllResults(),
                 'total_customers'    => $db->table('users')
                     ->join('user_roles ur', 'ur.user_id = users.id')
