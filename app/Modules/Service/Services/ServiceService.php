@@ -112,6 +112,41 @@ class ServiceService
         return $this->serviceModel->search($keyword, $limit);
     }
 
+    public function getServices(array $filters = []): array
+    {
+        $builder = $this->serviceModel->builder();
+        
+        if (!empty($filters['status'])) {
+            $builder->where('status', $filters['status']);
+        }
+        
+        if (!empty($filters['category_slug'])) {
+            $builder->join('service_categories sc', 'sc.id = services.category_id')
+                   ->where('sc.slug', $filters['category_slug']);
+        }
+        
+        $services = $builder->orderBy('name', 'ASC')->get()->getResultArray();
+        
+        return [
+            'success' => true,
+            'data' => $services
+        ];
+    }
+
+    public function getServiceBySlug(string $slug): array
+    {
+        $service = $this->serviceModel->where('slug', $slug)->first();
+        
+        if (!$service) {
+            return ['success' => false, 'message' => 'Service not found.'];
+        }
+        
+        return [
+            'success' => true,
+            'data' => $service
+        ];
+    }
+
     public function getServiceWithDetails(int $id): ?object
     {
         return $this->serviceModel->getWithCategory($id);
