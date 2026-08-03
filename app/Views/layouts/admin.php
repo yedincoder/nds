@@ -172,6 +172,88 @@
             background: linear-gradient(90deg, rgba(26,188,156,0.1) 0%, transparent 100%);
         }
 
+        .sidebar-menu .menu-header {
+            padding: 20px 20px 8px 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: rgba(255,255,255,0.35);
+        }
+
+        .sidebar-menu .menu-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .sidebar-menu .menu-toggle i.fa-chevron-down {
+            font-size: 11px;
+            transition: transform 0.3s;
+        }
+
+        .sidebar-menu .menu-toggle.collapsed i.fa-chevron-down {
+            transform: rotate(-90deg);
+        }
+
+        .sidebar-menu .submenu {
+            list-style: none;
+            padding: 0 0 5px 0;
+            display: none;
+        }
+
+        .sidebar-menu .submenu.show {
+            display: block;
+        }
+
+        .sidebar-menu .submenu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 9px 20px 9px 52px;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 13px;
+        }
+
+        .sidebar-menu .submenu li a:hover,
+        .sidebar-menu .submenu li.active a {
+            background: rgba(255,255,255,0.03);
+            color: var(--white-color);
+        }
+
+        .sidebar-menu .submenu li.active a {
+            color: var(--secondary-color);
+        }
+
+        .sidebar-menu .submenu li.active a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--secondary-color);
+        }
+
+        .sidebar-menu .submenu li a::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .sidebar-menu .submenu li.active a::before {
+            background: var(--secondary-color);
+        }
+
         .right_col {
             margin-left: var(--sidebar-width);
             margin-top: var(--topbar-height);
@@ -494,6 +576,22 @@
         body.sidebar-mini .site_title span {
             display: none;
         }
+
+        body.sidebar-mini .menu-header {
+            display: none;
+        }
+
+        body.sidebar-mini .submenu {
+            display: none !important;
+        }
+
+        body.sidebar-mini .menu-toggle {
+            pointer-events: none;
+        }
+
+        body.sidebar-mini .menu-toggle i.fa-chevron-down {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -508,91 +606,121 @@
         </div>
 
         <ul class="sidebar-menu">
-            <li class="<?= uri_string() == 'admin/dashboard' ? 'active' : '' ?>">
+            <li class="menu-header">UTAMA</li>
+            <li class="<?= uri_string() === 'admin/dashboard' ? 'active' : '' ?>">
                 <a href="/admin/dashboard">
                     <i class="fas fa-home"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li class="<?= uri_string() == 'admin/customers' ? 'active' : '' ?>">
-                <a href="/admin/customers">
-                    <i class="fas fa-users"></i>
-                    <span>Customers</span>
-                </a>
-            </li>
-            <li class="<?= uri_string() == 'admin/products' ? 'active' : '' ?>">
-                <a href="/admin/products">
-                    <i class="fas fa-box"></i>
-                    <span>Products</span>
-                </a>
-            </li>
-            <li class="<?= uri_string() == 'admin/orders' ? 'active' : '' ?>">
-                <a href="/admin/orders">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span>Orders</span>
-                </a>
-            </li>
-            <li class="<?= uri_string() == 'admin/invoices' ? 'active' : '' ?>">
-                <a href="/admin/invoices">
-                    <i class="fas fa-file-invoice"></i>
-                    <span>Invoices</span>
-                </a>
-            </li>
-            <li class="<?= uri_string() == 'admin/reports' ? 'active' : '' ?>">
-                <a href="/admin/reports">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Reports</span>
-                </a>
-            </li>
-            <li class="<?= uri_string() == 'admin/portfolio' ? 'active' : '' ?>">
-                <a href="/admin/portfolio">
-                    <i class="fas fa-briefcase"></i>
-                    <span>Portfolio</span>
-                </a>
-            </li>
-            <li class="<?= uri_string() == 'admin/services' ? 'active' : '' ?>">
-                <a href="/admin/services">
-                    <i class="fas fa-cogs"></i>
-                    <span>Services</span>
-                </a>
-            </li>
+
+            <li class="menu-header">MANAJEMEN KONTEN</li>
             <li class="<?= strpos(uri_string(), 'admin/cms') === 0 ? 'active' : '' ?>">
-                <a href="/admin/cms/dashboard">
-                    <i class="fas fa-newspaper"></i>
-                    <span>CMS</span>
+                <a href="#submenu-cms" class="menu-toggle <?= strpos(uri_string(), 'admin/cms') === 0 ? '' : 'collapsed' ?>" data-bs-toggle="collapse" aria-expanded="<?= strpos(uri_string(), 'admin/cms') === 0 ? 'true' : 'false' ?>">
+                    <span><i class="fas fa-newspaper me-2"></i>CMS</span>
+                    <i class="fas fa-chevron-down"></i>
                 </a>
+                <ul class="submenu collapse <?= strpos(uri_string(), 'admin/cms') === 0 ? 'show' : '' ?>" id="submenu-cms">
+                    <li class="<?= uri_string() === 'admin/cms/dashboard' ? 'active' : '' ?>">
+                        <a href="/admin/cms/dashboard">Dashboard</a>
+                    </li>
+                    <li class="<?= uri_string() === 'admin/cms/pages' ? 'active' : '' ?>">
+                        <a href="/admin/cms/pages">Pages</a>
+                    </li>
+                    <li class="<?= uri_string() === 'admin/cms/articles' ? 'active' : '' ?>">
+                        <a href="/admin/cms/articles">Articles</a>
+                    </li>
+                    <li class="<?= uri_string() === 'admin/cms/categories' ? 'active' : '' ?>">
+                        <a href="/admin/cms/categories">Categories</a>
+                    </li>
+                    <li class="<?= uri_string() === 'admin/cms/tags' ? 'active' : '' ?>">
+                        <a href="/admin/cms/tags">Tags</a>
+                    </li>
+                </ul>
             </li>
-            <li class="<?= strpos(uri_string(), 'admin/payments') === 0 ? 'active' : '' ?>">
-                <a href="/admin/payments">
-                    <i class="fas fa-credit-card"></i>
-                    <span>Payments (Midtrans)</span>
-                </a>
-            </li>
-            <li class="<?= uri_string() == 'admin/media' ? 'active' : '' ?>">
+            <li class="<?= uri_string() === 'admin/media' ? 'active' : '' ?>">
                 <a href="/admin/media">
                     <i class="fas fa-images"></i>
                     <span>Media Manager</span>
                 </a>
             </li>
-            <li class="<?= uri_string() == 'admin/support' ? 'active' : '' ?>">
-                <a href="/admin/support">
-                    <i class="fas fa-headset"></i>
-                    <span>Support</span>
+            <li class="<?= uri_string() === 'admin/portfolio' ? 'active' : '' ?>">
+                <a href="/admin/portfolio">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Portfolio</span>
                 </a>
             </li>
-            <li class="<?= uri_string() == 'admin/billing' ? 'active' : '' ?>">
-                <a href="/admin/billing">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                    <span>Billing</span>
+
+            <li class="menu-header">E-COMMERCE</li>
+            <li class="<?= uri_string() === 'admin/products' ? 'active' : '' ?>">
+                <a href="/admin/products">
+                    <i class="fas fa-box"></i>
+                    <span>Products</span>
                 </a>
             </li>
-            <li class="<?= uri_string() == 'admin/auth' ? 'active' : '' ?>">
+            <li class="<?= uri_string() === 'admin/orders' ? 'active' : '' ?>">
+                <a href="/admin/orders">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Orders</span>
+                </a>
+            </li>
+            <li class="<?= uri_string() === 'admin/invoices' ? 'active' : '' ?>">
+                <a href="/admin/invoices">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>Invoices</span>
+                </a>
+            </li>
+            <li class="<?= strpos(uri_string(), 'admin/payments') === 0 ? 'active' : '' ?>">
+                <a href="/admin/payments">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Payments</span>
+                </a>
+            </li>
+
+            <li class="menu-header">PELANGGAN</li>
+            <li class="<?= uri_string() === 'admin/customers' ? 'active' : '' ?>">
+                <a href="/admin/customers">
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                </a>
+            </li>
+            <li class="<?= uri_string() === 'admin/auth' ? 'active' : '' ?>">
                 <a href="/admin/auth">
                     <i class="fas fa-users-cog"></i>
                     <span>Auth Users</span>
                 </a>
             </li>
-            <li class="<?= uri_string() == 'admin/settings' ? 'active' : '' ?>">
+
+            <li class="menu-header">LAYANAN</li>
+            <li class="<?= uri_string() === 'admin/services' ? 'active' : '' ?>">
+                <a href="/admin/services">
+                    <i class="fas fa-cogs"></i>
+                    <span>Services</span>
+                </a>
+            </li>
+            <li class="<?= uri_string() === 'admin/billing' ? 'active' : '' ?>">
+                <a href="/admin/billing">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span>Billing</span>
+                </a>
+            </li>
+
+            <li class="menu-header">DUKUNGAN</li>
+            <li class="<?= strpos(uri_string(), 'admin/support') === 0 ? 'active' : '' ?>">
+                <a href="/admin/support">
+                    <i class="fas fa-headset"></i>
+                    <span>Support Tickets</span>
+                </a>
+            </li>
+
+            <li class="menu-header">LAPORAN & PENGATURAN</li>
+            <li class="<?= uri_string() === 'admin/reports' ? 'active' : '' ?>">
+                <a href="/admin/reports">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+            <li class="<?= uri_string() === 'admin/settings' ? 'active' : '' ?>">
                 <a href="/admin/settings">
                     <i class="fas fa-cog"></i>
                     <span>Settings</span>
