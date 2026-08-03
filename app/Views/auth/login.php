@@ -1,306 +1,110 @@
 <!DOCTYPE html>
-<html lang="id" data-bs-theme="light">
+<html lang="id" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - NgAppID</title>
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Bootstrap 5.3 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    
+    <script>(function(){try{var t=localStorage.getItem("dash26-theme"),e=window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.setAttribute("data-theme",t||(e?"dark":"light"))}catch(t){document.documentElement.setAttribute("data-theme","light")}})();</script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/assets/adminator/style.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #2A3F54;
-            --secondary-color: #1ABB9C;
-            --light-bg: #F7F7F7;
-            --white-color: #FFFFFF;
-            --border-color: #E5E5E5;
-            --text-primary: #73879C;
-            --text-dark: #2A3F54;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        [data-bs-theme="dark"] {
-            --primary-color: #1F2937;
-            --light-bg: #1F2937;
-            --white-color: #111827;
-            --border-color: #374151;
-            --text-primary: #9CA3AF;
-            --text-dark: #F3F4F6;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            font-size: 14px;
-            line-height: 1.6;
-            color: var(--text-primary);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-
-        [data-bs-theme="dark"] body {
-            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-        }
-
-        .login-container {
-            width: 100%;
-            max-width: 420px;
-            padding: 20px;
-        }
-
-        .login-card {
-            background: var(--white-color);
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            overflow: hidden;
-            transition: var(--transition);
-        }
-
-        .login-header {
-            background: var(--secondary-color);
-            color: var(--white-color);
-            padding: 30px 20px;
-            text-align: center;
-        }
-
-        .login-header h2 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .login-header p {
-            font-size: 14px;
-            opacity: 0.9;
-            margin: 0;
-        }
-
-        .login-body {
-            padding: 35px 30px;
-        }
-
-        .theme-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--white-color);
-            border: 2px solid var(--border-color);
-            color: var(--text-dark);
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-            z-index: 100;
-        }
-
-        .theme-toggle:hover {
-            border-color: var(--secondary-color);
-            color: var(--secondary-color);
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: var(--text-dark);
-            margin-bottom: 8px;
-        }
-
-        .form-control {
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 10px 14px;
-            font-size: 14px;
-            transition: var(--transition);
-            background: var(--white-color);
-            color: var(--text-dark);
-        }
-
-        .form-control:focus {
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
-        }
-
-        .btn-primary {
-            background: var(--secondary-color);
-            border: none;
-            border-radius: 6px;
-            padding: 12px 20px;
-            font-weight: 600;
-            transition: var(--transition);
-            width: 100%;
-        }
-
-        .btn-primary:hover {
-            background: #169f82;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(26, 188, 156, 0.3);
-        }
-
-        .form-text {
-            font-size: 13px;
-            color: var(--text-primary);
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .mt-4 {
-            margin-top: 20px !important;
-        }
-
-        .mb-4 {
-            margin-bottom: 20px !important;
-        }
-
-        .alert {
-            border-radius: 8px;
-            border: none;
-            padding: 12px 16px;
-            margin-bottom: 20px;
-        }
-
-        .alert-success {
-            background: #d1e7dd;
-            color: #0f5132;
-        }
-
-        .alert-danger {
-            background: #f8d7da;
-            color: #842029;
-        }
-
-        .text-primary {
-            color: var(--secondary-color) !important;
-        }
-
-        .text-decoration-underline {
-            text-decoration: underline !important;
-        }
-
-        @media (max-width: 480px) {
-            .login-card {
-                border-radius: 8px;
-            }
-            
-            .login-header {
-                padding: 25px 15px;
-            }
-            
-            .login-body {
-                padding: 25px 20px;
-            }
+        .auth-form { display: flex; flex-direction: column; gap: 16px; }
+        .auth-field { display: flex; flex-direction: column; gap: 6px; }
+        .auth-label { color: var(--t-base); font-size: 13px; font-weight: 500; }
+        .auth-input { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; color: var(--t-base); font-size: 13px; padding: 10px 12px; width: 100%; }
+        .auth-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-ring); }
+        .auth-btn { align-items: center; background: var(--primary); border: none; border-radius: 8px; color: #fff; cursor: pointer; display: inline-flex; font-size: 13px; font-weight: 600; justify-content: center; padding: 10px 16px; transition: background-color .18s ease; }
+        .auth-btn:hover { background: var(--primary-dark); }
+        .auth-link { color: var(--primary); font-size: 13px; text-decoration: none; }
+        .auth-link:hover { text-decoration: underline; }
+        .auth-title { color: var(--t-base); font-size: 22px; font-weight: 700; margin: 0 0 6px; }
+        .auth-subtitle { color: var(--t-muted); font-size: 13px; margin: 0 0 24px; }
+        .auth-error { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); border-radius: 8px; color: #dc2626; font-size: 13px; margin-bottom: 16px; padding: 10px 14px; }
+        .auth-success { background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.3); border-radius: 8px; color: #059669; font-size: 13px; margin-bottom: 16px; padding: 10px 14px; }
+        .auth-theme-toggle { background: transparent; border: none; color: var(--t-muted); cursor: pointer; font-size: 16px; position: absolute; right: 24px; top: 24px; }
+        .auth-aside-eyebrow { font-size: 12px; letter-spacing: .15em; opacity: .8; text-transform: uppercase; }
+        .auth-aside h1 { font-size: 28px; font-weight: 700; line-height: 1.3; margin: 16px 0 12px; }
+        .auth-aside p { font-size: 14px; line-height: 1.6; opacity: .85; }
+        @media (max-width: 768px) {
+            .auth-shell { display: block; }
+            .auth-aside { display: none; }
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
-            <i class="fas fa-moon"></i>
-        </button>
-
-        <div class="login-card">
-            <div class="login-header">
-                <h2><i class="fas fa-cube me-2"></i>NgAppID</h2>
-                <p>Welcome back! Please sign in to continue.</p>
-            </div>
-
-            <div class="login-body">
-                <?= session()->getFlashdata('error') ? '<div class="alert alert-danger">' . session()->getFlashdata('error') . '</div>' : '' ?>
-                <?= session()->getFlashdata('success') ? '<div class="alert alert-success">' . session()->getFlashdata('success') . '</div>' : '' ?>
-
-                <form method="POST" action="/auth/login">
-                    <?= csrf_field() ?>
-
-                    <div class="mb-4">
-                        <label for="login" class="form-label">Email or Username</label>
-                        <input type="text" 
-                               class="form-control" 
-                               id="login" 
-                               name="login" 
-                               placeholder="Enter your email or username" 
-                               required
-                               value="<?= old('login') ?>">
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" 
-                               class="form-control" 
-                               id="password" 
-                               name="password" 
-                               placeholder="Enter your password" 
-                               required>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-sign-in-alt me-2"></i>Login
-                    </button>
-
-                    <div class="text-center mt-4">
-                        <p class="mb-0">
-                            Don't have an account? <a href="/auth/register" class="text-primary text-decoration-underline">Register</a>
-                        </p>
-                    </div>
-                </form>
-            </div>
+<div class="auth-shell">
+    <aside class="auth-aside">
+        <div class="auth-brand">
+            <i class="fas fa-cube fa-2x"></i>
+            <div class="name" style="font-size:20px;font-weight:700">NgAppID</div>
         </div>
-    </div>
+        <div class="auth-aside-body" style="margin:auto 0">
+            <span class="auth-aside-eyebrow">PT. YEDIN DIGITAL MANDIRI</span>
+            <h1>Platform digital modern untuk bisnis Anda.</h1>
+            <p>Pengembangan aplikasi profesional, penjualan produk digital, sistem billing, dan dukungan pelanggan terintegrasi.</p>
+        </div>
+        <div class="auth-aside-footer" style="display:flex;gap:16px;font-size:12px;opacity:.7">
+            <span>&copy; 2026</span><span>Rangkasbitung, Banten</span>
+        </div>
+    </aside>
+    <main class="auth-main" style="position:relative">
+        <button class="auth-theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-sun"></i></button>
+        <div class="auth-card">
+            <div style="margin-bottom:24px">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+                    <div style="align-items:center;background:var(--primary);border-radius:10px;color:#fff;display:inline-flex;height:44px;justify-content:center;width:44px"><i class="fas fa-cube"></i></div>
+                    <span style="color:var(--t-base);font-size:18px;font-weight:700">NgAppID</span>
+                </div>
+                <h2 class="auth-title">Selamat Datang</h2>
+                <p class="auth-subtitle">Silakan masuk untuk melanjutkan.</p>
+            </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
-        // Theme toggle
-        const themeToggle = document.getElementById('theme-toggle');
-        const htmlElement = document.documentElement;
-        
-        // Load saved theme
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        htmlElement.setAttribute('data-bs-theme', savedTheme);
-        updateThemeIcon(savedTheme);
-        
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = htmlElement.getAttribute('data-bs-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
-            htmlElement.setAttribute('data-bs-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
-        });
-        
-        function updateThemeIcon(theme) {
-            const icon = themeToggle.querySelector('i');
-            icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
-        }
-        
-        // Auto-detect system theme
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-            if (!localStorage.getItem('theme')) {
-                const newTheme = e.matches ? 'dark' : 'light';
-                htmlElement.setAttribute('data-bs-theme', newTheme);
-                updateThemeIcon(newTheme);
-            }
-        });
-    </script>
+            <?php if (session()->getFlashdata('error')): ?>
+            <div class="auth-error"><i class="fas fa-exclamation-circle me-2"></i><?= session()->getFlashdata('error') ?></div>
+            <?php endif; ?>
+            <?php if (session()->getFlashdata('success')): ?>
+            <div class="auth-success"><i class="fas fa-check-circle me-2"></i><?= session()->getFlashdata('success') ?></div>
+            <?php endif; ?>
+            <?php if (!empty(session()->getFlashdata('errors')) && is_array(session()->getFlashdata('errors'))): ?>
+            <div class="auth-error">
+                <ul style="margin:0;padding-left:18px">
+                    <?php foreach (session()->getFlashdata('errors') as $e): ?>
+                    <li><?= esc($e) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <?php endif; ?>
+
+            <form method="POST" action="/auth/login" class="auth-form">
+                <?= csrf_field() ?>
+                <div class="auth-field">
+                    <label class="auth-label" for="login">Email atau Username</label>
+                    <input type="text" id="login" name="login" class="auth-input" placeholder="Masukkan email atau username" value="<?= old('login') ?>" required>
+                </div>
+                <div class="auth-field">
+                    <label class="auth-label" for="password">Password</label>
+                    <input type="password" id="password" name="password" class="auth-input" placeholder="Masukkan password" required>
+                </div>
+                <button type="submit" class="auth-btn">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </button>
+            </form>
+
+            <p style="color:var(--t-muted);font-size:13px;margin-top:20px;text-align:center">
+                Belum punya akun? <a class="auth-link" href="/auth/register">Daftar</a>
+            </p>
+        </div>
+    </main>
+</div>
+<script>
+document.getElementById('themeToggle')?.addEventListener('click', function() {
+    var html = document.documentElement;
+    var next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('dash26-theme', next);
+    this.querySelector('i').className = next === 'light' ? 'fas fa-sun' : 'fas fa-moon';
+});
+</script>
 </body>
 </html>
