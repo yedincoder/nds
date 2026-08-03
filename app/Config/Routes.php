@@ -124,8 +124,8 @@ $routes->group('admin', ['filter' => 'permission:users.read'], function ($routes
     $routes->get('orders', '\App\Modules\Dashboard\Controllers\AdminDashboardController::orders');
     $routes->get('invoices', '\App\Modules\Dashboard\Controllers\AdminDashboardController::invoices');
     $routes->get('reports', '\App\Modules\Dashboard\Controllers\AdminDashboardController::reports');
-    $routes->get('portfolio', '\App\Modules\Portfolio\Controllers\PortfolioController::index');
-    $routes->get('services', '\App\Modules\Service\Controllers\ServiceController::index');
+    $routes->get('portfolio', '\App\Modules\Dashboard\Controllers\AdminDashboardController::portfolio');
+    $routes->get('services', '\App\Modules\Dashboard\Controllers\AdminDashboardController::services');
     $routes->get('settings', '\App\Modules\Dashboard\Controllers\AdminDashboardController::settings');
     $routes->get('payments', '\App\Modules\Dashboard\Controllers\AdminDashboardController::payments');
     $routes->get('media', '\App\Modules\MediaManager\Controllers\MediaController::index');

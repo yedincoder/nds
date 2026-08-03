@@ -151,4 +151,38 @@ class AdminDashboardController extends BaseController
 
         return view('Dashboard/payments', $data);
     }
+
+    public function services()
+    {
+        $db = \Config\Database::connect();
+        $services = $db->table('services s')
+            ->select('s.*, sc.name as category_name')
+            ->join('service_categories sc', 'sc.id = s.category_id', 'left')
+            ->orderBy('s.created_at', 'DESC')
+            ->get()
+            ->getResult();
+
+        $data = [
+            'title' => 'Services',
+            'services' => $services,
+        ];
+
+        return view('Dashboard/services', $data);
+    }
+
+    public function portfolio()
+    {
+        $db = \Config\Database::connect();
+        $portfolios = $db->table('portfolios')
+            ->orderBy('created_at', 'DESC')
+            ->get()
+            ->getResult();
+
+        $data = [
+            'title' => 'Portfolio',
+            'portfolios' => $portfolios,
+        ];
+
+        return view('Dashboard/portfolio', $data);
+    }
 }
