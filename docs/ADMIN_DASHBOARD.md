@@ -9,7 +9,7 @@
 # 1. ADMIN DASHBOARD ARCHITECTURE
 # ==============================================================================
 Architecture: Modular Architecture
-Frontend: CoreUI Dashboard
+Frontend: Adminator Free (ThemeWagon) — modified to orange theme
 Backend Layer:
   1. Controller
   2. Service
