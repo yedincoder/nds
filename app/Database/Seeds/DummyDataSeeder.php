@@ -23,7 +23,7 @@ class DummyDataSeeder extends Seeder
             'cart_items', 'carts', 'customer_addresses', 'login_attempts', 'activity_logs',
             'audit_logs', 'settings', 'service_packages', 'services', 'service_categories',
             'product_files', 'product_images', 'product_prices', 'products', 'product_categories',
-            'pages', 'article_tags', 'articles', 'tags', 'categories', 'testimonials',
+            'pages', 'article_tags', 'articles', 'tags', 'categories', 'testimonials', 'portfolios',
         ];
         foreach ($tables as $t) {
             $db->query('SET FOREIGN_KEY_CHECKS = 0');
@@ -47,53 +47,55 @@ class DummyDataSeeder extends Seeder
             echo "[~] product_categories already exists (id={$catId})\n";
         }
 
-        // 2. products
-        $prod = $db->table('products')->where('slug', 'web-app-starter-pack')->get()->getRow();
-        if (!$prod) {
+        // 2. products (3 dummies)
+        $productList = [
+            ['name' => 'Web Application Starter Pack', 'slug' => 'web-app-starter-pack', 'price' => 2500000, 'discount' => 2000000, 'short' => 'Starter pack untuk aplikasi web profesional.', 'desc' => 'Complete starter pack for web applications with auth, dashboard, and API.', 'img' => '/images/products/web-starter.jpg'],
+            ['name' => 'Mobile App Framework', 'slug' => 'mobile-app-framework', 'price' => 3500000, 'discount' => 3000000, 'short' => 'Framework hybrid untuk aplikasi Android dan iOS.', 'desc' => 'Hybrid mobile app framework with single codebase for Android and iOS, including push notifications and offline support.', 'img' => '/images/products/mobile-framework.jpg'],
+            ['name' => 'E-Commerce Suite', 'slug' => 'ecommerce-suite', 'price' => 5000000, 'discount' => 4500000, 'short' => 'Paket lengkap untuk membangun toko online.', 'desc' => 'Complete e-commerce package with product management, cart, checkout, payment gateway integration, and admin dashboard.', 'img' => '/images/products/ecommerce-suite.jpg'],
+        ];
+
+        $productIds = [];
+        foreach ($productList as $i => $p) {
             $db->table('products')->insert([
                 'uuid' => $this->uuid(), 'category_id' => $catId,
-                'name' => 'Web Application Starter Pack',
-                'slug' => 'web-app-starter-pack',
-                'description' => 'Complete starter pack for web applications with auth, dashboard, and API.',
-                'short_description' => 'Starter pack untuk aplikasi web profesional.',
-                'thumbnail' => '/images/products/web-starter.jpg',
-                'status' => 'active', 'seo_title' => 'Web App Starter Pack',
-                'seo_description' => 'Paket starter aplikasi web', 'created_by' => $this->userId,
+                'name' => $p['name'], 'slug' => $p['slug'],
+                'description' => $p['desc'],
+                'short_description' => $p['short'],
+                'thumbnail' => $p['img'],
+                'status' => 'active', 'seo_title' => $p['name'],
+                'seo_description' => $p['short'], 'created_by' => $this->userId,
                 'created_at' => $now, 'updated_at' => $now,
             ]);
-            $prodId = $db->insertID();
-            echo "[+] products (id={$prodId})\n";
-        } else {
-            $prodId = $prod->id;
-            echo "[~] products already exists (id={$prodId})\n";
+            $pid = $db->insertID();
+            $productIds[] = $pid;
+
+            // product_prices
+            $db->table('product_prices')->insert([
+                'uuid' => $this->uuid(), 'product_id' => $pid,
+                'price' => $p['price'], 'discount_price' => $p['discount'],
+                'currency' => 'IDR', 'created_at' => $now, 'updated_at' => $now,
+            ]);
+
+            // product_images
+            $db->table('product_images')->insert([
+                'uuid' => $this->uuid(), 'product_id' => $pid,
+                'image_path' => str_replace('.jpg', '-1.jpg', $p['img']),
+                'image_type' => 'gallery', 'position' => 1, 'created_at' => $now,
+            ]);
+
+            // product_files
+            $db->table('product_files')->insert([
+                'uuid' => $this->uuid(), 'product_id' => $pid,
+                'file_name' => str_replace('-', '-', $p['slug']) . '-v1.zip',
+                'file_path' => '/downloads/' . $p['slug'] . '-v1.zip',
+                'file_size' => 5242880 + ($i * 1048576), 'file_type' => 'application/zip',
+                'version' => '1.0', 'status' => 'active',
+                'created_at' => $now, 'updated_at' => $now,
+            ]);
         }
-
-        // 3. product_prices
-        $db->table('product_prices')->insert([
-            'uuid' => $this->uuid(), 'product_id' => $prodId,
-            'price' => 2500000, 'discount_price' => 2000000,
-            'currency' => 'IDR', 'created_at' => $now, 'updated_at' => $now,
-        ]);
-        echo "[+] product_prices\n";
-
-        // 4. product_images
-        $db->table('product_images')->insert([
-            'uuid' => $this->uuid(), 'product_id' => $prodId,
-            'image_path' => '/images/products/web-starter-1.jpg',
-            'image_type' => 'gallery', 'position' => 1, 'created_at' => $now,
-        ]);
-        echo "[+] product_images\n";
-
-        // 5. product_files
-        $db->table('product_files')->insert([
-            'uuid' => $this->uuid(), 'product_id' => $prodId,
-            'file_name' => 'starter-pack-v1.zip',
-            'file_path' => '/downloads/starter-pack-v1.zip',
-            'file_size' => 5242880, 'file_type' => 'application/zip',
-            'version' => '1.0', 'status' => 'active',
-            'created_at' => $now, 'updated_at' => $now,
-        ]);
-        echo "[+] product_files\n";
+        $prodId = $productIds[0];
+        echo "[+] products (3 dummies)\n";
+        echo "[+] product_prices / product_images / product_files (3x)\n";
 
         // 6. service_categories
         $db->table('service_categories')->insert([
@@ -104,29 +106,39 @@ class DummyDataSeeder extends Seeder
         $svcCatId = $db->insertID();
         echo "[+] service_categories (id={$svcCatId})\n";
 
-        // 7. services
-        $db->table('services')->insert([
-            'uuid' => $this->uuid(), 'category_id' => $svcCatId,
-            'name' => 'Custom Web Application',
-            'slug' => 'custom-web-application',
-            'description' => 'Custom web application development tailored to your business needs.',
-            'thumbnail' => '/images/services/web-dev.jpg',
-            'price_type' => 'starting', 'price' => 15000000,
-            'status' => 'active', 'seo_title' => 'Custom Web App Development',
-            'seo_description' => 'Jasa pengembangan web aplikasi custom', 'created_by' => $this->userId,
-            'created_at' => $now, 'updated_at' => $now,
-        ]);
-        $svcId = $db->insertID();
-        echo "[+] services (id={$svcId})\n";
+        // 7. services (3 dummies)
+        $serviceList = [
+            ['name' => 'Custom Web Application', 'slug' => 'custom-web-application', 'desc' => 'Custom web application development tailored to your business needs.', 'price' => 15000000, 'img' => '/images/services/web-dev.jpg'],
+            ['name' => 'Mobile App Development', 'slug' => 'mobile-app-development', 'desc' => 'Professional mobile app development for Android and iOS platforms.', 'price' => 25000000, 'img' => '/images/services/mobile-dev.jpg'],
+            ['name' => 'Cloud & DevOps Setup', 'slug' => 'cloud-devops-setup', 'desc' => 'Complete cloud infrastructure setup, CI/CD pipeline, and deployment automation.', 'price' => 10000000, 'img' => '/images/services/cloud-devops.jpg'],
+        ];
 
-        // 8. service_packages
-        $db->table('service_packages')->insert([
-            'uuid' => $this->uuid(), 'service_id' => $svcId,
-            'package_name' => 'Basic Package',
-            'description' => '3 pages, basic auth, responsive design',
-            'price' => 15000000, 'created_at' => $now, 'updated_at' => $now,
-        ]);
-        echo "[+] service_packages\n";
+        $svcIds = [];
+        foreach ($serviceList as $p) {
+            $db->table('services')->insert([
+                'uuid' => $this->uuid(), 'category_id' => $svcCatId,
+                'name' => $p['name'], 'slug' => $p['slug'],
+                'description' => $p['desc'],
+                'thumbnail' => $p['img'],
+                'price_type' => 'starting', 'price' => $p['price'],
+                'status' => 'active', 'seo_title' => $p['name'],
+                'seo_description' => $p['desc'], 'created_by' => $this->userId,
+                'created_at' => $now, 'updated_at' => $now,
+            ]);
+            $sid = $db->insertID();
+            $svcIds[] = $sid;
+
+            // service_packages
+            $db->table('service_packages')->insert([
+                'uuid' => $this->uuid(), 'service_id' => $sid,
+                'package_name' => 'Basic Package',
+                'description' => 'Starter package with core features',
+                'price' => $p['price'], 'created_at' => $now, 'updated_at' => $now,
+            ]);
+        }
+        $svcId = $svcIds[0];
+        echo "[+] services (3 dummies)\n";
+        echo "[+] service_packages (3x)\n";
 
         // 9. carts
         $db->table('carts')->insert([
@@ -362,45 +374,88 @@ class DummyDataSeeder extends Seeder
         ]);
         echo "[+] settings\n";
 
-        // 32. pages
-        $db->table('pages')->insert([
-            'uuid' => $this->uuid(), 'title' => 'About NgAppID',
-            'slug' => 'about-ngappid',
-            'content' => '<p>NgAppID adalah platform digital modern untuk bisnis Anda.</p>',
-            'status' => 'published', 'created_at' => $now, 'updated_at' => $now,
-        ]);
-        echo "[+] pages\n";
+        // 32. pages (5 dummies)
+        $pagesData = [
+            ['title' => 'Tentang Kami', 'slug' => 'tentang-kami', 'content' => '<h2>Tentang NgAppID</h2><p>NgAppID adalah platform digital modern yang menyediakan layanan pengembangan perangkat lunak, penjualan produk digital, sistem billing pelanggan, serta layanan support terintegrasi.</p><p>Visi kami adalah menjadi platform digital terdepan di Indonesia dengan teknologi terkini dan arsitektur yang bersih.</p>'],
+            ['title' => 'Team', 'slug' => 'team', 'content' => '<h2>Tim Kami</h2><p>Tim NgAppID terdiri dari para ahli di bidang pengembangan perangkat lunak, desain UI/UX, arsitektur sistem, dan jaminan kualitas.</p><ul><li>Project Manager</li><li>Full Stack Developer</li><li>UI/UX Designer</li><li>Quality Assurance</li></ul>'],
+            ['title' => 'Cara Pesan', 'slug' => 'cara-pesan', 'content' => '<h2>Cara Memesan</h2><p>Berikut langkah-langkah cara memesan produk atau layanan kami:</p><ol><li>Pilih produk atau layanan yang diinginkan</li><li>Tambahkan ke keranjang belanja</li><li>Lakukan checkout dan isi data Anda</li><li>Pilih metode pembayaran</li><li>Selesaikan pembayaran</li><li>Download produk atau mulai pengerjaan</li></ol>'],
+            ['title' => 'Pembayaran (Terms of Payment)', 'slug' => 'pembayaran', 'content' => '<h2>Ketentuan Pembayaran</h2><p>Kami menerima berbagai metode pembayaran untuk kenyamanan Anda:</p><ul><li>Transfer Bank (BCA, Mandiri, BNI, BRI)</li><li>E-Wallet (GoPay, OVO, DANA, ShopeePay)</li><li>Virtual Account</li><li>QRIS</li></ul><p>Pembayaran dilakukan melalui gateway Midtrans yang aman dan terpercaya.</p>'],
+            ['title' => 'Kebijakan & Ketentuan', 'slug' => 'kebijakan-ketentuan', 'content' => '<h2>Kebijakan & Ketentuan</h2><p>Dengan menggunakan layanan NgAppID, Anda setuju dengan kebijakan dan ketentuan berikut:</p><ul><li>Produk digital bersifat non-refundable setelah diunduh</li><li>Layanan pengembangan mengikuti kontrak yang disepakati</li><li>Data pelanggan dijaga kerahasiaannya</li><li>Dukungan teknis tersedia 24/7</li></ul>'],
+        ];
+        foreach ($pagesData as $pg) {
+            $db->table('pages')->insert(array_merge($pg, [
+                'uuid' => $this->uuid(),
+                'status' => 'published',
+                'created_at' => $now, 'updated_at' => $now,
+            ]));
+        }
+        echo "[+] pages (5 dummies)\n";
 
-        // 33. categories
-        $db->table('categories')->insert([
-            'uuid' => $this->uuid(), 'name' => 'Blog',
-            'slug' => 'blog', 'description' => 'Blog articles category',
-            'type' => 'article', 'created_at' => $now, 'updated_at' => $now,
-        ]);
-        $artCatId = $db->insertID();
-        echo "[+] categories (id={$artCatId})\n";
+        // 33. categories (Blog + Tutorial)
+        $catDefs = [
+            ['name' => 'Blog', 'slug' => 'blog', 'desc' => 'Artikel dan berita terkait NgAppID'],
+            ['name' => 'Tutorial', 'slug' => 'tutorial', 'desc' => 'Panduan dan tutorial pengembangan'],
+        ];
+        $catIds = [];
+        foreach ($catDefs as $cd) {
+            $db->table('categories')->insert([
+                'uuid' => $this->uuid(), 'name' => $cd['name'],
+                'slug' => $cd['slug'], 'description' => $cd['desc'],
+                'type' => 'article', 'created_at' => $now, 'updated_at' => $now,
+            ]);
+            $catIds[$cd['slug']] = $db->insertID();
+        }
+        $blogCatId = $catIds['blog'];
+        $tutorialCatId = $catIds['tutorial'];
+        echo "[+] categories (Blog id={$blogCatId}, Tutorial id={$tutorialCatId})\n";
 
         // 34. tags
-        $db->table('tags')->insert([
-            'uuid' => $this->uuid(), 'name' => 'Tutorial',
-            'slug' => 'tutorial',
-            'created_at' => $now, 'updated_at' => $now,
-        ]);
-        echo "[+] tags\n";
+        $tagDefs = ['Tutorial', 'News', 'Tips', 'Development'];
+        $tagIds = [];
+        foreach ($tagDefs as $tg) {
+            $db->table('tags')->insert([
+                'uuid' => $this->uuid(), 'name' => $tg,
+                'slug' => strtolower($tg),
+                'created_at' => $now, 'updated_at' => $now,
+            ]);
+            $tagIds[strtolower($tg)] = $db->insertID();
+        }
+        echo "[+] tags (4 dummies)\n";
 
-        // 35. articles
-        $db->table('articles')->insert([
-            'uuid' => $this->uuid(), 'category_id' => $artCatId,
-            'author_id' => $this->userId,
-            'title' => 'Getting Started with NgAppID',
-            'slug' => 'getting-started-ngappid',
-            'content' => '<p>Panduan memulai menggunakan platform NgAppID.</p>',
-            'excerpt' => 'Panduan singkat memulai NgAppID',
-            'status' => 'published',
-            'published_at' => $now,
-            'created_at' => $now, 'updated_at' => $now,
-        ]);
-        echo "[+] articles\n";
+        // 35. articles (3 Blog + 3 Tutorial)
+        $articlesData = [
+            // Blog category
+            ['cat' => $blogCatId, 'title' => 'NgAppID Meluncurkan Fitur Baru untuk Client Area', 'slug' => 'fitur-baru-client-area', 'content' => '<p>NgAppID dengan bangga mengumumkan peluncuran fitur baru pada Client Area, termasuk dashboard yang lebih informatif dan manajemen download yang lebih baik.</p>', 'excerpt' => 'Fitur baru Client Area telah diluncurkan.', 'tag' => 'news'],
+            ['cat' => $blogCatId, 'title' => 'Tips Meningkatkan Keamanan Aplikasi Web', 'slug' => 'tips-keamanan-aplikasi-web', 'content' => '<p>Keamanan adalah hal terpenting dalam aplikasi web. Berikut tips untuk meningkatkan keamanan aplikasi Anda.</p><p>1. Gunakan HTTPS. 2. Validasi input. 3. Sanitasi output. 4. Kelola session dengan aman.</p>', 'excerpt' => 'Tips keamanan penting untuk aplikasi web.', 'tag' => 'tips'],
+            ['cat' => $blogCatId, 'title' => 'Update Platform dan Peningkatan Performa', 'slug' => 'update-platform-performa', 'content' => '<p>Kami telah melakukan update besar pada platform untuk meningkatkan performa dan stabilitas sistem.</p>', 'excerpt' => 'Peningkatan performa platform terbaru.', 'tag' => 'news'],
+            // Tutorial category
+            ['cat' => $tutorialCatId, 'title' => 'Tutorial: Membuat Website Pertama dengan CodeIgniter 4', 'slug' => 'tutorial-website-codeigniter4', 'content' => '<p>Dalam tutorial ini, Anda akan belajar membuat website pertama menggunakan CodeIgniter 4.</p><p>Langkah 1: Instalasi. Langkah 2: Konfigurasi. Langkah 3: Membuat Controller dan View.</p>', 'excerpt' => 'Panduan lengkap membuat website dengan CI4.', 'tag' => 'tutorial'],
+            ['cat' => $tutorialCatId, 'title' => 'Tutorial: Integrasi Midtrans Payment Gateway', 'slug' => 'tutorial-integrasi-midtrans', 'content' => '<p>Pelajari cara mengintegrasikan Midtrans sebagai payment gateway di aplikasi Anda.</p><p>Midtrans menyediakan berbagai metode pembayaran seperti transfer bank, e-wallet, dan virtual account.</p>', 'excerpt' => 'Integrasi pembayaran Midtrans step by step.', 'tag' => 'development'],
+            ['cat' => $tutorialCatId, 'title' => 'Tutorial: Membuat REST API dengan CodeIgniter', 'slug' => 'tutorial-rest-api-codeigniter', 'content' => '<p>Belajar membuat REST API menggunakan CodeIgniter 4 dengan baik dan benar.</p><p>Kita akan membuat API untuk manajemen produk lengkap dengan autentikasi.</p>', 'excerpt' => 'Panduan membangun REST API dengan CI4.', 'tag' => 'development'],
+        ];
+
+        $artIds = [];
+        foreach ($articlesData as $ar) {
+            $db->table('articles')->insert([
+                'uuid' => $this->uuid(), 'category_id' => $ar['cat'],
+                'author_id' => $this->userId,
+                'title' => $ar['title'], 'slug' => $ar['slug'],
+                'content' => $ar['content'], 'excerpt' => $ar['excerpt'],
+                'status' => 'published',
+                'published_at' => $now,
+                'created_at' => $now, 'updated_at' => $now,
+            ]);
+            $aid = $db->insertID();
+            $artIds[] = $aid;
+
+            // article_tags
+            $db->table('article_tags')->insert([
+                'article_id' => $aid,
+                'tag_id' => $tagIds[$ar['tag']] ?? $tagIds['tutorial'],
+            ]);
+        }
+        echo "[+] articles (6 dummies: 3 Blog + 3 Tutorial)\n";
+        echo "[+] article_tags (6x)\n";
 
         // 36. testimonials
         $dummyTestimonials = [
@@ -421,7 +476,27 @@ class DummyDataSeeder extends Seeder
         }
         echo "[+] testimonials (5 dummies)\n";
 
-        echo "\n=== Selesai: 1 dummy per tabel user/customer related ===\n";
+        // Portfolios (3 dummy)
+        $portfolioData = [
+            ['title' => 'E-Commerce Platform untuk Fashion Brand', 'slug' => 'ecommerce-fashion-brand', 'description' => 'Platform e-commerce lengkap untuk brand fashion lokal', 'content' => '<p>Platform e-commerce lengkap dengan fitur manajemen produk, keranjang belanja, checkout, dan integrasi payment gateway.</p>', 'thumbnail' => '/images/portfolio/ecommerce-fashion.jpg', 'status' => 'published'],
+            ['title' => 'Sistem Klinik Digital', 'slug' => 'sistem-klinik-digital', 'description' => 'Aplikasi manajemen klinik dengan booking online', 'content' => '<p>Aplikasi manajemen klinik dengan fitur booking online, rekam medis digital, dan antrian digital.</p>', 'thumbnail' => '/images/portfolio/klinik-digital.jpg', 'status' => 'published'],
+            ['title' => 'Platform E-Learning', 'slug' => 'platform-e-learning', 'description' => 'Platform pembelajaran online dengan video streaming', 'content' => '<p>Platform pembelajaran online dengan video streaming, quiz interaktif, dan sertifikat.</p>', 'thumbnail' => '/images/portfolio/e-learning.jpg', 'status' => 'published'],
+        ];
+        foreach ($portfolioData as $i => $p) {
+            $slug = $p['slug'] . '-' . $i;
+            $db->table('portfolios')->insert([
+                'uuid' => $this->uuid(),
+                'client_id' => 1, 'category_id' => 1,
+                'title' => $p['title'], 'slug' => $slug,
+                'description' => $p['description'], 'content' => $p['content'],
+                'thumbnail' => $p['thumbnail'], 'status' => 'published',
+                'created_by' => $this->userId,
+                'created_at' => $now, 'updated_at' => $now,
+            ]);
+        }
+        echo "[+] portfolios (3 dummies)\n";
+
+        echo "\n=== Selesai: Semua dummy data berhasil dimasukkan ===\n";
     }
 
     private function uuid(): string
