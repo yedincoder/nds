@@ -16,7 +16,7 @@ class AuthController extends BaseController
     public function showLogin(): string|RedirectResponse
     {
         if (session()->get('isLoggedIn')) {
-            return redirect()->to('admin/dashboard');
+            return redirect()->to($this->redirectAfterLogin());
         }
 
         $data = [
@@ -58,25 +58,39 @@ class AuthController extends BaseController
         }
 
         session()->regenerate();
+
+        // Determine user role
+        $role = $db->table('user_roles ur')
+            ->select('r.slug')
+            ->join('roles r', 'r.id = ur.role_id')
+            ->where('ur.user_id', $user->id)
+            ->get()
+            ->getRow();
+
+        $roleSlug = $role->slug ?? 'customer';
+
         session()->set([
             'isLoggedIn' => true,
             'user_id' => $user->id,
             'username' => $user->username,
             'email' => $user->email,
+            'role' => $roleSlug,
         ]);
 
         $db->table('users')->where('id', $user->id)->update([
             'last_login_at' => date('Y-m-d H:i:s'),
         ]);
 
-        return redirect()->to('admin/dashboard')
+        $isAdmin = in_array($roleSlug, ['super-administrator', 'administrator'], true);
+
+        return redirect()->to($isAdmin ? 'admin/dashboard' : 'client/dashboard')
             ->with('success', 'Login successful');
     }
 
     public function showRegister(): string|RedirectResponse
     {
         if (session()->get('isLoggedIn')) {
-            return redirect()->to('admin/dashboard');
+            return redirect()->to($this->redirectAfterLogin());
         }
 
         return view('auth/register', ['title' => 'Register']);
@@ -133,5 +147,11 @@ class AuthController extends BaseController
         session()->destroy();
         return redirect()->to('auth/login')
             ->with('success', 'Logged out successfully');
+    }
+
+    private function redirectAfterLogin(): string
+    {
+        $role = session()->get('role') ?? 'customer';
+        return in_array($role, ['super-administrator', 'administrator'], true) ? 'admin/dashboard' : 'client/dashboard';
     }
 }
