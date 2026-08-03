@@ -16,6 +16,7 @@
 <div class="card">
     <div class="card-body">
         <form action="<?= isset($article) ? '/admin/cms/articles/'.$article->id.'/update' : '/admin/cms/articles/create' ?>" method="POST">
+            <?= csrf_field() ?>
             <div class="row">
                 <div class="col-md-8">
                     <div class="mb-3">

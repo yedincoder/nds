@@ -77,10 +77,11 @@ class TicketController extends BaseController
         }
 
         if ($this->request->getMethod() === 'post') {
-            $db->table('ticket_replies')->insert([
+            $db->table('ticket_messages')->insert([
                 'ticket_id' => (int) $ticketId,
                 'user_id' => session()->get('user_id') ?? 1,
                 'message' => $this->request->getPost('message'),
+                'uuid' => $this->generateUuid(),
                 'created_at' => date('Y-m-d H:i:s'),
             ]);
 
@@ -88,11 +89,11 @@ class TicketController extends BaseController
                 ->with('success', 'Reply added successfully.');
         }
 
-        $replies = $db->table('ticket_replies')
-            ->select('r.*, u.username')
-            ->join('users u', 'u.id = r.user_id', 'left')
-            ->where('ticket_id', $ticketId)
-            ->orderBy('r.created_at', 'ASC')
+        $replies = $db->table('ticket_messages tm')
+            ->select('tm.*, u.username')
+            ->join('users u', 'u.id = tm.user_id', 'left')
+            ->where('tm.ticket_id', $ticketId)
+            ->orderBy('tm.created_at', 'ASC')
             ->get()
             ->getResult();
 
@@ -112,5 +113,19 @@ class TicketController extends BaseController
 
         return redirect()->to('/admin/support')
             ->with('success', 'Ticket closed successfully.');
+    }
+
+    private function generateUuid(): string
+    {
+        $data = random_bytes(16);
+        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
+        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
+
+        return sprintf('%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x',
+            ord($data[0]), ord($data[1]), ord($data[2]), ord($data[3]),
+            ord($data[4]), ord($data[5]), ord($data[6]), ord($data[7]),
+            ord($data[8]), ord($data[9]), ord($data[10]), ord($data[11]),
+            ord($data[12]), ord($data[13]), ord($data[14]), ord($data[15])
+        );
     }
 }

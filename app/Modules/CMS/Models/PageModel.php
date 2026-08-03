@@ -31,6 +31,7 @@ class PageModel extends Model
     protected $deletedField = 'deleted_at';
 
     protected $validationRules = [
+        'id' => 'permit_empty',
         'title' => 'required|min_length[2]|max_length[255]',
         'slug' => 'required|min_length[2]|max_length[255]|is_unique[pages.slug,id,{id}]',
         'status' => 'in_list[draft,published,archived]',

@@ -3,9 +3,26 @@
 namespace App\Modules\Dashboard\Controllers;
 
 use App\Controllers\BaseController;
+use App\Modules\Product\Models\ProductModel;
+use App\Modules\Order\Models\OrderModel;
+use App\Modules\Customer\Models\UserProfileModel;
+use App\Modules\Invoice\Models\InvoiceModel;
 
 class AdminDashboardController extends BaseController
 {
+    protected ProductModel $productModel;
+    protected OrderModel $orderModel;
+    protected UserProfileModel $userProfileModel;
+    protected InvoiceModel $invoiceModel;
+
+    public function __construct()
+    {
+        $this->productModel = new ProductModel();
+        $this->orderModel = new OrderModel();
+        $this->userProfileModel = new UserProfileModel();
+        $this->invoiceModel = new InvoiceModel();
+    }
+
     public function index()
     {
         $db = \Config\Database::connect();
@@ -33,7 +50,6 @@ class AdminDashboardController extends BaseController
         // Revenue last 6 months for chart
         $revenueChart = [];
         for ($i = 5; $i >= 0; $i--) {
-            $month = date('Y-m', strtotime("-{$i} months"));
             $monthLabel = date('M Y', strtotime("-{$i} months"));
             $revenue = $db->table('transactions')
                 ->selectSum('amount')
@@ -114,7 +130,7 @@ class AdminDashboardController extends BaseController
         // Top products
         $topProducts = $db->table('products p')
             ->select('p.name, p.slug, COUNT(oi.id) as sold_count, p.status')
-            ->leftJoin('order_items oi', 'oi.product_id = p.id')
+            ->join('order_items oi', 'oi.product_id = p.id', 'left')
             ->where('p.status', 'active')
             ->groupBy('p.id')
             ->orderBy('sold_count', 'DESC')
@@ -125,7 +141,7 @@ class AdminDashboardController extends BaseController
         // Recent activity logs
         $recentActivity = $db->table('activity_logs a')
             ->select('a.*, u.username')
-            ->leftJoin('users u', 'u.id = a.user_id')
+            ->join('users u', 'u.id = a.user_id', 'left')
             ->orderBy('a.created_at', 'DESC')
             ->limit(8)
             ->get()
@@ -151,20 +167,18 @@ class AdminDashboardController extends BaseController
 
     public function customers()
     {
-        $db = \Config\Database::connect();
         $perPage = 15;
         $page = $this->request->getGet('page') ?? 1;
 
-        $customers = $db->table('user_profiles up')
-            ->select('up.*, u.email, u.username, u.status, u.last_login_at, u.created_at')
-            ->join('users u', 'u.id = up.user_id')
-            ->orderBy('up.created_at', 'DESC')
+        $customers = $this->userProfileModel->join('users', 'users.id = user_profiles.user_id')
+            ->select('user_profiles.*, users.email, users.username, users.status')
+            ->orderBy('user_profiles.created_at', 'DESC')
             ->paginate($perPage, 'default', $page);
 
         $data = [
             'title' => 'Customers',
             'customers' => $customers,
-            'pager' => $db->table('user_profiles')->pager,
+            'pager' => $this->userProfileModel->pager,
         ];
 
         return view('Dashboard/customers', $data);
@@ -172,21 +186,16 @@ class AdminDashboardController extends BaseController
 
     public function products()
     {
-        $db = \Config\Database::connect();
         $perPage = 15;
         $page = $this->request->getGet('page') ?? 1;
 
-        $products = $db->table('products p')
-            ->select('p.*, pc.name as category_name, pp.price, pp.discount_price')
-            ->leftJoin('product_categories pc', 'pc.id = p.category_id')
-            ->leftJoin('product_prices pp', 'pp.product_id = p.id')
-            ->orderBy('p.created_at', 'DESC')
+        $products = $this->productModel->orderBy('created_at', 'DESC')
             ->paginate($perPage, 'default', $page);
 
         $data = [
             'title' => 'Products',
             'products' => $products,
-            'pager' => $db->table('products')->pager,
+            'pager' => $this->productModel->pager,
         ];
 
         return view('Dashboard/products', $data);
@@ -194,20 +203,16 @@ class AdminDashboardController extends BaseController
 
     public function orders()
     {
-        $db = \Config\Database::connect();
         $perPage = 15;
         $page = $this->request->getGet('page') ?? 1;
 
-        $orders = $db->table('orders o')
-            ->select('o.*, u.username, u.email')
-            ->join('users u', 'u.id = o.user_id', 'left')
-            ->orderBy('o.created_at', 'DESC')
+        $orders = $this->orderModel->orderBy('created_at', 'DESC')
             ->paginate($perPage, 'default', $page);
 
         $data = [
             'title' => 'Orders',
             'orders' => $orders,
-            'pager' => $db->table('orders')->pager,
+            'pager' => $this->orderModel->pager,
         ];
 
         return view('Dashboard/orders', $data);
@@ -215,21 +220,16 @@ class AdminDashboardController extends BaseController
 
     public function invoices()
     {
-        $db = \Config\Database::connect();
         $perPage = 15;
         $page = $this->request->getGet('page') ?? 1;
 
-        $invoices = $db->table('invoices i')
-            ->select('i.*, u.username, o.order_number')
-            ->leftJoin('users u', 'u.id = i.user_id')
-            ->leftJoin('orders o', 'o.id = i.order_id')
-            ->orderBy('i.created_at', 'DESC')
+        $invoices = $this->invoiceModel->orderBy('created_at', 'DESC')
             ->paginate($perPage, 'default', $page);
 
         $data = [
             'title' => 'Invoices',
             'invoices' => $invoices,
-            'pager' => $db->table('invoices')->pager,
+            'pager' => $this->invoiceModel->pager,
         ];
 
         return view('Dashboard/invoices', $data);
@@ -251,8 +251,6 @@ class AdminDashboardController extends BaseController
             ->get()
             ->getResult();
 
-        $total = $db->table('transactions')->countAllResults();
-
         $data = [
             'title' => 'Payments',
             'payments' => $payments,
@@ -266,7 +264,7 @@ class AdminDashboardController extends BaseController
         $db = \Config\Database::connect();
         $services = $db->table('services s')
             ->select('s.*, sc.name as category_name')
-            ->leftJoin('service_categories sc', 'sc.id = s.category_id')
+            ->join('service_categories sc', 'sc.id = s.category_id', 'left')
             ->orderBy('s.created_at', 'DESC')
             ->get()
             ->getResult();

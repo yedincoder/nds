@@ -22,7 +22,7 @@
             --sidebar-width: 230px;
             --topbar-height: 60px;
             --primary-color: #2A3F54;
-            --secondary-color: #1ABB9C;
+            --secondary-color: #E65C00;
             --accent-color: #3498DB;
             --danger-color: #E74C3C;
             --warning-color: #F39C12;
@@ -169,7 +169,7 @@
         }
 
         .sidebar-menu > li.active > a {
-            background: linear-gradient(90deg, rgba(26,188,156,0.1) 0%, transparent 100%);
+            background: linear-gradient(90deg, rgba(230,92,0,0.1) 0%, transparent 100%);
         }
 
         .sidebar-menu .menu-header {
@@ -448,8 +448,8 @@
         }
 
         .btn-primary:hover {
-            background: #169f82;
-            border-color: #169f82;
+            background: #C44900;
+            border-color: #C44900;
         }
 
         .dropdown-menu {

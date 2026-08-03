@@ -35,6 +35,7 @@ class ArticleModel extends Model
     protected $deletedField = 'deleted_at';
 
     protected $validationRules = [
+        'id' => 'permit_empty',
         'title' => 'required|min_length[2]|max_length[255]',
         'slug' => 'required|min_length[2]|max_length[255]|is_unique[articles.slug,id,{id}]',
         'status' => 'in_list[draft,review,published,archived]',
