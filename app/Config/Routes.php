@@ -165,6 +165,73 @@ $routes->group('admin', ['filter' => 'permission:users.read'], function ($routes
 });
 
 // ================================================================
+// ADMIN PANEL MANAGEMENT
+// ================================================================
+$routes->group('adminpanel', ['filter' => 'auth'], function ($routes) {
+    $routes->get('', '\App\Modules\Dashboard\Controllers\AdminPanel::index');
+    
+    // Products
+    $routes->get('products', '\App\Modules\Dashboard\Controllers\AdminPanel::products');
+    $routes->get('products/create', '\App\Modules\Dashboard\Controllers\AdminPanel::createProduct');
+    $routes->post('products/create', '\App\Modules\Dashboard\Controllers\AdminPanel::storeProduct');
+    $routes->get('products/edit/(:num)', '\App\Modules\Dashboard\Controllers\AdminPanel::editProduct/$1');
+    $routes->post('products/update/(:num)', '\App\Modules\Dashboard\Controllers\AdminPanel::updateProduct/$1');
+    $routes->get('products/delete/(:num)', '\App\Modules\Dashboard\Controllers\AdminPanel::deleteProduct/$1');
+    
+    // Orders
+    $routes->get('orders', '\App\Modules\Dashboard\Controllers\AdminPanel::orders');
+    $routes->get('orders/view/(:num)', '\App\Modules\Dashboard\Controllers\AdminPanel::viewOrder/$1');
+    $routes->post('orders/status/(:num)', '\App\Modules\Dashboard\Controllers\AdminPanel::updateOrderStatus/$1');
+    
+    // Invoices
+    $routes->get('invoices', '\App\Modules\Dashboard\Controllers\AdminPanel::invoices');
+    
+    // Customers
+    $routes->get('customers', '\App\Modules\Dashboard\Controllers\AdminPanel::customers');
+    
+    // Payments
+    $routes->get('payments', '\App\Modules\Dashboard\Controllers\AdminPanel::payments');
+    
+    // CMS Pages
+    $routes->get('pages', '\App\Modules\Dashboard\Controllers\AdminPanel::pages');
+    $routes->get('pages/create', '\App\Modules\Dashboard\Controllers\AdminPanel::createPage');
+    $routes->post('pages/create', '\App\Modules\Dashboard\Controllers\AdminPanel::storePage');
+    $routes->get('pages/edit/(:num)', '\App\Modules\Dashboard\Controllers\AdminPanel::editPage/$1');
+    $routes->post('pages/update/(:num)', '\App\Modules\Dashboard\Controllers\AdminPanel::updatePage/$1');
+    $routes->get('pages/delete/(:num)', '\App\Modules\Dashboard\Controllers\AdminPanel::deletePage/$1');
+    
+    // Articles
+    $routes->get('articles', '\App\Modules\Dashboard\Controllers\AdminPanel::articles');
+    $routes->get('articles/create', '\App\Modules\Dashboard\Controllers\AdminPanel::createArticle');
+    $routes->post('articles/create', '\App\Modules\Dashboard\Controllers\AdminPanel::storeArticle');
+    $routes->get('articles/edit/(:num)', '\App\Modules\Dashboard\Controllers\AdminPanel::editArticle/$1');
+    $routes->post('articles/update/(:num)', '\App\Modules\Dashboard\Controllers\AdminPanel::updateArticle/$1');
+    $routes->get('articles/delete/(:num)', '\App\Modules\Dashboard\Controllers\AdminPanel::deleteArticle/$1');
+    
+    // Categories
+    $routes->get('categories', '\App\Modules\Dashboard\Controllers\AdminPanel::categories');
+    $routes->post('categories/create', '\App\Modules\Dashboard\Controllers\AdminPanel::storeCategory');
+    $routes->get('categories/delete/(:num)', '\App\Modules\Dashboard\Controllers\AdminPanel::deleteCategory/$1');
+    
+    // Tags
+    $routes->get('tags', '\App\Modules\Dashboard\Controllers\AdminPanel::tags');
+    $routes->post('tags/create', '\App\Modules\Dashboard\Controllers\AdminPanel::storeTag');
+    $routes->get('tags/delete/(:num)', '\App\Modules\Dashboard\Controllers\AdminPanel::deleteTag/$1');
+    
+    // Services
+    $routes->get('services', '\App\Modules\Dashboard\Controllers\AdminPanel::services');
+    
+    // Portfolio  
+    $routes->get('portfolio', '\App\Modules\Dashboard\Controllers\AdminPanel::portfolio');
+    
+    // Blog
+    $routes->get('blogs', '\App\Modules\Dashboard\Controllers\AdminPanel::blogs');
+    
+    // Tickets
+    $routes->get('tickets', '\App\Modules\Dashboard\Controllers\AdminPanel::tickets');
+});
+
+// ================================================================
 // API V1
 // ================================================================
 $routes->group('api/v1', function ($routes) {

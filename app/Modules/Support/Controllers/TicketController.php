@@ -11,9 +11,9 @@ class TicketController extends BaseController
     {
         $db = \Config\Database::connect();
         $tickets = $db->table('tickets')
-            ->select('t.*, u.username')
-            ->join('users u', 'u.id = t.user_id', 'left')
-            ->orderBy('t.created_at', 'DESC')
+            ->select('tickets.*, u.username')
+            ->join('users u', 'u.id = tickets.user_id', 'left')
+            ->orderBy('tickets.created_at', 'DESC')
             ->get()
             ->getResult();
 

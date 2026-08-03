@@ -1,46 +1,48 @@
 <?php
-
 namespace App\Modules\Billing\Controllers;
 
 use App\Controllers\BaseController;
-use App\Modules\Billing\Services\BillingService;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class BillingController extends BaseController
 {
-    protected BillingService $billingService;
-
-    public function __construct()
+    public function index(): string
     {
-        $this->billingService = new BillingService();
-    }
-
-    public function index()
-    {
-        $result = $this->billingService->getBillings();
+        $db = \Config\Database::connect();
+        
+        $billings = $db->table('invoices i')
+            ->select('i.*, u.username')
+            ->join('users u', 'u.id = i.user_id', 'left')
+            ->orderBy('i.created_at', 'DESC')
+            ->get()
+            ->getResult();
 
         $data = [
             'title' => 'Billing',
-            'billings' => $result['data']['billings'] ?? [],
-            'summary' => $result['data']['summary'] ?? [],
+            'billings' => $billings ?? [],
+            'summary' => [],
         ];
 
-        return view('invoice/index', $data);
+        return view('Dashboard/billing', $data);
     }
 
-    public function detail(string $uuid)
+    public function detail(string $uuid): string
     {
-        $result = $this->billingService->getBillingByUuid($uuid);
+        $db = \Config\Database::connect();
+        $billing = $db->table('invoices')
+            ->where('uuid', $uuid)
+            ->get()
+            ->getRow();
 
-        if (!$result['success']) {
+        if (!$billing) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
         $data = [
-            'title' => 'Billing - ' . $result['data']['uuid'],
-            'billing' => $result['data'],
+            'title' => 'Billing - ' . $billing->uuid,
+            'billing' => $billing,
         ];
 
-        return view('invoice/detail', $data);
+        return view('Dashboard/billing_detail', $data);
     }
 }

@@ -146,6 +146,11 @@ class AdminDashboardController extends BaseController
 
         $total = $db->table('transactions')->countAllResults();
 
+        $data = [
+            'title' => 'Payments (Midtrans)',
+            'payments' => $payments,
+        ];
+
         return view('Dashboard/payments', $data);
     }
 }

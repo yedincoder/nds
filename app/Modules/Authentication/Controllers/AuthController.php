@@ -7,6 +7,12 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class AuthController extends BaseController
 {
+    public function index(): string|RedirectResponse
+    {
+        // Just redirect to login
+        return redirect()->to('auth/login');
+    }
+
     public function showLogin(): string|RedirectResponse
     {
         if (session()->get('isLoggedIn')) {
