@@ -209,6 +209,83 @@ class CustomerService
         return $this->addressModel->getDefault($userId);
     }
 
+    public function getDownloads(int $userId): array
+    {
+        $db = \Config\Database::connect();
+        $downloads = $db->table('downloads d')
+            ->select('d.*, p.name as product_name, p.thumbnail, o.order_number')
+            ->join('products p', 'p.id = d.product_id', 'left')
+            ->join('orders o', 'o.id = d.order_id', 'left')
+            ->where('d.user_id', $userId)
+            ->orderBy('d.created_at', 'DESC')
+            ->get()
+            ->getResult();
+
+        return [
+            'success' => true,
+            'data' => ['downloads' => $downloads],
+        ];
+    }
+
+    public function getAddresses(int $userId): array
+    {
+        $addresses = $this->addressModel->getByUser($userId);
+
+        return [
+            'success' => true,
+            'data' => ['addresses' => $addresses],
+        ];
+    }
+
+    public function changePassword(int $userId, array $data): array
+    {
+        try {
+            $user = $this->userModel->find($userId);
+            if (!$user) {
+                return ['success' => false, 'message' => 'User not found.'];
+            }
+
+            if (!password_verify($data['current_password'], $user->password_hash)) {
+                return ['success' => false, 'message' => 'Current password is incorrect.'];
+            }
+
+            $this->userModel->update($userId, [
+                'password_hash' => password_hash($data['new_password'], PASSWORD_BCRYPT),
+            ]);
+
+            return ['success' => true, 'message' => 'Password changed successfully.'];
+        } catch (\Throwable $e) {
+            return ['success' => false, 'message' => 'Error changing password: ' . $e->getMessage()];
+        }
+    }
+
+    public function downloadFile(int $userId, string $token): array
+    {
+        $db = \Config\Database::connect();
+        $download = $db->table('downloads')
+            ->where('token', $token)
+            ->where('user_id', $userId)
+            ->get()
+            ->getRow();
+
+        if (!$download) {
+            return ['success' => false, 'message' => 'Download not found.'];
+        }
+
+        $filePath = WRITEPATH . 'uploads/' . $download->file_path;
+        if (!file_exists($filePath)) {
+            return ['success' => false, 'message' => 'File not found on server.'];
+        }
+
+        return [
+            'success' => true,
+            'data' => [
+                'file' => $download,
+                'file_path' => $filePath,
+            ],
+        ];
+    }
+
     protected function generateUuidString(): string
     {
         $data = random_bytes(16);

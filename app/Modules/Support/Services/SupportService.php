@@ -149,7 +149,29 @@ class SupportService
             return [
                 'success' => true,
                 'message' => 'Tickets retrieved successfully.',
-                'data' => $tickets
+                'data' => ['tickets' => $tickets]
+            ];
+        } catch (\Throwable $e) {
+            return [
+                'success' => false,
+                'message' => 'Error retrieving tickets: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    public function countByUser(int $userId): int
+    {
+        return $this->ticketModel->where('user_id', $userId)->countAllResults();
+    }
+
+    public function getTicketsByUser(int $userId): array
+    {
+        try {
+            $tickets = $this->ticketModel->getByUser($userId);
+            return [
+                'success' => true,
+                'message' => 'Tickets retrieved successfully.',
+                'data' => ['tickets' => $tickets]
             ];
         } catch (\Throwable $e) {
             return [

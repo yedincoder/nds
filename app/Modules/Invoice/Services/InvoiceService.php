@@ -56,6 +56,17 @@ class InvoiceService
         return $this->invoiceModel->countByUser($userId);
     }
 
+    public function getInvoicesByUser(int $userId): array
+    {
+        $invoices = $this->invoiceModel->getInvoicesByUser($userId);
+
+        return [
+            'success' => true,
+            'message' => 'Invoices retrieved successfully.',
+            'data' => ['invoices' => $invoices],
+        ];
+    }
+
     public function getUnpaidByUser(int $userId): array
     {
         $invoices = $this->invoiceModel->getUnpaidByUser($userId);
