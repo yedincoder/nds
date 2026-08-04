@@ -2,6 +2,19 @@
 
 <?= $this->section('content') ?>
 
+<!-- 1. BAGIAN HEADER & BREADCRUMB (Sesuai Struktur) -->
+<section class="page-header">
+    <div class="container">
+        <h1>Payment</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active">Payment</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
 <section class="py-5">
     <div class="container">
         <h1 class="mb-4">Payment History</h1>

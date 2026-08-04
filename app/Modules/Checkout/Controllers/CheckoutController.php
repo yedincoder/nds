@@ -27,11 +27,34 @@ class CheckoutController extends BaseController
                 ->with('error', 'Your cart is empty.');
         }
 
+        // Get logged in user data
+        $userId = session()->get('user_id');
+        $db = \Config\Database::connect();
+        
+        // Get user profile data
+        $user = $db->table('users u')
+            ->select('u.id, u.email, u.username, p.full_name, p.phone, p.address, p.city, p.province')
+            ->join('user_profiles p', 'p.user_id = u.id', 'left')
+            ->where('u.id', $userId)
+            ->get()
+            ->getRow();
+
+        // Get default address if exists
+        $defaultAddress = $db->table('customer_addresses')
+            ->where('user_id', $userId)
+            ->orderBy('is_default', 'DESC')
+            ->orderBy('created_at', 'DESC')
+            ->limit(1)
+            ->get()
+            ->getRow();
+
         $data = [
             'title' => 'Checkout',
             'cart' => $cartResult['data']['cart'] ?? null,
             'items' => $cartResult['data']['items'] ?? [],
             'summary' => $cartResult['data']['summary'] ?? [],
+            'user' => $user,
+            'defaultAddress' => $defaultAddress,
         ];
 
         return view('checkout/index', $data);
@@ -66,13 +89,23 @@ class CheckoutController extends BaseController
 
         $result = $this->checkoutService->processCheckout($data);
 
+        log_message('error', 'CheckoutController::process() result: ' . json_encode($result));
+
         if (!$result['success']) {
             return redirect()->back()
                 ->with('error', $result['message'])
                 ->withInput();
         }
 
-        return redirect()->to('payment/' . $result['data']['order_id'])
+        // Redirect ke halaman payment menggunakan invoice number/uuid (bukan order_id)
+        $invoiceRef = $result['data']['invoice_number'] ?? $result['data']['invoice_uuid'] ?? null;
+
+        if (!$invoiceRef) {
+            return redirect()->back()
+                ->with('error', 'Invoice reference not found. Please try again.');
+        }
+
+        return redirect()->to('payment/' . $invoiceRef)
             ->with('success', $result['message']);
     }
 

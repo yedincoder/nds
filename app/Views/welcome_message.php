@@ -108,7 +108,7 @@
             <?php endforeach; ?>
         </div>
         <div class="text-center mt-4">
-            <a href="/products" class="btn btn-outline-primary">Lihat Semua Produk</a>
+            <a href="<?= site_url('products/' . (isset($product->slug) ? $product->slug : $product->id)) ?>" class="btn btn-sm btn-primary">Lihat Detail</a>
         </div>
     </div>
 </section>

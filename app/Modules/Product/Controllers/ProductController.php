@@ -42,15 +42,17 @@ class ProductController extends BaseController
 
     public function detail(string $slug)
     {
-        $result = $this->productService->getProductBySlug($slug);
+        // Tangkap data yang ternyata langsung berupa object
+        $product = $this->productService->getProductBySlug($slug);
 
-        if (!$result['success']) {
+        // Cek kalau datanya kosong/tidak ditemukan di database
+        if (empty($product)) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
         $data = [
-            'title' => $result['data']['name'],
-            'product' => $result['data'],
+            'title'   => $product->name,
+            'product' => $product,
         ];
 
         return view('product/detail', $data);

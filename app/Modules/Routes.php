@@ -4,11 +4,11 @@ use CodeIgniter\Router\RouteCollection;
 
 $routes = service('routes');
 
-$routes->group('product', function ($routes) {
-    $routes->get('/', 'Product\Controllers\ProductController::index');
-    $routes->get('(:any)', 'Product\Controllers\ProductController::detail/$1');
-    $routes->get('category/(:any)', 'Product\Controllers\ProductController::category/$1');
-    $routes->get('search', 'Product\Controllers\ProductController::search');
+$routes->group('product', ['namespace' => 'App\Modules\Product\Controllers'], function ($routes) {
+    $routes->get('/', 'ProductController::index');
+    $routes->get('(:any)', 'ProductController::detail/$1');
+    $routes->get('category/(:any)', 'ProductController::category/$1');
+    $routes->get('search', 'ProductController::search');
 });
 
 $routes->group('service', function ($routes) {

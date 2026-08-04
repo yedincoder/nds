@@ -8,6 +8,7 @@ class MidtransLibrary
     protected $clientKey;
     protected $isProduction;
     protected $apiUrl;
+    protected $snapUrl;
 
     public function __construct()
     {
@@ -17,15 +18,33 @@ class MidtransLibrary
         $this->clientKey = $config->clientKey ?? getenv('MIDTRANS_CLIENT_KEY');
         $this->isProduction = $config->isProduction ?? (getenv('MIDTRANS_IS_PRODUCTION') === 'true');
         
+        // Core API untuk status & verify
         $this->apiUrl = $this->isProduction ? 'https://api.midtrans.com' : 'https://api.sandbox.midtrans.com';
+        // Snap API untuk token generation
+        $this->snapUrl = $this->isProduction ? 'https://app.midtrans.com' : 'https://app.sandbox.midtrans.com';
     }
 
     public function snapToken(array $transactionDetails): ?string
     {
+        $result = $this->createSnapTransaction($transactionDetails);
+        return $result['token'] ?? null;
+    }
+
+    /**
+     * Create Snap transaction and return full response (token + redirect_url)
+     *
+     * @param array $payload Struktur lengkap Midtrans: 
+     *                       ['transaction_details'=>[...], 'customer_details'=>[...], 'item_details'=>[...]]
+     */
+    public function createSnapTransaction(array $payload): ?array
+    {
+        log_message('error', 'MidtransLibrary::createSnapTransaction() called - isProduction: ' . ($this->isProduction ? 'true' : 'false') . ', snapUrl: ' . $this->snapUrl);
+        log_message('error', 'MidtransLibrary::createSnapTransaction() payload: ' . json_encode($payload));
+        
         $curl = curl_init();
         
-        curl_setopt_array($curl, [
-            CURLOPT_URL => $this->apiUrl . '/v2/snap/transactions',
+        $curlOptions = [
+            CURLOPT_URL => $this->snapUrl . '/snap/v1/transactions',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_HEADER => false,
@@ -34,13 +53,16 @@ class MidtransLibrary
                 'Content-Type: application/json',
                 'Authorization: Basic ' . base64_encode($this->serverKey . ':'),
             ],
-            CURLOPT_POSTFIELDS => json_encode([
-                'transaction_details' => $transactionDetails,
-                'credit_card' => [
-                    'secure' => true
-                ],
-            ]),
-        ]);
+            CURLOPT_POSTFIELDS => json_encode($payload),
+        ];
+        
+        // Disable SSL verification for sandbox (Windows PHP compatibility)
+        if (!$this->isProduction) {
+            $curlOptions[CURLOPT_SSL_VERIFYPEER] = false;
+            $curlOptions[CURLOPT_SSL_VERIFYHOST] = 0;
+        }
+        
+        curl_setopt_array($curl, $curlOptions);
 
         $response = curl_exec($curl);
         $err = curl_error($curl);
@@ -48,8 +70,10 @@ class MidtransLibrary
 
         curl_close($curl);
 
+        log_message('error', 'Midtrans API Response: HTTP ' . $httpCode . ' | Error: ' . $err . ' | Response: ' . $response);
+
         if ($err) {
-            log_message('error', 'Midtrans API error: ' . $err);
+            log_message('error', 'Midtrans API cURL error: ' . $err);
             return null;
         }
 
@@ -58,16 +82,14 @@ class MidtransLibrary
             return null;
         }
 
-        $data = json_decode($response, true);
-        
-        return $data['token'] ?? null;
+        return json_decode($response, true) ?: null;
     }
 
     public function verifyPayment(string $transactionId): ?array
     {
         $curl = curl_init();
         
-        curl_setopt_array($curl, [
+        $curlOptions = [
             CURLOPT_URL => $this->apiUrl . '/v2/' . $transactionId . '/status',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => false,
@@ -77,7 +99,15 @@ class MidtransLibrary
                 'Content-Type: application/json',
                 'Authorization: Basic ' . base64_encode($this->serverKey . ':'),
             ],
-        ]);
+        ];
+        
+        // Disable SSL verification for sandbox (Windows PHP compatibility)
+        if (!$this->isProduction) {
+            $curlOptions[CURLOPT_SSL_VERIFYPEER] = false;
+            $curlOptions[CURLOPT_SSL_VERIFYHOST] = 0;
+        }
+        
+        curl_setopt_array($curl, $curlOptions);
 
         $response = curl_exec($curl);
         $err = curl_error($curl);

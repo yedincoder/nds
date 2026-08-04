@@ -16,7 +16,12 @@
                                 <h5 class="card-title"><?= esc($product->name) ?></h5>
                                 <p class="card-text"><?= esc($product->short_description ?? '') ?></p>
                                 <a href="<?= site_url('products/' . $product->slug) ?>" class="btn btn-primary">View Details</a>
-                                <a href="<?= site_url('cart/add') ?>" class="btn btn-outline-success" data-product-id="<?= $product->id ?>">Add to Cart</a>
+                                <form action="<?= site_url('cart/add') ?>" method="POST" style="display:inline;">
+                                    <?= csrf_field() ?>
+                                    <input type="hidden" name="product_id" value="<?= $product->id ?>">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="btn btn-outline-success">Add to Cart</button>
+                                </form>
                             </div>
                         </div>
                     </div>

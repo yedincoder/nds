@@ -23,7 +23,8 @@ class CartController extends BaseController
             'title' => 'Shopping Cart',
             'cart' => $result['data']['cart'] ?? null,
             'items' => $result['data']['items'] ?? [],
-            'summary' => $result['data']['summary'] ?? [],
+            'summary' => $result['data']['totals'] ?? [],
+            'userId' => session()->get('user_id'),
         ];
 
         return view('cart/index', $data);

@@ -13,7 +13,7 @@
 
 <!-- Stats Cards - 1 row x 4 columns -->
 <div class="row mb-4">
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-3 mb-4">
         <div class="kpi-card">
             <div class="kpi-top">
                 <div class="kpi-identity">
@@ -25,7 +25,7 @@
             <div class="kpi-subtext">Total pelanggan terdaftar</div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-3 mb-4">
         <div class="kpi-card">
             <div class="kpi-top">
                 <div class="kpi-identity">
@@ -37,7 +37,7 @@
             <div class="kpi-subtext"><?= $stats['pending_orders'] ?? 0 ?> pending</div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-3 mb-4">
         <div class="kpi-card">
             <div class="kpi-top">
                 <div class="kpi-identity">
@@ -45,11 +45,11 @@
                     <div class="kpi-label">Revenue</div>
                 </div>
             </div>
-            <div class="kpi-value" style="font-size:20px">Rp <?= number_format($stats['total_revenue'] ?? 0, 0, ',', '.') ?></div>
+            <div class="kpi-value">Rp <?= number_format($stats['total_revenue'] ?? 0, 0, ',', '.') ?></div>
             <div class="kpi-subtext"><?= $stats['total_payments'] ?? 0 ?> pembayaran sukses</div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-3 mb-4">
         <div class="kpi-card">
             <div class="kpi-top">
                 <div class="kpi-identity">
@@ -64,8 +64,8 @@
 </div>
 
 <!-- Stats Cards - row 2 -->
-<div class="row mb-4">
-    <div class="col-xl-3 col-md-6 mb-4">
+<div class="row mb-4">    
+    <div class="col-xl-3 col-md-3 mb-4">
         <div class="kpi-card">
             <div class="kpi-top">
                 <div class="kpi-identity">
@@ -77,7 +77,7 @@
             <div class="kpi-subtext">Produk aktif</div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-3 mb-4">
         <div class="kpi-card">
             <div class="kpi-top">
                 <div class="kpi-identity">
@@ -89,7 +89,7 @@
             <div class="kpi-subtext">Layanan aktif</div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-3 mb-4">
         <div class="kpi-card">
             <div class="kpi-top">
                 <div class="kpi-identity">
@@ -101,7 +101,7 @@
             <div class="kpi-subtext">Ticket belum selesai</div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-3 mb-4">
         <div class="kpi-card">
             <div class="kpi-top">
                 <div class="kpi-identity">
@@ -243,7 +243,7 @@
 
 <!-- Recent Invoices & Tickets -->
 <div class="row mb-4">
-    <div class="col-xl-7">
+    <div class="col-xl-8 col-lg-7">
         <div class="card">
             <div class="card-header">
                 <div class="card-title">Recent Invoices</div>
@@ -281,7 +281,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-5">
+    <div class="col-xl-4 col-lg-5">
         <div class="card">
             <div class="card-header">
                 <div class="card-title">Recent Tickets</div>
@@ -311,9 +311,9 @@
     </div>
 </div>
 
-<!-- Testimonials & Top Products -->
+<!-- Testimonials & Top Products & Recent Activity -->
 <div class="row mb-4">
-    <div class="col-xl-5">
+    <div class="col-xl-4 col-lg-5">
         <div class="card">
             <div class="card-header">
                 <div class="card-title">Recent Testimonials</div>
@@ -342,7 +342,8 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-7">
+    <div class="col-xl-8 col-lg-7">
+    <div class="col-12">
         <div class="card">
             <div class="card-header">
                 <div class="card-title">Top Products</div>
@@ -376,11 +377,7 @@
                 <?php endif; ?>
             </div>
         </div>
-    </div>
-</div>
-
-<!-- Recent Activity -->
-<div class="row">
+        
     <div class="col-12">
         <div class="card">
             <div class="card-header">
@@ -411,6 +408,11 @@
             </div>
         </div>
     </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row">
 </div>
 
 <?= $this->endSection() ?>

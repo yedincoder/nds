@@ -14,7 +14,7 @@
 
 <!-- Statistics - 1 row x 4 columns -->
 <div class="row mb-4">
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-3 mb-4">
         <div class="kpi-card">
             <div class="kpi-top">
                 <div class="kpi-identity">
@@ -26,7 +26,7 @@
             <div class="kpi-subtext">Halaman website</div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-3 mb-4">
         <div class="kpi-card">
             <div class="kpi-top">
                 <div class="kpi-identity">
@@ -38,7 +38,7 @@
             <div class="kpi-subtext">Artikel & tutorial</div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-3 mb-4">
         <div class="kpi-card">
             <div class="kpi-top">
                 <div class="kpi-identity">
@@ -50,7 +50,7 @@
             <div class="kpi-subtext">Kategori konten</div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-3 mb-4">
         <div class="kpi-card">
             <div class="kpi-top">
                 <div class="kpi-identity">
@@ -66,7 +66,7 @@
 
 <!-- Quick Actions -->
 <div class="row mb-4">
-    <div class="col-12">
+    <div class="col-xl-12 col-lg-12">
         <div class="card">
             <div class="card-header">
                 <div class="card-title">CMS Quick Actions</div>
@@ -82,14 +82,14 @@
 </div>
 
 <!-- Recent Pages & Articles -->
-<div class="row">
-    <div class="col-xl-8 col-lg-12">
+<div class="row mb-4">
+    <div class="col-xl-4 col-lg-5">
         <div class="card">
             <div class="card-header">
                 <div class="card-title">Recent Pages</div>
                 <a href="/admin/cms/pages" class="btn btn-sm btn-outline-primary">View All</a>
             </div>
-            <div class="card-body" style="padding:8px 16px">
+            <div class="card-body">
                 <?php if (!empty($recent_pages)):?>
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -98,7 +98,6 @@
                                 <th>Title</th>
                                 <th>Slug</th>
                                 <th>Status</th>
-                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -117,12 +116,6 @@
                                     ?>
                                     <span class="badge <?= $statusClass ?>"><?= esc(ucfirst($page->status ?? 'draft')) ?></span>
                                 </td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <a href="/admin/cms/pages/<?= $page->id ?>/edit" class="btn btn-sm btn-outline-primary" title="Edit"><i class="fas fa-edit"></i></a>
-                                        <a href="/admin/cms/pages/<?= $page->id ?>/delete" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure?')"><i class="fas fa-trash"></i></a>
-                                    </div>
-                                </td>
                             </tr>
                             <?php endforeach;?>
                         </tbody>
@@ -137,7 +130,8 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-4 col-lg-12">
+
+    <div class="col-xl-7 col-lg-12">
         <div class="card">
             <div class="card-header">
                 <div class="card-title">Recent Articles</div>
@@ -171,6 +165,6 @@
             </div>
         </div>
     </div>
-</div>
 
+</div>
 <?= $this->endSection()?>

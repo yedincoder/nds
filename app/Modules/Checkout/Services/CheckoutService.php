@@ -84,8 +84,9 @@ class CheckoutService
     public function getOrder(int $orderId): ?object
     {
         return $this->db->table('orders o')
-            ->select('o.*, u.full_name as user_name, u.email as user_email')
+            ->select('o.*, u.email as user_email, up.full_name as user_name')
             ->join('users u', 'u.id = o.user_id', 'left')
+            ->join('user_profiles up', 'up.user_id = u.id', 'left')
             ->where('o.id', $orderId)
             ->get()
             ->getRow();
@@ -172,8 +173,9 @@ class CheckoutService
     public function getAllOrders(array $filters = [], int $perPage = 20, int $page = 1): array
     {
         $builder = $this->db->table('orders o');
-        $builder->select('o.*, u.full_name as user_name, u.email as user_email');
+        $builder->select('o.*, u.email as user_email, up.full_name as user_name');
         $builder->join('users u', 'u.id = o.user_id', 'left');
+        $builder->join('user_profiles up', 'up.user_id = u.id', 'left');
 
         if (!empty($filters['status'])) {
             $builder->where('o.status', $filters['status']);
@@ -186,7 +188,7 @@ class CheckoutService
         if (!empty($filters['search'])) {
             $builder->groupStart();
             $builder->like('o.order_number', $filters['search']);
-            $builder->orLike('u.full_name', $filters['search']);
+            $builder->orLike('up.full_name', $filters['search']);
             $builder->groupEnd();
         }
 
@@ -216,6 +218,143 @@ class CheckoutService
         ];
     }
 
+    public function processCheckout(array $data): array
+    {
+        $this->db->transBegin();
+
+        try {
+            $userId = session()->get('user_id');
+            if (!$userId) {
+                return [
+                    'success' => false,
+                    'message' => 'User not authenticated.'
+                ];
+            }
+
+            // Get cart items
+            $cart = $this->db->table('carts')
+                ->where('user_id', $userId)
+                ->where('status', 'active')
+                ->get()
+                ->getRow();
+
+            if (!$cart) {
+                return [
+                    'success' => false,
+                    'message' => 'Cart not found.'
+                ];
+            }
+
+            $cartItems = $this->db->table('cart_items')
+                ->select('cart_items.*, products.name as product_name, services.name as service_name')
+                ->join('products', 'products.id = cart_items.product_id', 'left')
+                ->join('services', 'services.id = cart_items.service_id', 'left')
+                ->where('cart_id', $cart->id)
+                ->get()
+                ->getResult();
+
+            if (empty($cartItems)) {
+                return [
+                    'success' => false,
+                    'message' => 'Cart is empty.'
+                ];
+            }
+
+            // Prepare order items
+            $orderItems = [];
+            $subtotal = 0;
+            
+            foreach ($cartItems as $item) {
+                $itemName = $item->product_name ?? $item->service_name ?? 'Item';
+                $itemSubtotal = $item->quantity * $item->price;
+                
+                $orderItems[] = [
+                    'product_id' => $item->product_id,
+                    'service_id' => $item->service_id,
+                    'name' => $itemName,
+                    'quantity' => $item->quantity,
+                    'price' => $item->price,
+                    'subtotal' => $itemSubtotal
+                ];
+                
+                $subtotal += $itemSubtotal;
+            }
+
+            // Create order
+            $orderId = $this->createOrder($userId, $orderItems, $data, [
+                'subtotal' => $subtotal,
+                'discount' => 0,
+                'tax' => 0,
+                'total' => $subtotal
+            ]);
+
+            if (!$orderId) {
+                return [
+                    'success' => false,
+                    'message' => 'Failed to create order.'
+                ];
+            }
+
+            // Create invoice
+            $billingService = new \App\Modules\Billing\Services\BillingService();
+            
+            $invoiceId = $billingService->createInvoice($orderId, $userId, [
+                'subtotal' => $subtotal,
+                'discount' => 0,
+                'tax' => 0,
+                'total' => $subtotal,
+                'status' => 'unpaid',
+                'items' => $orderItems
+            ]);
+
+            if (!$invoiceId) {
+                $this->db->transRollback();
+                return [
+                    'success' => false,
+                    'message' => 'Failed to create invoice.'
+                ];
+            }
+
+            // Update cart status
+            $this->db->table('carts')
+                ->where('id', $cart->id)
+                ->update(['status' => 'converted']);
+
+            $invoice = $this->db->table('invoices')->where('id', $invoiceId)->get()->getRow();
+
+            if ($this->db->transStatus() === false) {
+                $this->db->transRollback();
+                return [
+                    'success' => false,
+                    'message' => 'Checkout process failed.'
+                ];
+            }
+
+            $this->db->transCommit();
+
+            return [
+                'success' => true,
+                'message' => 'Checkout completed successfully.',
+                'data' => [
+                    'order_id' => $orderId,
+                    'invoice_id' => $invoiceId,
+                    'invoice_uuid' => $invoice->uuid ?? null,
+                    'invoice_number' => $invoice->invoice_number ?? null,
+                    'order_number' => $this->getOrder($orderId)->order_number ?? ''
+                ]
+            ];
+
+        } catch (\Throwable $e) {
+            $this->db->transRollback();
+            log_message('error', 'Checkout error: ' . $e->getMessage());
+            
+            return [
+                'success' => false,
+                'message' => 'An error occurred during checkout. Please try again.'
+            ];
+        }
+    }
+
     protected function generateOrderNumber(): string
     {
         return 'ORD-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
@@ -223,15 +362,13 @@ class CheckoutService
 
     protected function generateUuid(): string
     {
-        $data = random_bytes(16);
-        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
-        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
-
-        return sprintf('%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x',
-            $data[0], $data[1], $data[2], $data[3],
-            $data[4], $data[5], $data[6], $data[7],
-            $data[8], $data[9], $data[10], $data[11],
-            $data[12], $data[13], $data[14], $data[15]
+        // Generate UUID v4 dengan uniqid dan mt_rand untuk Windows compatibility
+        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0x0fff) | 0x4000,
+            mt_rand(0, 0x3fff) | 0x8000,
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
         );
     }
 }

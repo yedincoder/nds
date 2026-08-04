@@ -65,7 +65,7 @@
                         <strong>#<?= esc($inv->invoice_number ?? $inv->id ?? '') ?></strong>
                         <br><small class="text-muted">Rp <?= number_format($inv->total ?? 0, 0, ',', '.') ?></small>
                     </div>
-                    <a href="/client/invoices" class="btn btn-sm btn-outline-primary">Pay</a>
+                    <a href="<?= site_url('payment/' . ($inv->invoice_number ?? $inv->id)) ?>" class="btn btn-sm btn-primary">Pay Now</a>
                 </div>
                 <?php endforeach; ?>
                 <?php else: ?>

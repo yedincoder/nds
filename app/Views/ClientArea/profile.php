@@ -17,6 +17,7 @@
         $postalCode = $profileData->postal_code ?? '';
         ?>
         <form method="POST" action="/client/profile/update">
+            <?= csrf_field() ?>
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">

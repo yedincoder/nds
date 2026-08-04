@@ -44,10 +44,10 @@
                                 <span class="text-muted text-decoration-line-through me-2" style="font-size:14px;">Rp <?= number_format($product->price, 0, ',', '.') ?></span>
                                 <span class="price">Rp <?= number_format($product->discount_price, 0, ',', '.') ?></span>
                                 <?php else: ?>
-                                <span class="price">Rp <?= number_format($product->price, 0, ',', '.') ?></span>
+                                <span class="price">Rp <?= number_format($product->price ?? 0, 0, ',', '.') ?></span>
                                 <?php endif; ?>
                             </div>
-                            <a href="/contact" class="btn btn-sm btn-primary">Beli</a>
+                            <a href="<?= site_url('product/' . ($product->slug ?? $product->id)) ?>" class="btn btn-sm btn-primary">Lihat Detail</a>
                         </div>
                     </div>
                 </div>

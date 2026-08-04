@@ -117,15 +117,7 @@ class TicketController extends BaseController
 
     private function generateUuid(): string
     {
-        $data = random_bytes(16);
-        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
-        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
-
-        return sprintf('%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x',
-            ord($data[0]), ord($data[1]), ord($data[2]), ord($data[3]),
-            ord($data[4]), ord($data[5]), ord($data[6]), ord($data[7]),
-            ord($data[8]), ord($data[9]), ord($data[10]), ord($data[11]),
-            ord($data[12]), ord($data[13]), ord($data[14]), ord($data[15])
-        );
+        // Simple implementation dengan timestamp dan random number (Windows compatible)
+        return date('YmdHis') . substr(md5(uniqid('', true) . mt_rand(100000, 999999)), 0, 8);
     }
 }

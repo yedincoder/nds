@@ -16,10 +16,134 @@ class CartService
         $this->cartItemModel = new CartItemModel();
     }
 
+    /**
+     * Get cart for current user (wrapper for getOrCreateCart)
+     */
+    public function getCart(): array
+    {
+        $userId = session()->get('user_id');
+        $sessionId = session_id();
+        
+        // Debug logging
+        log_message('debug', 'CartService::getCart() - userId: ' . ($userId ?? 'null') . ', sessionId: ' . $sessionId);
+        
+        // Jika user belum login, gunakan session_id saja
+        if (!$userId) {
+            log_message('debug', 'CartService::getCart() - User not logged in, using session_id');
+            return $this->getOrCreateCart(null, $sessionId);
+        }
+        
+        $result = $this->getOrCreateCart($userId, $sessionId);
+        
+        // Debug logging
+        if (isset($result['data']['items'])) {
+            log_message('debug', 'CartService::getCart() - Items count: ' . count($result['data']['items']));
+        }
+        
+        return $result;
+    }
+
+    /**
+     * Add item to cart (wrapper for addItem)
+     */
+    public function addToCart(array $data): array
+    {
+        // Get or create cart
+        $cartResult = $this->getCart();
+        
+        if (!$cartResult['success']) {
+            return $cartResult;
+        }
+        
+        $cart = $cartResult['data']['cart'];
+        
+        // Get product/service price if not provided
+        if (!isset($data['price']) || $data['price'] == 0) {
+            $db = \Config\Database::connect();
+            
+            if (!empty($data['product_id'])) {
+                // Get price, tax_rate, discount_price from product_prices table
+                $productPrice = $db->table('product_prices')
+                    ->select('price, tax_rate, discount_price')
+                    ->where('product_id', $data['product_id'])
+                    ->orderBy('id', 'DESC')
+                    ->limit(1)
+                    ->get()
+                    ->getRow();
+                
+                if ($productPrice) {
+                    $data['price'] = $productPrice->price;
+                    $data['tax_rate'] = $productPrice->tax_rate ?? 0;
+                    
+                    // Calculate discount
+                    if (!empty($productPrice->discount_price) && $productPrice->discount_price < $productPrice->price) {
+                        $data['discount_rate'] = (($productPrice->price - $productPrice->discount_price) / $productPrice->price) * 100;
+                    } else {
+                        $data['discount_rate'] = 0;
+                    }
+                } else {
+                    $data['price'] = 0;
+                    $data['tax_rate'] = 0;
+                    $data['discount_rate'] = 0;
+                }
+            } elseif (!empty($data['service_id'])) {
+                // Get price from service_prices table
+                $servicePrice = $db->table('service_prices')
+                    ->select('price, tax_rate, discount_price')
+                    ->where('service_id', $data['service_id'])
+                    ->orderBy('id', 'DESC')
+                    ->limit(1)
+                    ->get()
+                    ->getRow();
+                
+                if ($servicePrice) {
+                    $data['price'] = $servicePrice->price;
+                    $data['tax_rate'] = $servicePrice->tax_rate ?? 0;
+                    $data['discount_rate'] = 0;
+                } else {
+                    $data['price'] = 0;
+                    $data['tax_rate'] = 0;
+                    $data['discount_rate'] = 0;
+                }
+            }
+        }
+        
+        return $this->addItem($cart->id, $data);
+    }
+
+    /**
+     * Update cart item (wrapper for updateItem)
+     */
+    public function updateCartItem(int $itemId, int $quantity): array
+    {
+        return $this->updateItem($itemId, ['quantity' => $quantity]);
+    }
+
+    /**
+     * Remove item from cart (wrapper for removeItem)
+     */
+    public function removeFromCart(string $itemId): array
+    {
+        return $this->removeItem((int) $itemId);
+    }
+
     public function getOrCreateCart(?int $userId = null, ?string $sessionId = null): array
     {
         try {
             $cart = $this->cartModel->getActiveCart($userId, $sessionId);
+            
+            // Jika tidak ada cart aktif, cek apakah ada cart yang sudah dikonversi
+            if (!$cart && $userId) {
+                // Cari cart yang sudah dikonversi dan buat cart baru
+                $oldCart = $this->cartModel->where('user_id', $userId)->orderBy('id', 'DESC')->first();
+                if ($oldCart) {
+                    // Buat cart baru untuk session ini
+                    $cart = $this->cartModel->where('user_id', $userId)
+                        ->where('status', 'active')
+                        ->first();
+                }
+            }
+            
             if ($cart) {
                 $items = $this->cartItemModel->getCartItemsWithDetails($cart->id);
                 $totals = $this->cartItemModel->calculateCartTotal($cart->id);
@@ -34,6 +158,8 @@ class CartService
                     ]
                 ];
             }
+            
+            log_message('debug', 'CartService: No active cart found, creating new cart');
 
             // Create new cart
             $cartData = [
@@ -64,21 +190,34 @@ class CartService
     public function addItem(int $cartId, array $data): array
     {
         try {
+            log_message('debug', 'CartService::addItem() - cartId: ' . $cartId . ', productId: ' . ($data['product_id'] ?? 'null'));
+            
             $cart = $this->cartModel->find($cartId);
             if (!$cart || $cart->status !== 'active') {
                 return ['success' => false, 'message' => 'Cart not found or not active.'];
             }
+            
+            log_message('debug', 'CartService::addItem() - Cart status: ' . $cart->status);
 
             $existingItem = $this->cartItemModel->getItem($cartId, $data['product_id'] ?? null, $data['service_id'] ?? null);
             if ($existingItem) {
                 // Update existing item
                 $quantity = $existingItem->quantity + ($data['quantity'] ?? 1);
                 $price = $data['price'] ?? $existingItem->price;
+                $taxRate = $data['tax_rate'] ?? $existingItem->tax_rate ?? 0;
+                $discountRate = $data['discount_rate'] ?? $existingItem->discount_rate ?? 0;
+                
                 $subtotal = $quantity * $price;
+                $taxAmount = $subtotal * ($taxRate / 100);
+                $discountAmount = $subtotal * ($discountRate / 100);
 
                 $updateData = [
                     'quantity' => $quantity,
                     'price' => $price,
+                    'tax_rate' => $taxRate,
+                    'tax_amount' => $taxAmount,
+                    'discount_rate' => $discountRate,
+                    'discount_amount' => $discountAmount,
                     'subtotal' => $subtotal,
                 ];
                 $this->cartItemModel->update($existingItem->id, $updateData);
@@ -90,15 +229,28 @@ class CartService
                 ];
             }
 
-            // Create new cart item
+            // Create new cart item - Calculate tax and discount
+            $quantity = $data['quantity'] ?? 1;
+            $price = $data['price'] ?? 0;
+            $taxRate = $data['tax_rate'] ?? 0;
+            $discountRate = $data['discount_rate'] ?? 0;
+            
+            $subtotal = $quantity * $price;
+            $taxAmount = $subtotal * ($taxRate / 100);
+            $discountAmount = $subtotal * ($discountRate / 100);
+            
             $itemData = [
                 'uuid' => $this->generateUuidString(),
                 'cart_id' => $cartId,
                 'product_id' => $data['product_id'] ?? null,
                 'service_id' => $data['service_id'] ?? null,
-                'quantity' => $data['quantity'] ?? 1,
-                'price' => $data['price'] ?? 0,
-                'subtotal' => ($data['quantity'] ?? 1) * ($data['price'] ?? 0),
+                'quantity' => $quantity,
+                'price' => $price,
+                'tax_rate' => $taxRate,
+                'tax_amount' => $taxAmount,
+                'discount_rate' => $discountRate,
+                'discount_amount' => $discountAmount,
+                'subtotal' => $subtotal,
             ];
             $itemId = $this->cartItemModel->insert($itemData);
 
@@ -186,7 +338,27 @@ class CartService
         }
     }
 
-    public function clearCart(int $cartId): array
+    /**
+     * Clear cart for current user (wrapper for original clearCart)
+     */
+    public function clearCart(): array
+    {
+        $cartResult = $this->getCart();
+        
+        if (!$cartResult['success']) {
+            return $cartResult;
+        }
+        
+        $cart = $cartResult['data']['cart'];
+        
+        // Call original clearCart dengan cartId
+        return $this->clearCartById($cart->id);
+    }
+
+    /**
+     * Clear cart by ID (original implementation)
+     */
+    public function clearCartById(int $cartId): array
     {
         try {
             $this->cartItemModel->where('cart_id', $cartId)->delete();
@@ -280,16 +452,8 @@ class CartService
 
     protected function generateUuidString(): string
     {
-        $data = random_bytes(16);
-        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
-        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
-
-        return sprintf('%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x',
-            $data[0], $data[1], $data[2], $data[3],
-            $data[4], $data[5], $data[6], $data[7],
-            $data[8], $data[9], $data[10], $data[11],
-            $data[12], $data[13], $data[14], $data[15]
-        );
+        // Simple implementation dengan timestamp dan random number (Windows compatible)
+        return date('YmdHis') . substr(md5(uniqid('', true) . mt_rand(100000, 999999)), 0, 8);
     }
 
     protected function generateOrderNumber(): string

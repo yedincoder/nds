@@ -64,9 +64,24 @@ $routes->group('invoice', ['filter' => 'auth'], function ($routes) {
 // ================================================================
 $routes->group('payment', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', '\App\Modules\Payment\Controllers\PaymentController::index');
+    $routes->get('invoice/(:any)', '\App\Modules\Payment\Controllers\PaymentController::process/$1');
+    $routes->post('invoice/(:any)', '\App\Modules\Payment\Controllers\PaymentController::process/$1');
     $routes->get('(:any)', '\App\Modules\Payment\Controllers\PaymentController::process/$1');
+    $routes->post('(:any)', '\App\Modules\Payment\Controllers\PaymentController::process/$1');
     $routes->get('success/(:any)', '\App\Modules\Payment\Controllers\PaymentController::success/$1');
     $routes->get('failed/(:any)', '\App\Modules\Payment\Controllers\PaymentController::failed/$1');
+});
+
+// ================================================================
+// MIDTRANS PAYMENT
+// ================================================================
+$routes->group('midtrans', function ($routes) {
+    $routes->get('initiate/(:any)', '\App\Modules\Midtrans\Controllers\MidtransController::initiate/$1', ['filter' => 'auth']);
+    $routes->get('status/(:any)', '\App\Modules\Midtrans\Controllers\MidtransController::status/$1', ['filter' => 'auth']);
+    $routes->get('success', '\App\Modules\Midtrans\Controllers\MidtransController::success', ['filter' => 'auth']);
+    $routes->get('pending', '\App\Modules\Midtrans\Controllers\MidtransController::pending', ['filter' => 'auth']);
+    $routes->get('error', '\App\Modules\Midtrans\Controllers\MidtransController::error', ['filter' => 'auth']);
+    $routes->post('notification', '\App\Modules\Midtrans\Controllers\MidtransController::notification');
 });
 
 // ================================================================
@@ -180,4 +195,11 @@ $routes->group('api/v1', function ($routes) {
         $routes->post('tickets', '\App\Controllers\Api\SupportApiController::create');
         $routes->get('notifications', '\App\Controllers\Api\NotificationApiController::index');
     });
+	
 });
+
+// Load rute modular dari app/Modules/Routes.php
+$modularRoutes = APPPATH . 'Modules/Routes.php';
+if (file_exists($modularRoutes)) {
+    require $modularRoutes;
+}

@@ -25,15 +25,16 @@ if (!function_exists('format_date')) {
 if (!function_exists('generate_uuid')) {
     function generate_uuid()
     {
-        $data = random_bytes(16);
-        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
-        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
-
-        return sprintf('%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x',
-            $data[0], $data[1], $data[2], $data[3],
-            $data[4], $data[5], $data[6], $data[7],
-            $data[8], $data[9], $data[10], $data[11],
-            $data[12], $data[13], $data[14], $data[15]
+        // Generate UUID v4 dengan uniqid yang lebih reliable
+        $data = uniqid('', true) . uniqid('', true) . mt_rand(0, 999999);
+        $hash = md5($data);
+        
+        return sprintf('%s-%s-%s-%s-%s',
+            substr($hash, 0, 8),
+            substr($hash, 8, 4),
+            substr($hash, 12, 4),
+            substr($hash, 16, 4),
+            substr($hash, 20, 12)
         );
     }
 }

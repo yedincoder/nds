@@ -19,6 +19,10 @@ class CartItemModel extends Model
         'service_id',
         'quantity',
         'price',
+        'tax_rate',
+        'tax_amount',
+        'discount_rate',
+        'discount_amount',
         'subtotal',
         'created_at',
         'updated_at',
@@ -30,7 +34,7 @@ class CartItemModel extends Model
 
     protected $validationRules = [
         'cart_id' => 'required|integer',
-        'quantity' => 'required|integer|min[1]',
+        'quantity' => 'required|integer|greater_than_equal_to[1]',
         'price' => 'required|decimal',
         'subtotal' => 'required|decimal',
     ];
@@ -48,16 +52,8 @@ class CartItemModel extends Model
 
     protected function generateUuidString(): string
     {
-        $data = random_bytes(16);
-        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
-        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
-
-        return sprintf('%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x',
-            $data[0], $data[1], $data[2], $data[3],
-            $data[4], $data[5], $data[6], $data[7],
-            $data[8], $data[9], $data[10], $data[11],
-            $data[12], $data[13], $data[14], $data[15]
-        );
+        // Simple implementation dengan timestamp dan random number
+        return date('YmdHis') . substr(md5(uniqid('', true) . mt_rand(100000, 999999)), 0, 8);
     }
 
     public function getByCart(int $cartId): array
@@ -79,6 +75,13 @@ class CartItemModel extends Model
     public function getCartItemsWithDetails(int $cartId): array
     {
         $items = $this->where('cart_id', $cartId)->findAll();
+        
+        // Debug: Log if no items found
+        if (empty($items)) {
+            log_message('debug', 'CartService: No items found for cart_id=' . $cartId);
+            return [];
+        }
+        
         foreach ($items as $item) {
             if ($item->product_id) {
                 $db = \Config\Database::connect();
@@ -103,13 +106,20 @@ class CartItemModel extends Model
     {
         $items = $this->where('cart_id', $cartId)->findAll();
         $subtotal = 0;
+        $totalTax = 0;
+        $totalDiscount = 0;
+        
         foreach ($items as $item) {
             $subtotal += $item->subtotal;
+            $totalTax += $item->tax_amount ?? 0;
+            $totalDiscount += $item->discount_amount ?? 0;
         }
+        
         return [
             'subtotal' => $subtotal,
-            'tax' => $subtotal * 0.10, // 10% tax
-            'total' => $subtotal * 1.10, // 10% tax
+            'tax' => $totalTax,
+            'discount' => $totalDiscount,
+            'total' => $subtotal + $totalTax - $totalDiscount,
         ];
     }
 }

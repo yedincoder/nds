@@ -29,32 +29,71 @@ class PaymentController extends BaseController
 
     public function process(string $invoiceId)
     {
+        log_message('error', 'PaymentController::process() REACHED - method: ' . $this->request->getMethod() . ', invoiceId: ' . $invoiceId);
+
         $result = $this->paymentService->getInvoiceById($invoiceId);
 
         if (!$result['success']) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        if ($this->request->getMethod() === 'post') {
+        if ($this->request->getMethod() === 'POST') {
             $paymentMethodId = $this->request->getPost('payment_method_id');
 
-            $result = $this->paymentService->initiatePayment($invoiceId, $paymentMethodId);
+            log_message('error', 'PaymentController::process() POST - invoiceId: ' . $invoiceId . ', method: ' . ($paymentMethodId ?? 'none'));
 
-            if (!$result['success']) {
-                return redirect()->back()
-                    ->with('error', $result['message']);
+            try {
+                $paymentResult = $this->paymentService->initiatePayment($invoiceId);
+                log_message('error', 'PaymentController::process() - initiatePayment result: ' . json_encode($paymentResult));
+            } catch (\Throwable $e) {
+                log_message('error', 'PaymentController::process() EXCEPTION: ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine());
+                $paymentResult = ['success' => false, 'message' => 'Payment initiation exception: ' . $e->getMessage()];
             }
 
-            if (isset($result['data']['redirect_url'])) {
-                return redirect()->to($result['data']['redirect_url']);
+            if (!$paymentResult['success']) {
+                // Show error on the same page instead of redirecting back
+                $data = [
+                    'title' => 'Payment - Invoice ' . $result['data']->invoice_number,
+                    'invoice' => $result['data'],
+                    'paymentMethods' => $this->paymentService->getPaymentMethods()['data'] ?? [],
+                    'error' => $paymentResult['message'],
+                ];
+
+                return view('payment/process', $data);
+            }
+
+            // Redirect user DIRECTLY to Midtrans hosted payment page
+            if (!empty($paymentResult['data']['redirect_url'])) {
+                return redirect()->to($paymentResult['data']['redirect_url']);
+            }
+
+            // Fallback: if no redirect_url, render Midtrans payment page with snap token
+            if (!empty($paymentResult['data']['snap_token'])) {
+                $midtransConfig = config('MidtransConfig');
+                $clientKey = $midtransConfig->clientKey ?? getenv('MIDTRANS_CLIENT_KEY');
+                $isProduction = $midtransConfig->isProduction ?? (getenv('MIDTRANS_IS_PRODUCTION') === 'true');
+                
+                $snapUrl = $isProduction 
+                    ? 'https://app.midtrans.com/snap/snap.js' 
+                    : 'https://app.sandbox.midtrans.com/snap/snap.js';
+
+                $data = [
+                    'title' => 'Payment',
+                    'invoice' => $result['data'],
+                    'snap_token' => $paymentResult['data']['snap_token'],
+                    'snap_url' => $snapUrl,
+                    'client_key' => $clientKey,
+                ];
+
+                return view('midtrans/payment', $data);
             }
 
             return redirect()->back()
-                ->with('success', $result['message']);
+                ->with('success', $paymentResult['message']);
         }
 
         $data = [
-            'title' => 'Payment - Invoice ' . $result['data']['invoice_number'],
+            'title' => 'Payment - Invoice ' . $result['data']->invoice_number,
             'invoice' => $result['data'],
             'paymentMethods' => $this->paymentService->getPaymentMethods()['data'] ?? [],
         ];
