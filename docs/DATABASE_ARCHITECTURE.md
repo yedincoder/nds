@@ -1,244 +1,162 @@
-# DATABASE ARCHITECTURE DOCUMENT
-# ==============================================================================
-# PROJECT     : NgAppID Digital Platform
-# PHASE       : 05 - Database Architecture
-# VERSION     : 1.0.0
-# DATE        : 2026-08-02
-# ==============================================================================
+# NDS - Database Architecture
 
-# 1. DATABASE INFORMATION
-# ==============================================================================
-Database Name: NgAppID Database
-Database Engine: MariaDB 10.5+
-Database Development: Migration Based Development
-Database Initial Data: Seeder Based Development
-Database Cache: Redis
+**Version:** 2.0
+**Date:** 2026-08-05
+**Engine:** MariaDB 10.5+
+**Database:** ngappid
 
-# 2. DATABASE PRINCIPLE
-# ==============================================================================
-1. Normalization
-2. Data Integrity
-3. Foreign Key Relationship
-4. Query Optimization
-5. Index Optimization
-6. Secure Query
-7. Maintainable Structure
+---
 
-# 3. DATABASE ARCHITECTURE
-# ==============================================================================
-Database Layer:
-1. Application Database
-2. Transaction Database
-3. Configuration Database
-4. Logging Database
+## 📊 Tabel Utama (±45)
 
-# 4. DATABASE CATEGORY
-# ==============================================================================
-1. User Management
-2. Content Management
-3. Product Management
-4. Ecommerce Management
-5. Customer Management
-6. Payment Management
-7. Support Management
-8. System Management
+### Core / Auth
+| Tabel | Keterangan |
+|-------|-----------|
+| users | Data pengguna |
+| user_profiles | Profil lengkap pengguna |
+| user_roles | Relasi user ↔ role |
+| roles | Role (super-admin, admin, customer) |
+| permissions | Daftar permission |
+| role_permissions | Relasi role ↔ permission |
+| login_attempts | Log percobaan login |
+| activity_logs | Log aktivitas |
 
-# 5. DATABASE ENTITY
-# ==============================================================================
+### FrontArea / E-commerce
+| Tabel | Keterangan |
+|-------|-----------|
+| products | Produk |
+| product_categories | Kategori produk |
+| product_prices | Harga produk (termasuk tax_rate, discount) |
+| product_files | File produk (untuk download) |
+| product_images | Gambar produk |
+| services | Layanan |
+| service_categories | Kategori layanan |
+| service_packages | Paket layanan |
+| carts | Keranjang |
+| cart_items | Item keranjang |
+| orders | Pesanan |
+| order_items | Item pesanan |
+| invoices | Invoice |
+| invoice_items | Item invoice |
+| transactions | Transaksi pembayaran |
+| payments | Pembayaran |
+| payment_methods | Metode pembayaran |
+| payment_logs | Log pembayaran |
+| midtrans_transactions | Transaksi Midtrans |
+| midtrans_notifications | Notifikasi webhook Midtrans |
 
-## 5.1 CORE DATABASE ENTITY
-1. Users
-2. Roles
-3. Permissions
-4. User Roles
-5. Settings
-6. Audit Logs
+### Content / CMS
+| Tabel | Keterangan |
+|-------|-----------|
+| articles | Artikel/blog |
+| categories | Kategori (article, ticket) |
+| tags | Tag |
+| article_tags | Relasi artikel ↔ tag |
+| pages | Halaman statis |
+| portfolios | Portofolio |
+| testimonials | Testimoni |
 
-## 5.2 CONTENT DATABASE ENTITY
-1. Categories
-2. Tags
-3. Posts
-4. Pages
-5. Media
-6. Comments
+### ClientArea / Customer
+| Tabel | Keterangan |
+|-------|-----------|
+| customer_addresses | Alamat pelanggan |
+| downloads | Data download produk |
+| download_logs | Log download |
 
-## 5.3 PRODUCT DATABASE ENTITY
-1. Products
-2. Product Categories
-3. Product Files
-4. Product Prices
-5. Services
-6. Service Categories
+### AdminArea / Support
+| Tabel | Keterangan |
+|-------|-----------|
+| tickets | Tiket support |
+| ticket_messages | Pesan tiket |
+| contacts | Pesan kontak |
+| notifications | Notifikasi |
 
-## 5.4 CUSTOMER DATABASE ENTITY
-1. Customers
-2. Customer Profiles
-3. Customer Addresses
-4. Customer Activity
+### System
+| Tabel | Keterangan |
+|-------|-----------|
+| settings | Konfigurasi sistem |
+| media | Media manager |
+| audit_logs | Log audit |
 
-## 5.5 ECOMMERCE DATABASE ENTITY
-1. Carts
-2. Cart Items
-3. Orders
-4. Order Items
-5. Transactions
-6. Invoices
-7. Invoice Items
+---
 
-## 5.6 PAYMENT DATABASE ENTITY
-1. Payments
-2. Payment Methods
-3. Payment Logs
-4. Payment Webhooks
+## 🔗 Relasi Utama
 
-## 5.7 SUPPORT DATABASE ENTITY
-1. Tickets
-2. Ticket Messages
-3. Ticket Categories
-4. Ticket Attachments
+```
+users 1─∞ user_roles ∞─1 roles
+users 1─∞ user_profiles
+users 1─∞ orders ∞─1 invoices
+users 1─∞ tickets ∞─∞ ticket_messages
+users 1─∞ customer_addresses
 
-# 6. DATABASE RELATIONSHIP
-# ==============================================================================
-Users:
-  1. Users memiliki banyak Roles
-  2. Users memiliki banyak Orders
-  3. Users memiliki banyak Tickets
-  4. Users memiliki banyak Audit Logs
+products 1─∞ product_prices
+products 1─∞ product_files
+products 1─∞ order_items ∞─1 orders
+products 1─∞ cart_items ∞─1 carts
 
-Product:
-  1. Product memiliki banyak Categories
-  2. Product memiliki banyak Order Items
-  3. Product memiliki banyak Files
+invoices 1─∞ invoice_items
+invoices 1─∞ transactions ∞─1 payments
 
-Order:
-  1. Order memiliki banyak Order Items
-  2. Order memiliki satu Invoice
-  3. Order memiliki banyak Payment
+orders 1─∞ downloads
+products 1─∞ downloads
+```
 
-Ticket:
-  1. Ticket memiliki banyak Messages
-  2. Ticket memiliki banyak Attachments
+---
 
-# 7. DATABASE NAMING CONVENTION
-# ==============================================================================
-Table: Menggunakan plural lowercase
-  Contoh: users, products, orders
+## 📝 Naming Convention
 
-Column: Menggunakan snake_case
-  Contoh: created_at, updated_at, user_id
+| Item | Aturan | Contoh |
+|------|--------|--------|
+| Tabel | plural snake_case | `order_items` |
+| Kolom | snake_case | `invoice_number` |
+| Primary Key | `id` | `id` |
+| Foreign Key | `table_id` | `order_id` |
+| Timestamp | `created_at`, `updated_at` | - |
+| Soft Delete | `deleted_at` | - |
+| UUID | unique per record | - |
 
-Primary Key: Menggunakan id
+---
 
-Foreign Key: Menggunakan nama_table_id
-  Contoh: user_id, product_id, order_id
+## 🔑 Standard Field
 
-# 8. DATABASE STANDARD FIELD
-# ==============================================================================
-Setiap table utama menggunakan:
-1. id
-2. created_at
-3. updated_at
-4. deleted_at (jika menggunakan soft delete)
+Setiap tabel utama memiliki:
+```php
+'id'          => BIGINT UNSIGNED AUTO_INCREMENT
+'uuid'        => CHAR(36) UNIQUE
+'created_at'  => DATETIME
+'updated_at'  => DATETIME
+```
 
-# 9. DATABASE SECURITY
-# ==============================================================================
-Database wajib menerapkan:
-1. Prepared Statement
-2. Query Builder
-3. Input Validation
-4. Access Control
-5. Database Backup
-6. Audit Logging
+Tabel dengan soft delete:
+```php
+'deleted_at'  => DATETIME NULL
+```
 
-# 10. DATABASE INDEX STRATEGY
-# ==============================================================================
-Index digunakan pada:
-1. Primary Key
-2. Foreign Key
-3. Search Column
-4. Filter Column
-5. Sorting Column
+---
 
-# 11. MIGRATION RULE
-# ==============================================================================
-Semua perubahan database wajib:
-1. Menggunakan Migration
-2. Memiliki nama migration jelas
-3. Memiliki rollback
-4. Tidak melakukan perubahan manual production database
+## 🛡️ Keamanan Database
 
-# 12. SEEDER RULE
-# ==============================================================================
-Seeder digunakan untuk:
-1. Default Role
-2. Default Permission
-3. Default Configuration
-4. Dummy Development Data
+- Prepared Statement (Query Builder)
+- Input validation
+- Access control (RBAC)
+- Database backup berkala
+- Audit logging
 
-# 13. DATABASE BACKUP RULE
-# ==============================================================================
-Backup harus:
-1. Dilakukan secara berkala
-2. Memiliki retention policy
-3. Diuji proses restore
-4. Disimpan secara aman
+---
 
-# 14. DATABASE OPTIMIZATION
-# ==============================================================================
-Optimasi menggunakan:
-1. Query Optimization
-2. Database Index
-3. Pagination
-4. Redis Cache
-5. Database Monitoring
+## 🗃️ Migrasi
 
-# 15. DATABASE CONSTRAINT
-# ==============================================================================
-1. Database harus mengikuti Architecture Phase
-2. Database tidak boleh dibuat sebelum design selesai
-3. Semua tabel harus memiliki dokumentasi
-4. Semua perubahan harus melalui review
+Migrations berada di masing-masing area:
+```
+app/Modules/
+├── Auth/Database/Migrations/
+├── FrontArea/Database/Migrations/
+├── AdminArea/Database/Migrations/
+├── ClientArea/Database/Migrations/
+└── app/Database/Migrations/
+```
 
-# OUTPUT PHASE
-# ==============================================================================
-1. Database Architecture ✓
-2. Database Entity List ✓
-3. Database Relationship ✓
-4. Database Naming Convention ✓
-5. Database Rule ✓
-6. Migration Standard ✓
-7. Seeder Standard ✓
-8. Security Standard ✓
-9. Optimization Standard ✓
-
-# CHECKLIST
-# ==============================================================================
-[✓] Database architecture dibuat
-[✓] Entity database dibuat
-[✓] Relationship dibuat
-[✓] Naming convention dibuat
-[✓] Migration rule dibuat
-[✓] Seeder rule dibuat
-[✓] Security rule dibuat
-[✓] Optimization rule dibuat
-[✓] Backup rule dibuat
-[✓] Tidak ada implementasi database
-
-# ACCEPTANCE CRITERIA
-# ==============================================================================
-Phase dinyatakan selesai apabila:
-✓ Database architecture telah dibuat
-✓ Entity telah ditentukan
-✓ Relationship telah ditentukan
-✓ Naming convention telah dibuat
-✓ Migration standard telah dibuat
-✓ Seeder standard telah dibuat
-✓ Database security telah ditentukan
-✓ Tidak terdapat implementasi database
-✓ Siap masuk Phase-06 Module
-
-# STATUS
-# ==============================================================================
-PHASE STATUS: SELESAI
-NEXT PHASE: Phase-06 (Module)
-# ==============================================================================
+Jalankan:
+```bash
+php spark migrate
+```

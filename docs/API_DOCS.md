@@ -1,288 +1,563 @@
-# API DOCUMENTATION
-# ==============================================================================
-# PROJECT     : NgAppID Digital Platform
-# PHASE       : 45 - API Documentation
-# VERSION     : 1.0.0
-# DATE        : 2026-08-02
-# ==============================================================================
+# NDS - API Documentation
 
-# 1. API DOCUMENTATION TARGET
-# ==============================================================================
-Dokumentasi ditujukan untuk:
-  1. Internal Developer
-  2. External Developer
-  3. Integration Partner
-  4. Mobile Application Developer
-  5. Third Party Service
+**Version:** 1.0
+**Base URL:** `https://skirmish-slighting-nicotine.ngrok-free.dev/api/v1`
+**Auth:** Bearer Token (API Key) / Session Cookie
 
-# 2. API ARCHITECTURE
-# ==============================================================================
-Architecture: REST API
-Format: JSON
-Communication: HTTP / HTTPS
-Authentication: Token Based Authentication
+---
 
-# 3. API PRINCIPLE
-# ==============================================================================
-1. RESTful Standard
-2. Secure Communication
-3. Consistent Response
-4. Version Control
-5. Clear Documentation
-6. Backward Compatibility
+## 🔐 Authentication
 
-# 4. API VERSIONING
-# ==============================================================================
-Version Format: /api/v1/
-Contoh:
-  /api/v1/products
-  /api/v1/orders
-  /api/v1/users
+### Login
+```http
+POST /api/v1/auth/login
+Content-Type: application/json
 
-# 5. API STRUCTURE
-# ==============================================================================
-Base URL: /api/v1/
-Endpoint: Resource Based
-Method:
-  GET - Mengambil data
-  POST - Membuat data
-  PUT - Memperbarui data
-  PATCH - Perubahan sebagian data
-  DELETE - Menghapus data
-
-# 6. API AUTHENTICATION
-# ==============================================================================
-Authentication:
-  1. Access Token
-  2. API Key
-  3. Bearer Token
-
-Header: Authorization
-Format: Bearer {token}
-
-# 7. API PERMISSION
-# ==============================================================================
-Permission:
-  1. Public API
-  2. Customer API
-  3. Admin API
-  4. Internal API
-
-# 8. REQUEST DOCUMENTATION
-# ==============================================================================
-Setiap endpoint wajib memiliki:
-  1. Endpoint URL
-  2. HTTP Method
-  3. Authentication Requirement
-  4. Request Parameter
-  5. Request Body
-  6. Validation Rule
-  7. Example Request
-
-# 9. RESPONSE DOCUMENTATION
-# ==============================================================================
-Response harus memiliki:
-  1. Status Code
-  2. Message
-  3. Data
-  4. Error Information
-
-Format: JSON Response
-
-# 10. SUCCESS RESPONSE
-# ==============================================================================
-Standard:
-Status: 200 OK
-Response:
 {
-  "status": true,
-  "message": "Success",
-  "data": {}
+  "email": "user@example.com",
+  "password": "password123"
 }
+```
 
-# 11. ERROR RESPONSE
-# ==============================================================================
-Standard:
-Response:
+**Response:**
+```json
 {
-  "status": false,
-  "message": "Error",
-  "errors": {}
+  "success": true,
+  "message": "Login successful",
+  "data": {
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+    "user": {
+      "id": 1,
+      "username": "johndoe",
+      "email": "john@example.com",
+      "role": "customer"
+    }
+  }
 }
+```
 
-# 12. HTTP STATUS CODE
-# ==============================================================================
-200 - Success
-201 - Created
-400 - Bad Request
-401 - Unauthorized
-403 - Forbidden
-404 - Not Found
-422 - Validation Error
-500 - Server Error
+---
 
-# 13. API ENDPOINT DOCUMENTATION
-# ==============================================================================
-Dokumentasi endpoint:
-  1. Authentication API
-  2. User API
-  3. Customer API
-  4. Product API
-  5. Service API
-  6. Order API
-  7. Payment API
-  8. Invoice API
-  9. Download API
-  10. Ticket API
+### Register
+```http
+POST /api/v1/auth/register
+Content-Type: application/json
 
-# 14. AUTHENTICATION API
-# ==============================================================================
-Endpoint:
-  POST /api/v1/auth/register
-  POST /api/v1/auth/login
-  POST /api/v1/auth/logout
-  POST /api/v1/auth/refresh
-  POST /api/v1/auth/reset-password
+{
+  "full_name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123",
+  "password_confirm": "password123"
+}
+```
 
-# 15. PRODUCT API
-# ==============================================================================
-Endpoint:
-  GET /api/v1/products
-  GET /api/v1/products/{id}
-  GET /api/v1/products/search
-  GET /api/v1/products/category/{id}
+---
 
-# 16. ORDER API
-# ==============================================================================
-Endpoint:
-  POST /api/v1/orders
-  GET /api/v1/orders
-  GET /api/v1/orders/{id}
-  GET /api/v1/orders/{id}/status
-  DELETE /api/v1/orders/{id}
+### Logout
+```http
+POST /api/v1/auth/logout
+Authorization: Bearer {token}
+```
 
-# 17. PAYMENT API
-# ==============================================================================
-Endpoint:
-  POST /api/v1/payments
-  GET /api/v1/payments/{id}/status
-  POST /api/v1/payments/callback
-  GET /api/v1/payments/history
+---
 
-# 18. WEBHOOK DOCUMENTATION
-# ==============================================================================
-Webhook digunakan untuk:
-  1. Payment Notification
-  2. Transaction Update
-  3. External Event
+### Profile
+```http
+GET /api/v1/profile
+Authorization: Bearer {token}
+```
 
-Requirement:
-  1. Signature Validation
-  2. Request Verification
-  3. Logging
-  4. Retry Handling
+---
 
-# 19. API SECURITY
-# ==============================================================================
-Security:
-  1. HTTPS Only
-  2. Token Validation
-  3. Permission Check
-  4. Rate Limit
-  5. Input Validation
-  6. Request Logging
-  7. Sensitive Data Protection
+## 🛍️ Products
 
-# 20. API TESTING
-# ==============================================================================
-Testing:
-  1. Endpoint Test
-  2. Authentication Test
-  3. Authorization Test
-  4. Validation Test
-  5. Response Test
-  6. Performance Test
-  7. Security Test
+### List Products
+```http
+GET /api/v1/products?page=1&per_page=12&category=web-app&search=laravel
+```
 
-# 21. API ERROR HANDLING
-# ==============================================================================
-Handling:
-  1. Validation Error
-  2. Authentication Error
-  3. Permission Error
-  4. Database Error
-  5. External API Error
-  6. Timeout Error
+Query params:
+- `page` (int): Page number (default 1)
+- `per_page` (int): Items per page (default 12, max 50)
+- `category` (string): Category slug
+- `search` (string): Search keyword
+- `sort` (string): `price_asc`, `price_desc`, `newest`, `popular`
 
-# 22. API MAINTENANCE
-# ==============================================================================
-Maintenance:
-  1. API Version Update
-  2. Documentation Update
-  3. Deprecation Management
-  4. Security Review
-  5. Performance Review
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "products": [
+      {
+        "id": 1,
+        "name": "Web App Starter Pack",
+        "slug": "web-app-starter-pack",
+        "short_description": "Starter kit untuk web app modern",
+        "thumbnail": "https://cdn.ngappid.com/products/web-app-starter.jpg",
+        "price": 5000000,
+        "discount_price": 3500000,
+        "category": {
+          "id": 1,
+          "name": "Web Application",
+          "slug": "web-app"
+        },
+        "rating": 4.8,
+        "sales_count": 156
+      }
+    ],
+    "meta": {
+      "current_page": 1,
+      "per_page": 12,
+      "total": 15,
+      "last_page": 2
+    }
+  }
+}
+```
 
-# 23. API DOCUMENTATION FORMAT
-# ==============================================================================
-Format:
-  1. Markdown
-  2. OpenAPI Specification
-  3. Swagger Documentation
-  4. PDF Reference
-  5. Online Documentation
+### Product Detail
+```http
+GET /api/v1/products/{slug}
+```
 
-# 24. IMPLEMENTATION RULE
-# ==============================================================================
-RULE-001: Semua API wajib memiliki dokumentasi
-RULE-002: Semua endpoint wajib memiliki authentication rule
-RULE-003: Semua response harus konsisten
-RULE-004: Semua error harus terdokumentasi
-RULE-005: Perubahan API harus menggunakan versioning
-RULE-006: API secret tidak boleh ditampilkan pada dokumentasi publik
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "id": 1,
+    "name": "Web App Starter Pack",
+    "slug": "web-app-starter-pack",
+    "description": "<p>Full description...</p>",
+    "short_description": "Starter kit untuk web app modern",
+    "thumbnail": "https://cdn.ngappid.com/products/web-app-starter.jpg",
+    "price": 5000000,
+    "discount_price": 3500000,
+    "category": {
+      "id": 1,
+      "name": "Web Application",
+      "slug": "web-app"
+    },
+    "tags": [
+      {"id": 1, "name": "Laravel", "slug": "laravel"},
+      {"id": 2, "name": "Vue.js", "slug": "vuejs"}
+    ],
+    "files": [
+      {
+        "id": 1,
+        "name": "source-code.zip",
+        "size": 5242880,
+        "download_url": "https://ngappid.com/api/v1/download/abc123"
+      }
+    ]
+  }
+}
+```
 
-# OUTPUT PHASE
-# ==============================================================================
-1. REST API Documentation ✓
-2. Endpoint Reference ✓
-3. Authentication Guide ✓
-4. Request Documentation ✓
-5. Response Documentation ✓
-6. Error Reference ✓
-7. Webhook Documentation ✓
-8. Security Documentation ✓
-9. API Testing Documentation ✓
-10. API Maintenance Guide ✓
+---
 
-# CHECKLIST
-# ==============================================================================
-[✓] API architecture selesai
-[✓] API versioning selesai
-[✓] Authentication dokumentasi selesai
-[✓] Endpoint dokumentasi selesai
-[✓] Request format selesai
-[✓] Response format selesai
-[✓] Error handling selesai
-[✓] Webhook dokumentasi selesai
-[✓] Security dokumentasi selesai
-[✓] Testing dokumentasi selesai
+## 🛒 Cart
 
-# ACCEPTANCE CRITERIA
-# ==============================================================================
-Phase dinyatakan selesai apabila:
-✓ Semua endpoint terdokumentasi
-✓ Authentication terdokumentasi
-✓ Request dan response jelas
-✓ Webhook terdokumentasi
-✓ API security tervalidasi
-✓ API testing selesai
-✓ Developer dapat menggunakan API
-✓ Dokumentasi lengkap
-✓ Seluruh NDS Phase selesai
+### Get Cart
+```http
+GET /api/v1/cart
+Authorization: Bearer {token}
+```
 
-# STATUS
-# ==============================================================================
-PHASE STATUS: SELESAI
-PROJECT STATUS: FINISH
-SELURUH 45 PHASE: SELESAI
-# ==============================================================================
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "id": 1,
+        "product": {
+          "id": 1,
+          "name": "Web App Starter Pack",
+          "slug": "web-app-starter-pack",
+          "price": 5000000,
+          "discount_price": 3500000,
+          "thumbnail": "https://cdn.ngappid.com/..."
+        },
+        "quantity": 2,
+        "subtotal": 7000000
+      }
+    ],
+    "summary": {
+      "subtotal": 7000000,
+      "discount": 0,
+      "tax": 0,
+      "total": 7000000
+    }
+  }
+}
+```
+
+### Add to Cart
+```http
+POST /api/v1/cart/add
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "product_id": 1,
+  "quantity": 2
+}
+```
+
+### Update Cart Item
+```http
+PUT /api/v1/cart/update/{item_id}
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "quantity": 3
+}
+```
+
+### Remove from Cart
+```http
+DELETE /api/v1/cart/remove/{item_id}
+Authorization: Bearer {token}
+```
+
+### Clear Cart
+```http
+DELETE /api/v1/cart/clear
+Authorization: Bearer {token}
+```
+
+---
+
+## 💳 Checkout
+
+### Process Checkout
+```http
+POST /api/v1/checkout/process
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "billing_name": "John Doe",
+  "billing_email": "john@example.com",
+  "billing_phone": "081234567890",
+  "billing_address": "Jl. Sudirman No. 123",
+  "billing_city": "Jakarta",
+  "billing_province": "DKI Jakarta",
+  "billing_postal_code": "10220",
+  "notes": "Catatan tambahan"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Checkout berhasil. Silakan lanjutkan pembayaran.",
+  "data": {
+    "order_id": 123,
+    "order_number": "ORD-20260805-ABC123",
+    "invoice_uuid": "abc123-def456-7890",
+    "total": 3500000,
+    "payment_url": "https://app.sandbox.midtrans.com/snap/v4/redirection/abc123..."
+  }
+}
+```
+
+---
+
+## 📦 Orders
+
+### List Orders
+```http
+GET /api/v1/orders?page=1&per_page=10&status=paid
+Authorization: Bearer {token}
+```
+
+### Order Detail
+```http
+GET /api/v1/orders/{uuid}
+Authorization: Bearer {token}
+```
+
+### Cancel Order
+```http
+POST /api/v1/orders/{uuid}/cancel
+Authorization: Bearer {token}
+```
+
+---
+
+## 📄 Invoices
+
+### List Invoices
+```http
+GET /api/v1/invoices?page=1&status=unpaid
+Authorization: Bearer {token}
+```
+
+### Invoice Detail
+```http
+GET /api/v1/invoices/{uuid}
+Authorization: Bearer {token}
+```
+
+### Download Invoice PDF
+```http
+GET /api/v1/invoices/{uuid}/download
+Authorization: Bearer {token}
+```
+
+---
+
+## 💳 Payments (Midtrans)
+
+### Get Payment Methods
+```http
+GET /api/v1/payment/methods
+Authorization: Bearer {token}
+```
+
+### Create Payment
+```http
+POST /api/v1/payment/process
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "invoice_uuid": "abc123-def456",
+  "payment_method_id": "gopay"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "payment_url": "https://app.sandbox.midtrans.com/snap/v4/redirection/abc123...",
+    "token": "abc123-def456-7890",
+    "expired_at": "2026-08-06 14:30:00"
+  }
+}
+```
+
+---
+
+## 📥 Downloads
+
+### List Downloads
+```http
+GET /api/v1/downloads
+Authorization: Bearer {token}
+```
+
+### Download File
+```http
+GET /api/v1/downloads/{token}
+Authorization: Bearer {token}
+```
+
+---
+
+## 🎫 Support Tickets
+
+### List Tickets
+```http
+GET /api/v1/tickets?page=1&status=open
+Authorization: Bearer {token}
+```
+
+### Create Ticket
+```http
+POST /api/v1/tickets
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "category_id": 1,
+  "subject": "Tidak bisa login",
+  "message": "Saya tidak bisa login ke dashboard...",
+  "priority": "high"
+}
+```
+
+### Ticket Detail
+```http
+GET /api/v1/tickets/{uuid}
+Authorization: Bearer {token}
+```
+
+### Reply Ticket
+```http
+POST /api/v1/tickets/{uuid}/reply
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "message": "Sudah saya coba reset password tapi tetap tidak bisa"
+}
+```
+
+### Close Ticket
+```http
+POST /api/v1/tickets/{uuid}/close
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "resolution": "Password sudah direset, silakan coba login ulang"
+}
+```
+
+---
+
+## 🔔 Notifications
+
+### List Notifications
+```http
+GET /api/v1/notifications?unread_only=true
+Authorization: Bearer {token}
+```
+
+### Mark as Read
+```http
+POST /api/v1/notifications/{id}/read
+Authorization: Bearer {token}
+```
+
+---
+
+## 🛡️ Error Responses
+
+### 400 Bad Request
+```json
+{
+  "success": false,
+  "message": "Validation failed",
+  "errors": {
+    "email": "Email harus valid",
+    "password": "Password minimal 8 karakter"
+  }
+}
+```
+
+### 401 Unauthorized
+```json
+{
+  "success": false,
+  "message": "Unauthorized. Token tidak valid atau expired."
+}
+```
+
+### 403 Forbidden
+```json
+{
+  "success": false,
+  "message": "Akses ditolak. Anda tidak memiliki akses ke resource ini."
+}
+```
+
+### 404 Not Found
+```json
+{
+  "success": false,
+  "message": "Resource tidak ditemukan"
+}
+```
+
+### 422 Unprocessable Entity
+```json
+{
+  "success": false,
+  "message": "Data tidak valid",
+  "errors": {
+    "email": "Email sudah terdaftar",
+    "password": "Password minimal 8 karakter"
+  }
+}
+```
+
+### 500 Internal Server Error
+```json
+{
+  "success": false,
+  "message": "Terjadi kesalahan server. Silakan coba lagi nanti."
+}
+```
+
+---
+
+## 📋 Rate Limiting
+
+| Endpoint | Limit |
+|----------|-------|
+| Auth (login/register) | 5 req/min |
+| API (authenticated) | 60 req/min |
+| Payment/Checkout | 10 req/min |
+| File Upload | 5 req/min |
+
+Headers:
+```
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 59
+X-RateLimit-Reset: 1691234567
+```
+
+---
+
+## 📝 Webhooks
+
+### Midtrans Payment Notification
+```http
+POST /midtrans/notification
+Content-Type: application/json
+
+{
+  "transaction_status": "settlement",
+  "order_id": "ORD-20260805-ABC123",
+  "transaction_status": "settlement",
+  "fraud_status": "accept",
+  "signature_key": "sha512_hash..."
+}
+```
+
+---
+
+## 📚 SDK / Client Library
+
+### PHP (Coming Soon)
+```php
+$client = new NgAppID\Client('your-api-key');
+$products = $client->products()->list(['category' => 'web-app']);
+$order = $client->checkout()->process([
+    'items' => [['product_id' => 1, 'quantity' => 2]],
+    'billing' => ['name' => 'John', 'email' => 'john@example.com']
+]);
+```
+
+### JavaScript (Coming Soon)
+```javascript
+const client = new NgAppIDClient({ apiKey: 'your-key' });
+const products = await client.products.list({ category: 'web-app' });
+const order = await client.checkout.process({
+  items: [{ product_id: 1, quantity: 2 }],
+  billing: { name: 'John', email: 'john@example.com' }
+);
+```
+
+---
+
+## 📞 Support
+
+- **Email:** api-support@ngappid.com
+- **Documentation:** https://docs.ngappid.com
+- **Status Page:** https://status.ngappid.com
+
+---
+
+**Last Updated:** 2026-08-05
+**API Version:** v1.0.0

@@ -1,69 +1,70 @@
-# ==============================================================================
-# PROJECT CHANGELOG / DEVELOPMENT LOG
-# ==============================================================================
-# PROJECT     : NgAppID Digital Platform (NDS)
-# COMPANY     : PT. YEDIN DIGITAL MANDIRI (NgAppID Digital)
-# THEME       : Adminator Free (ThemeWagon)
-# TECHNOLOGY  : CodeIgniter 4.7.4 · PHP 8.3 · MySQL/MariaDB
-# REPOSITORY  : https://github.com/yedincoder/nds
-# ==============================================================================
+# NDS - Changelog
 
-## 2026-08-03
+**Versi terakhir:** 2.0.0  
+**Tanggal:** 2026-08-05
 
-### 1. Repository Init
-- Inisialisasi git repository, commit awal 361 files.
+---
 
-### 2. Syntax Fixes
-- CMS DashboardController: array closing `]);` (line 185).
-- AdminDashboardController: `sum()` -> `selectSum()`, `leftJoin()` -> `join(..., 'left')`.
-- PageModel/ArticleModel: tambah `'id' => 'permit_empty'` untuk `is_unique` placeholder.
-- TicketController: `ticket_replies` -> `ticket_messages`.
-- CMS Forms: tambah `csrf_field()`.
-- Session: RedisHandler -> FileHandler (`.env`).
+## v2.0.0 (2026-08-05) - Restrukturisasi Area-Based
 
-### 3. Admin Dashboard Overhaul
-- 8 stat cards dinamis dari database.
-- Revenue chart (Chart.js, 6 bulan terakhir).
-- Order & payment status breakdown.
-- Recent orders/invoices/payments/tickets/testimonials/activity.
-- Top products, quick actions.
-- Semua data real-time dari database.
+### 🏗️ Arsitektur
+- ✅ Restrukturisasi `app/Modules` menjadi area-based:
+  - `Auth`, `Api`, `AdminArea`, `ClientArea`, `FrontArea`, `MitraArea`
+- ✅ Setiap area memiliki template lengkap:
+  - Config, Controllers, Database/Migrations, Database/Seeds, Helpers, Language, Libraries, Models, Routes, Services, Views
+- ✅ Hapus 22 modul feature lama (Product, Service, Cart, Payment, dll)
+- ✅ Buat Base Controllers:
+  - `FrontBaseController`, `AdminBaseController`, `ClientBaseController`, `MitraBaseController`
+- ✅ Buat Layout files:
+  - `layout_frontarea.php`, `layout_adminarea.php`, `layout_clientarea.php`, `layout_mitraarea.php`
 
-### 4. Admin Menu (Sidebar)
-- Grouped: Utama, Konten, E-Commerce, Pelanggan, Layanan, Dukungan, Sistem.
-- CMS submenu collapsible (Pages, Articles, Categories, Tags).
+### 🗂️ Pindahan Modul
+| Modul Lama | Area Baru |
+|-----------|-----------|
+| Authentication | Auth |
+| Product, Service, Blog, Portfolio, CMS | FrontArea |
+| Cart, Checkout, Payment, Invoice, Billing | FrontArea |
+| Midtrans, Notification, Order | FrontArea |
+| Customer | ClientArea |
+| Dashboard, MediaManager, Support, Testimonial | AdminArea |
 
-### 5. CMS Module
-- Pages, Articles, Categories, Tags - CRUD lengkap.
-- CKEditor 5 Classic untuk text editor.
-- CSRF protection.
+### 🐛 Perbaikan
+- ✅ CSRF protection untuk payment & support routes
+- ✅ UUID generation Windows-compatible
+- ✅ PDF Invoice (DomPDF)
+- ✅ Contact form POST handler
+- ✅ Blog detail & category
+- ✅ Portfolio detail
+- ✅ Client Area orders & downloads
+- ✅ Support ticket create/reply/close
+- ✅ Route deduplication & syntax fix
 
-### 6. Testimonials Module
-- Migration, Model, Controller, Views, Routes.
-- 5 dummy testimonials.
+---
 
-### 7. Client Area
-- Views: Dashboard, Orders, Invoices, Downloads, Tickets, Profile, Addresses.
-- Services ditambah: `getInvoicesByUser`, `countByUser`, `getTicketsByUser`, `getDownloads`, `getAddresses`, `changePassword`, `downloadFile`.
+## v1.x (2026-08-04) - Payment Integration
 
-### 8. Frontend (Landing Page)
-- Semua data dinamis dari database via HomeController.
-- Halaman: Home, About, Services, Products, Portfolio, Blog, Contact.
+### 🎯 Fitur Baru
+- ✅ Midtrans Snap integration
+- ✅ Payment methods: QRIS, VA, Bank, E-Wallet, CStore
+- ✅ Webhook handler (success, pending, expired, cancelled, failed)
+- ✅ Auto-fill billing data untuk logged-in user
+- ✅ Dynamic nav menu (Login → Client Area)
 
-### 9. Company Info
-- PT. YEDIN DIGITAL MANDIRI, Jl. RA. Kartini No.23L Rangkasbitung.
+### 🔧 Teknis
+- ✅ DomPDF untuk invoice PDF
+- ✅ Helper: format_price, format_date
+- ✅ Tax & discount dari database (product_prices)
+- ✅ Auto-generate UUID Windows-compatible
 
-### 10. Midtrans Integration
-- Credentials di `.env` (tidak di-commit).
+---
 
-### 11. Dummy Data
-- `DummyDataSeeder`: 3 products, 3 services, 3 portfolios, 5 pages, 2 categories, 6 articles, 5 testimonials.
+## v1.0 (2026-08-02) - Initial Release
 
-### 12. Theme Adminator Free
-- CSS/JS/images dari Adminator di-copy ke `public/assets/adminator/`.
-- Admin layout: `aside.d-sidebar` + `header.d-topbar` + `main.content`.
-- Client layout: struktur sama.
-- Login/Register: `auth-shell` + `auth-aside` + `auth-main`.
-- Primary color: biru (#2563eb) -> orange (#E65C00).
-- Custom minimal helpers untuk row/col/btn/card/table (Bootstrap removed).
-- Dark mode toggle.
+### 🏗️ Foundation
+- ✅ CodeIgniter 4.7.4 setup
+- ✅ Adminator theme
+- ✅ Database migrations (±45 tabel)
+- ✅ Role & Permission system
+- ✅ Authentication (login, register)
+- ✅ Admin dashboard
+- ✅ Client area
