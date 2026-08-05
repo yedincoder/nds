@@ -106,11 +106,11 @@ class InvoiceService
 
         $invoice = $result['data'];
 
-        // Load the print view with invoice data
-        $html = view('invoice/print', [
+        // Load the PDF view (standalone, no layout)
+        $html = view('invoice/invoice_pdf', [
             'title' => 'Invoice - ' . $invoice->invoice_number,
             'invoice' => $invoice,
-        ])->getBody();
+        ]);
 
         // Create PDF using DomPDF
         $dompdf = new \Dompdf\Dompdf();

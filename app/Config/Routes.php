@@ -59,9 +59,9 @@ $routes->group('billing', ['filter' => 'auth'], function ($routes) {
 });
 $routes->group('invoice', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', '\App\Modules\Invoice\Controllers\InvoiceController::index');
-    $routes->get('(:any)', '\App\Modules\Invoice\Controllers\InvoiceController::detail/$1');
     $routes->get('download/(:any)', '\App\Modules\Invoice\Controllers\InvoiceController::download/$1');
     $routes->get('print/(:any)', '\App\Modules\Invoice\Controllers\InvoiceController::print/$1');
+    $routes->get('(:any)', '\App\Modules\Invoice\Controllers\InvoiceController::detail/$1');
 });
 
 // ================================================================
@@ -107,6 +107,7 @@ $routes->group('support', ['filter' => 'auth'], function ($routes) {
 $routes->group('client', ['filter' => 'auth'], function ($routes) {
     $routes->get('dashboard', '\App\Modules\ClientArea\Controllers\DashboardController::index');
     $routes->get('orders', '\App\Modules\ClientArea\Controllers\DashboardController::orders');
+    $routes->get('orders/(:any)', '\App\Modules\ClientArea\Controllers\OrderController::detail/$1');
     $routes->get('invoices', '\App\Modules\ClientArea\Controllers\DashboardController::invoices');
     $routes->get('downloads', '\App\Modules\ClientArea\Controllers\DashboardController::downloads');
     $routes->get('download/(:any)', '\App\Modules\ClientArea\Controllers\DownloadController::download/$1');

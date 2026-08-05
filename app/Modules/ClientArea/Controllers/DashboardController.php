@@ -46,9 +46,14 @@ class DashboardController extends BaseController
         $userId = session()->get('user_id');
         $result = $this->orderService->getOrdersByUser($userId);
 
+        // Filter only paid/completed orders for My Orders
+        $orders = array_filter($result['data']['orders'] ?? [], function($order) {
+            return in_array($order->status ?? '', ['paid', 'completed']);
+        });
+
         $data = [
             'title' => 'My Orders',
-            'orders' => $result['data']['orders'] ?? [],
+            'orders' => array_values($orders),
         ];
 
         return view('ClientArea/orders', $data);
