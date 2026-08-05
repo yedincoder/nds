@@ -4,6 +4,7 @@ namespace App\Modules\Invoice\Services;
 
 use App\Modules\Invoice\Models\InvoiceModel;
 use App\Modules\Invoice\Models\InvoiceItemModel;
+use Dompdf\Dompdf;
 
 class InvoiceService
 {
@@ -30,7 +31,9 @@ class InvoiceService
 
     public function getInvoiceByUuid(string $uuid): array
     {
-        $invoice = $this->invoiceModel->getInvoiceByUuid($uuid);
+        $invoice = $this->invoiceModel->where('uuid', $uuid)
+            ->orWhere('invoice_number', $uuid)
+            ->first();
 
         if (!$invoice) {
             return [
@@ -41,13 +44,30 @@ class InvoiceService
 
         $items = $this->invoiceItemModel->getByInvoice($invoice->id);
 
+        // Merge items into invoice object
+        $invoice->items = $items;
+
+        // Fetch billing info from user profile
+        $db = \Config\Database::connect();
+        $userInfo = $db->table('users u')
+            ->select('u.email, up.full_name, up.phone, up.address, up.city, up.province, up.postal_code')
+            ->join('user_profiles up', 'up.user_id = u.id', 'left')
+            ->where('u.id', $invoice->user_id)
+            ->get()
+            ->getRow();
+
+        $invoice->billing_name = $userInfo->full_name ?? 'Customer';
+        $invoice->billing_email = $userInfo->email ?? '';
+        $invoice->billing_phone = $userInfo->phone ?? '';
+        $invoice->billing_address = $userInfo->address ?? '';
+        $invoice->billing_city = $userInfo->city ?? '';
+        $invoice->billing_province = $userInfo->province ?? '';
+        $invoice->billing_postal_code = $userInfo->postal_code ?? '';
+
         return [
             'success' => true,
             'message' => 'Invoice retrieved successfully.',
-            'data' => [
-                'invoice' => $invoice,
-                'items' => $items,
-            ],
+            'data' => $invoice,
         ];
     }
 
@@ -77,8 +97,33 @@ class InvoiceService
         ];
     }
 
-    public function generateInvoicePDF($invoice)
+    public function generateInvoicePDF(string $uuid): string
     {
-        return redirect()->back()->with('error', 'PDF generation not implemented yet.');
+        $result = $this->getInvoiceByUuid($uuid);
+        
+        if (!$result['success']) {
+            throw new \RuntimeException($result['message']);
+        }
+
+        $invoice = $result['data'];
+
+        // Load the print view with invoice data
+        $html = view('invoice/print', [
+            'title' => 'Invoice - ' . $invoice->invoice_number,
+            'invoice' => $invoice,
+        ])->getBody();
+
+        // Create PDF using DomPDF
+        $dompdf = new \Dompdf\Dompdf();
+        $dompdf->loadHtml($html);
+        
+        // Set paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+        
+        // Render PDF
+        $dompdf->render();
+        
+        // Return PDF as string
+        return $dompdf->output();
     }
 }

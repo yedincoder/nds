@@ -25,8 +25,8 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-7">
+<div class="row mb-4">
+    <div class="col-xl-6 col-md-6">
         <div class="card">
             <div class="card-header">
                 <h5 class="mb-0">Recent Orders</h5>
@@ -52,7 +52,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-5">
+    <div class="col-xl-6 col-md-6">
         <div class="card">
             <div class="card-header">
                 <h5 class="mb-0">Unpaid Invoices</h5>

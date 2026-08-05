@@ -14,6 +14,7 @@ $routes->get('/products', 'HomeController::products');
 $routes->get('/portfolio', 'HomeController::portfolio');
 $routes->get('/blog', 'HomeController::blog');
 $routes->get('/contact', 'HomeController::contact');
+$routes->post('/contact', 'HomeController::contactStore');
 
 // ================================================================
 // AUTHENTICATION

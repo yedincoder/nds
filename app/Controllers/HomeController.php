@@ -182,4 +182,48 @@ class HomeController extends BaseController
     {
         return view('contact', ['title' => 'Contact Us', 'page' => 'contact']);
     }
+
+    public function contactStore()
+    {
+        $validation = $this->validate([
+            'name'    => 'required|min_length[3]|max_length[150]',
+            'email'   => 'required|valid_email|max_length[150]',
+            'subject' => 'required|min_length[3]|max_length[255]',
+            'message' => 'required|min_length[10]',
+        ]);
+
+        if (!$validation) {
+            return redirect()->back()
+                ->with('errors', $this->validator->getErrors())
+                ->withInput();
+        }
+
+        $db = \Config\Database::connect();
+
+        $inserted = $db->table('contact_messages')->insert([
+            'uuid'       => $this->generateUuid(),
+            'name'       => $this->request->getPost('name'),
+            'email'      => $this->request->getPost('email'),
+            'subject'    => $this->request->getPost('subject'),
+            'message'    => $this->request->getPost('message'),
+            'status'     => 'new',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        if (!$inserted) {
+            return redirect()->back()
+                ->with('error', 'Gagal mengirim pesan. Silakan coba lagi.')
+                ->withInput();
+        }
+
+        return redirect()->to('contact')
+            ->with('success', 'Pesan berhasil dikirim. Kami akan segera menghubungi Anda.');
+    }
+
+    protected function generateUuid(): string
+    {
+        // Simple implementation dengan timestamp dan random number (Windows compatible)
+        return date('YmdHis') . substr(md5(uniqid('', true) . mt_rand(100000, 999999)), 0, 8);
+    }
 }

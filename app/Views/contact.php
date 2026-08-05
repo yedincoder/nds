@@ -65,6 +65,25 @@
             <div class="col-lg-7">
                 <div class="card p-4">
                     <h4 class="fw-bold mb-4" style="color: var(--secondary)">Kirim Pesan</h4>
+
+                    <?php if (session()->getFlashdata('success')): ?>
+                    <div class="alert alert-success"><?= esc(session()->getFlashdata('success')) ?></div>
+                    <?php endif; ?>
+
+                    <?php if (session()->getFlashdata('error')): ?>
+                    <div class="alert alert-danger"><?= esc(session()->getFlashdata('error')) ?></div>
+                    <?php endif; ?>
+
+                    <?php if (!empty($errors = session()->getFlashdata('errors'))): ?>
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            <?php foreach ($errors as $error): ?>
+                            <li><?= esc($error) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                    <?php endif; ?>
+
                     <form method="POST" action="/contact">
                         <?= csrf_field() ?>
                         <div class="row">

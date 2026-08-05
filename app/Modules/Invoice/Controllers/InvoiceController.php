@@ -35,9 +35,11 @@ class InvoiceController extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
+        $invoice = $result['data'];
+
         $data = [
-            'title' => 'Invoice - ' . $result['data']['invoice_number'],
-            'invoice' => $result['data'],
+            'title' => 'Invoice - ' . $invoice->invoice_number,
+            'invoice' => $invoice,
         ];
 
         return view('invoice/detail', $data);
@@ -51,7 +53,16 @@ class InvoiceController extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        return $this->invoiceService->generateInvoicePDF($result['data']);
+        // Generate PDF
+        $pdfContent = $this->invoiceService->generateInvoicePDF($uuid);
+
+        $filename = 'Invoice-' . $result['data']->invoice_number . '.pdf';
+
+        // Return PDF response
+        return $this->response
+            ->setHeader('Content-Type', 'application/pdf')
+            ->setHeader('Content-Disposition', 'attachment; filename="' . $filename . '"')
+            ->setBody($pdfContent);
     }
 
     public function print(string $uuid)
@@ -62,9 +73,11 @@ class InvoiceController extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
+        $invoice = $result['data'];
+
         $data = [
-            'title' => 'Invoice - ' . $result['data']['invoice_number'],
-            'invoice' => $result['data'],
+            'title' => 'Invoice - ' . $invoice->invoice_number,
+            'invoice' => $invoice,
         ];
 
         return view('invoice/print', $data);
