@@ -37,7 +37,7 @@
                         <p class="text-muted mb-3" style="font-size:14px;"><?= esc(substr($pf->description ?? '', 0, 100)) ?></p>
                         <div class="d-flex justify-content-between align-items-center">
                             <small class="text-muted"><?= date('d M Y', strtotime($pf->created_at ?? date('Y-m-d'))) ?></small>
-                            <a href="/contact" class="btn btn-sm btn-outline-primary">Lihat Detail</a>
+                            <a href="/portfolio/<?= esc($pf->slug) ?>" class="btn btn-sm btn-outline-primary">Lihat Detail</a>
                         </div>
                     </div>
                 </div>

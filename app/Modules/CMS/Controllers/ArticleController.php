@@ -62,10 +62,14 @@ class ArticleController extends BaseController
         $perPage = 10;
         $page = $this->request->getGet('page') ?? 1;
 
+        log_message('error', 'ArticleController::category() - slug: ' . $slug);
+
         $result = $this->cmsService->getArticlesByCategory($slug, [
             'page' => $page,
             'perPage' => $perPage,
         ]);
+
+        log_message('error', 'ArticleController::category() result: ' . json_encode($result));
 
         if (!$result['success']) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();

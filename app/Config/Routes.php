@@ -29,10 +29,12 @@ $routes->group('auth', function ($routes) {
 // ================================================================
 // CMS / BLOG / PORTFOLIO
 // ================================================================
-$routes->get('articles', '\App\Modules\CMS\Controllers\ArticleController::index');
-$routes->get('article/(:any)', '\App\Modules\CMS\Controllers\ArticleController::detail/$1');
 $routes->get('article/category/(:any)', '\App\Modules\CMS\Controllers\ArticleController::category/$1');
 $routes->get('article/tag/(:any)', '\App\Modules\CMS\Controllers\ArticleController::tag/$1');
+$routes->get('articles', '\App\Modules\CMS\Controllers\ArticleController::index');
+$routes->get('article/(:any)', '\App\Modules\CMS\Controllers\ArticleController::detail/$1');
+$routes->get('portfolio/(:any)', 'HomeController::portfolioDetail/$1');
+$routes->get('portfolio', 'HomeController::portfolio');
 $routes->get('page/(:any)', '\App\Modules\CMS\Controllers\PageController::page/$1');
 
 // ================================================================

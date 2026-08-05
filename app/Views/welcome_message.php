@@ -85,7 +85,8 @@
             <p class="section-subtitle">Produk digital berkualitas untuk kebutuhan bisnis Anda</p>
         </div>
         <div class="row g-4">
-            <?php foreach ($products as $product): ?>
+            <?php $homeProducts = array_slice($products ?? [], 0, 3); ?>
+            <?php foreach ($homeProducts as $product): ?>
             <div class="col-md-6 col-lg-4">
                 <div class="product-card h-100">
                     <div class="product-img">
@@ -100,7 +101,7 @@
                         <p class="text-muted mb-3"><?= esc($product->short_description ?? '') ?></p>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="price">Rp <?= number_format($product->price ?? 0, 0, ',', '.') ?></span>
-                            <a href="/products" class="btn btn-sm btn-primary">Beli</a>
+                            <a href="/product/<?= esc($product->slug ?? $product->id) ?>" class="btn btn-sm btn-primary">Lihat Detail</a>
                         </div>
                     </div>
                 </div>
@@ -108,7 +109,7 @@
             <?php endforeach; ?>
         </div>
         <div class="text-center mt-4">
-            <a href="<?= site_url('products/' . (isset($product->slug) ? $product->slug : $product->id)) ?>" class="btn btn-sm btn-primary">Lihat Detail</a>
+            <a href="/products" class="btn btn-outline-primary">Lihat Semua Produk</a>
         </div>
     </div>
 </section>

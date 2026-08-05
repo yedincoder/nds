@@ -48,12 +48,12 @@ class HomeController extends BaseController
             ->get()
             ->getResult();
 
-        // Testimonials (approved only)
+        // Testimonials (approved only, limit 3)
         $testimonials = $db->table('testimonials')
             ->where('status', 'approved')
             ->orderBy('featured', 'DESC')
             ->orderBy('created_at', 'DESC')
-            ->limit(5)
+            ->limit(3)
             ->get()
             ->getResult();
 
@@ -132,6 +132,29 @@ class HomeController extends BaseController
             ->getResult();
 
         return view('portfolio', ['title' => 'Our Portfolio', 'page' => 'portfolio', 'portfolios' => $portfolios]);
+    }
+
+    public function portfolioDetail(string $slug): string
+    {
+        $db = \Config\Database::connect();
+
+        $portfolio = $db->table('portfolios p')
+            ->select('p.*, c.name as client_name')
+            ->join('clients c', 'c.id = p.client_id', 'left')
+            ->where('p.slug', $slug)
+            ->whereIn('p.status', ['published', 'featured'])
+            ->get()
+            ->getRow();
+
+        if (!$portfolio) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        return view('portfolio_detail', [
+            'title' => $portfolio->title ?? 'Portfolio',
+            'page' => 'portfolio',
+            'portfolio' => $portfolio,
+        ]);
     }
 
     public function blog(): string
