@@ -10,7 +10,7 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'HomeController::index');
 $routes->get('/about', 'HomeController::about');
 $routes->get('/services', 'HomeController::services');
-$routes->get('/products', 'HomeController::products');
+$routes->get('/products', '\App\Modules\FrontArea\Controllers\ProductsController::index');
 $routes->get('/portfolio', 'HomeController::portfolio');
 $routes->get('/blog', 'HomeController::blog');
 $routes->get('/contact', 'HomeController::contact');
@@ -20,11 +20,11 @@ $routes->post('/contact', 'HomeController::contactStore');
 // AUTHENTICATION
 // ================================================================
 $routes->group('auth', function ($routes) {
-    $routes->get('login', '\App\Modules\Authentication\Controllers\AuthController::showLogin');
-    $routes->post('login', '\App\Modules\Authentication\Controllers\AuthController::login');
-    $routes->get('register', '\App\Modules\Authentication\Controllers\AuthController::showRegister');
-    $routes->post('register', '\App\Modules\Authentication\Controllers\AuthController::register');
-    $routes->get('logout', '\App\Modules\Authentication\Controllers\AuthController::logout');
+    $routes->get('login', '\App\Modules\Auth\Controllers\AuthController::showLogin');
+    $routes->post('login', '\App\Modules\Auth\Controllers\AuthController::login');
+    $routes->get('register', '\App\Modules\Auth\Controllers\AuthController::showRegister');
+    $routes->post('register', '\App\Modules\Auth\Controllers\AuthController::register');
+    $routes->get('logout', '\App\Modules\Auth\Controllers\AuthController::logout');
 });
 
 // ================================================================
@@ -218,13 +218,12 @@ $routes->group('api/v1', function ($routes) {
 
 
 // ================================================================
-// PRODUCT (detail)
+// PRODUCT (FrontArea)
 // ================================================================
-$routes->group('product', ['namespace' => 'App\Modules\Product\Controllers'], function ($routes) {
-    $routes->get('category/(:any)', 'ProductController::category/$1');
-    $routes->get('search', 'ProductController::search');
-    $routes->get('(:any)', 'ProductController::detail/$1');
-});
+$routes->get('products', '\App\Modules\FrontArea\Controllers\ProductsController::index');
+$routes->get('product/category/(:any)', '\App\Modules\FrontArea\Controllers\ProductsController::category/$1');
+$routes->get('product/search', '\App\Modules\FrontArea\Controllers\ProductsController::search');
+$routes->get('product/(:any)', '\App\Modules\FrontArea\Controllers\ProductsController::detail/$1');
 
 // ================================================================
 // SERVICE (detail)
