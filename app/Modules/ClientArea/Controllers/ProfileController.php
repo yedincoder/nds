@@ -49,7 +49,6 @@ class ProfileController extends BaseController
             'address' => $this->request->getPost('address'),
             'city' => $this->request->getPost('city'),
             'province' => $this->request->getPost('province'),
-            'postal_code' => $this->request->getPost('postal_code'),
         ]);
 
         if ($result['success']) {

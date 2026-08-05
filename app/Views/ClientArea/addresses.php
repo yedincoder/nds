@@ -17,7 +17,7 @@
                         <?php if (($addr->is_default ?? 0) == 1): ?><span class="badge bg-success ms-2">Default</span><?php endif; ?>
                         <br>
                         <small class="text-muted">
-                            <?= esc($addr->address ?? '') ?>, <?= esc($addr->city ?? '') ?>, <?= esc($addr->province ?? '') ?> <?= esc($addr->postal_code ?? '') ?>
+                            <?= esc($addr->address ?? '') ?>, <?= esc($addr->city ?? '') ?>, <?= esc($addr->province ?? '') ?>
                         </small>
                     </div>
                     <a href="/client/address/delete/<?= esc($addr->id ?? $addr->uuid ?? '') ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this address?')"><i class="fas fa-trash"></i></a>
@@ -55,10 +55,6 @@
                             <label class="form-label">Province</label>
                             <input type="text" name="province" class="form-control" required>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Postal Code</label>
-                        <input type="text" name="postal_code" class="form-control">
                     </div>
                     <div class="form-check mb-3">
                         <input type="checkbox" name="is_default" value="1" class="form-check-input" id="isDefault">

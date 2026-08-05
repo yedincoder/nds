@@ -50,7 +50,7 @@ class InvoiceService
         // Fetch billing info from user profile
         $db = \Config\Database::connect();
         $userInfo = $db->table('users u')
-            ->select('u.email, up.full_name, up.phone, up.address, up.city, up.province, up.postal_code')
+            ->select('u.email, up.full_name, up.phone, up.address, up.city, up.province')
             ->join('user_profiles up', 'up.user_id = u.id', 'left')
             ->where('u.id', $invoice->user_id)
             ->get()
@@ -62,7 +62,6 @@ class InvoiceService
         $invoice->billing_address = $userInfo->address ?? '';
         $invoice->billing_city = $userInfo->city ?? '';
         $invoice->billing_province = $userInfo->province ?? '';
-        $invoice->billing_postal_code = $userInfo->postal_code ?? '';
 
         return [
             'success' => true,

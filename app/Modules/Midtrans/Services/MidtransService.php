@@ -74,7 +74,7 @@ class MidtransService
                 'phone' => $user->phone ?? '081234567890',
             ];
 
-            // Get billing address
+// Get billing address
             $billingAddress = $this->db->table('customer_addresses')
                 ->where('user_id', $invoice->user_id)
                 ->orderBy('is_default', 'DESC')
