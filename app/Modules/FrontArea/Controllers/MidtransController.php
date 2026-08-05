@@ -84,7 +84,7 @@ class MidtransController extends BaseController
             'client_key' => $clientKey,
         ];
 
-        return view('midtrans/payment', $data);
+        return view('FrontArea/midtrans/payment', $data);
     }
 
     /**
@@ -163,7 +163,7 @@ class MidtransController extends BaseController
             'status' => $transactionStatus,
         ];
 
-        return view('midtrans/success', $data);
+        return view('FrontArea/midtrans/success', $data);
     }
 
     /**
@@ -178,7 +178,7 @@ class MidtransController extends BaseController
             'order_id' => $orderId,
         ];
 
-        return view('midtrans/pending', $data);
+        return view('FrontArea/midtrans/pending', $data);
     }
 
     /**
@@ -193,7 +193,7 @@ class MidtransController extends BaseController
             'order_id' => $orderId,
         ];
 
-        return view('midtrans/error', $data);
+        return view('FrontArea/midtrans/error', $data);
     }
 
 }

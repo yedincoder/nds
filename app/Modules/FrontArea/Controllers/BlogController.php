@@ -41,7 +41,7 @@ class BlogController extends BaseController
             'recent' => $this->cmsService->getRecentArticles(5)['data'] ?? [],
         ];
 
-        return view('Blog/index', $data);
+        return view('FrontArea/Blog/index', $data);
     }
 
     public function detail(string $slug)
@@ -57,7 +57,7 @@ class BlogController extends BaseController
             'article' => $result['data'],
         ];
 
-        return view('Blog/detail', $data);
+        return view('FrontArea/Blog/detail', $data);
     }
 
     public function search()
@@ -78,6 +78,6 @@ class BlogController extends BaseController
             'keyword' => $keyword,
         ];
 
-        return view('Blog/search', $data);
+        return view('FrontArea/Blog/search', $data);
     }
 }

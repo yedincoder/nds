@@ -23,7 +23,7 @@ class BillingController extends BaseController
             'summary' => [],
         ];
 
-        return view('Dashboard/billing', $data);
+        return view('FrontArea/Dashboard/billing', $data);
     }
 
     public function detail(string $uuid): string
@@ -43,6 +43,6 @@ class BillingController extends BaseController
             'billing' => $billing,
         ];
 
-        return view('Dashboard/billing_detail', $data);
+        return view('FrontArea/Dashboard/billing_detail', $data);
     }
 }

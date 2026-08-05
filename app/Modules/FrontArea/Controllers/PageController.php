@@ -28,6 +28,6 @@ class PageController extends BaseController
             'page' => $result['data'],
         ];
 
-        return view('CMS/page', $data);
+        return view('FrontArea/CMS/page', $data);
     }
 }

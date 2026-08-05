@@ -85,7 +85,7 @@ class PaymentController extends BaseController
                     'client_key' => $clientKey,
                 ];
 
-                return view('midtrans/payment', $data);
+                return view('FrontArea/midtrans/payment', $data);
             }
 
             return redirect()->back()

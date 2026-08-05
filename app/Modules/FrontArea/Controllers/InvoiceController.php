@@ -24,7 +24,7 @@ class InvoiceController extends BaseController
             'invoices' => $result['data']['invoices'] ?? [],
         ];
 
-        return view('invoice/index', $data);
+        return view('FrontArea/invoice/index', $data);
     }
 
     public function detail(string $uuid)
@@ -42,7 +42,7 @@ class InvoiceController extends BaseController
             'invoice' => $invoice,
         ];
 
-        return view('invoice/detail', $data);
+        return view('FrontArea/invoice/detail', $data);
     }
 
     public function download(string $uuid)
@@ -80,6 +80,6 @@ class InvoiceController extends BaseController
             'invoice' => $invoice,
         ];
 
-        return view('invoice/print', $data);
+        return view('FrontArea/invoice/print', $data);
     }
 }

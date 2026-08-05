@@ -38,7 +38,7 @@ class ArticleController extends BaseController
             'tags' => $this->cmsService->getTags()['data'] ?? [],
         ];
 
-        return view('CMS/articles', $data);
+        return view('FrontArea/CMS/articles', $data);
     }
 
     public function detail(string $slug)
@@ -54,7 +54,7 @@ class ArticleController extends BaseController
             'article' => (object) $result['data'],
         ];
 
-        return view('CMS/article', $data);
+        return view('FrontArea/CMS/article', $data);
     }
 
     public function category(string $slug)
@@ -82,7 +82,7 @@ class ArticleController extends BaseController
             'category' => $result['data']['category'] ?? null,
         ];
 
-        return view('CMS/articles', $data);
+        return view('FrontArea/CMS/articles', $data);
     }
 
     public function tag(string $slug)
@@ -106,6 +106,6 @@ class ArticleController extends BaseController
             'tag' => $result['data']['tag'] ?? null,
         ];
 
-        return view('CMS/articles', $data);
+        return view('FrontArea/CMS/articles', $data);
     }
 }

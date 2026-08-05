@@ -57,7 +57,7 @@ class CheckoutController extends BaseController
             'defaultAddress' => $defaultAddress,
         ];
 
-        return view('checkout/index', $data);
+        return view('FrontArea/checkout/index', $data);
     }
 
     public function process(): ResponseInterface
@@ -116,6 +116,6 @@ class CheckoutController extends BaseController
             'order_id' => $orderId,
         ];
 
-        return view('checkout/success', $data);
+        return view('FrontArea/checkout/success', $data);
     }
 }

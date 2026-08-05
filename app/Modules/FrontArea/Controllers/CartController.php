@@ -27,7 +27,7 @@ class CartController extends BaseController
             'userId' => session()->get('user_id'),
         ];
 
-        return view('cart/index', $data);
+        return view('FrontArea/cart/index', $data);
     }
 
     public function add(): ResponseInterface
