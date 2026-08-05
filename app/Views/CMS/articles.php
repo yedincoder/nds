@@ -4,11 +4,12 @@
 
 <section class="page-header">
     <div class="container">
-        <h1>Blog</h1>
+        <h1><?= esc($title ?? 'Articles') ?></h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item active">Blog</li>
+                <li class="breadcrumb-item"><a href="/blog">Blog</a></li>
+                <li class="breadcrumb-item active"><?= esc($title ?? 'Articles') ?></li>
             </ol>
         </nav>
     </div>
@@ -16,16 +17,8 @@
 
 <section class="py-5">
     <div class="container">
-        <?php if (!empty($categories)): ?>
         <div class="text-center mb-5">
-            <?php foreach ($categories as $cat): ?>
-            <a href="/article/category/<?= esc($cat->slug) ?>" class="btn btn-outline-primary btn-sm me-2 mb-2"><?= esc($cat->name) ?></a>
-            <?php endforeach; ?>
-        </div>
-        <?php endif; ?>
-
-        <div class="text-center mb-5">
-            <h2 class="section-title">Artikel Terbaru</h2>
+            <h2 class="section-title"><?= esc($title ?? 'Artikel') ?></h2>
             <p class="section-subtitle">Wawasan, tips, dan update teknologi terbaru dari tim kami</p>
         </div>
         <div class="row g-4">
@@ -56,7 +49,8 @@
             <?php endforeach; ?>
             <?php else: ?>
             <div class="col-12 text-center py-5">
-                <p class="text-muted">Belum ada artikel yang dipublikasikan.</p>
+                <p class="text-muted">Belum ada artikel pada kategori ini.</p>
+                <a href="/blog" class="btn btn-primary mt-2">Kembali ke Blog</a>
             </div>
             <?php endif; ?>
         </div>
