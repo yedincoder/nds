@@ -264,6 +264,56 @@ class CMSService
         }
     }
 
+    public function getArticleBySlug(string $slug): array
+    {
+        try {
+            $article = $this->articleModel->where('slug', $slug)
+                ->where('status', 'published')
+                ->first();
+
+            if (!$article) {
+                return [
+                    'success' => false,
+                    'message' => 'Article not found.'
+                ];
+            }
+
+            // Get category name
+            $category = null;
+            if ($article->category_id) {
+                $category = $this->categoryModel->find($article->category_id);
+            }
+
+            // Get tags
+            $tags = [];
+            $db = \Config\Database::connect();
+            $tags = $db->table('article_tags')
+                ->select('tags.name, tags.slug')
+                ->join('tags', 'tags.id = article_tags.tag_id')
+                ->where('article_tags.article_id', $article->id)
+                ->get()
+                ->getResult();
+
+            return [
+                'success' => true,
+                'message' => 'Article retrieved successfully.',
+                'data' => (object) array_merge(
+                    (array) $article,
+                    [
+                        'category_name' => $category ? $category->name : null,
+                        'category_slug' => $category ? $category->slug : null,
+                        'tags' => $tags,
+                    ]
+                )
+            ];
+        } catch (\Throwable $e) {
+            return [
+                'success' => false,
+                'message' => 'Error retrieving article: ' . $e->getMessage()
+            ];
+        }
+    }
+
     public function getPublishedArticles(int $limit = 10, int $offset = 0): array
     {
         try {
