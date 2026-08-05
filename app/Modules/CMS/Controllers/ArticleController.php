@@ -51,7 +51,7 @@ class ArticleController extends BaseController
 
         $data = [
             'title' => $result['data']['title'],
-            'article' => $result['data'],
+            'article' => (object) $result['data'],
         ];
 
         return view('CMS/article', $data);

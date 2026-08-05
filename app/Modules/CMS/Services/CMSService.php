@@ -17,6 +17,7 @@ class CMSService
     protected $tagModel;
     protected $clientModel;
     protected $portfolioModel;
+    protected $db;
 
     public function __construct()
     {
@@ -26,7 +27,10 @@ class CMSService
         $this->tagModel = new TagModel();
         $this->clientModel = new ClientModel();
         $this->portfolioModel = new PortfolioModel();
+        $this->db = \Config\Database::connect();
     }
+
+    // ── Pages ──────────────────────────────────────────────
 
     public function createPage(array $data): array
     {
@@ -90,6 +94,8 @@ class CMSService
             ];
         }
     }
+
+    // ── Articles ───────────────────────────────────────────
 
     public function createArticle(array $data): array
     {
@@ -184,6 +190,195 @@ class CMSService
         }
     }
 
+    public function getArticleBySlug(string $slug): array
+    {
+        try {
+            $article = $this->articleModel->where('slug', $slug)
+                ->where('status', 'published')
+                ->first();
+
+            if (!$article) {
+                return [
+                    'success' => false,
+                    'message' => 'Article not found.'
+                ];
+            }
+
+            // Get category name
+            $category = null;
+            if ($article->category_id) {
+                $category = $this->categoryModel->find($article->category_id);
+            }
+
+            // Get author name
+            $authorName = null;
+            if (!empty($article->author_id)) {
+                $author = $this->db->table('users u')
+                    ->select('up.full_name as name')
+                    ->join('user_profiles up', 'up.user_id = u.id', 'left')
+                    ->where('u.id', $article->author_id)
+                    ->get()
+                    ->getRow();
+                $authorName = $author ? ($author->name ?? 'Admin') : 'Admin';
+            }
+
+            // Get tags
+            $tags = [];
+            $tags = $this->db->table('article_tags')
+                ->select('tags.name, tags.slug')
+                ->join('tags', 'tags.id = article_tags.tag_id')
+                ->where('article_tags.article_id', $article->id)
+                ->get()
+                ->getResult();
+
+            return [
+                'success' => true,
+                'message' => 'Article retrieved successfully.',
+                'data' => array_merge(
+                    (array) $article,
+                    [
+                        'category_name' => $category ? $category->name : null,
+                        'category_slug' => $category ? $category->slug : null,
+                        'author_name' => $authorName,
+                        'tags' => $tags,
+                    ]
+                )
+            ];
+        } catch (\Throwable $e) {
+            return [
+                'success' => false,
+                'message' => 'Error retrieving article: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    public function getArticlesByCategory(string $slug, array $options = []): array
+    {
+        try {
+            $perPage = $options['perPage'] ?? 10;
+            $page = $options['page'] ?? 1;
+            $offset = ($page - 1) * $perPage;
+
+            // Get category by slug
+            $category = $this->categoryModel->where('slug', $slug)
+                ->where('type', 'article')
+                ->first();
+
+            if (!$category) {
+                return [
+                    'success' => false,
+                    'message' => 'Category not found.',
+                    'data' => []
+                ];
+            }
+
+            $articles = $this->articleModel
+                ->select('articles.*, categories.name as category_name')
+                ->join('categories', 'categories.id = articles.category_id', 'left')
+                ->where('articles.category_id', $category->id)
+                ->where('articles.status', 'published')
+                ->orderBy('articles.published_at', 'DESC')
+                ->limit($perPage, $offset)
+                ->findAll();
+
+            return [
+                'success' => true,
+                'message' => 'Articles retrieved successfully.',
+                'data' => [
+                    'category' => $category,
+                    'articles' => $articles,
+                    'pager' => null,
+                ]
+            ];
+        } catch (\Throwable $e) {
+            return [
+                'success' => false,
+                'message' => 'Error retrieving articles by category: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    public function getArticlesByTag(string $slug, array $options = []): array
+    {
+        try {
+            $perPage = $options['perPage'] ?? 10;
+            $page = $options['page'] ?? 1;
+            $offset = ($page - 1) * $perPage;
+
+            // Get tag by slug
+            $tag = $this->tagModel->where('slug', $slug)->first();
+
+            if (!$tag) {
+                return [
+                    'success' => false,
+                    'message' => 'Tag not found.',
+                    'data' => []
+                ];
+            }
+
+            $articles = $this->articleModel
+                ->select('articles.*, categories.name as category_name')
+                ->join('article_tags', 'article_tags.article_id = articles.id')
+                ->join('categories', 'categories.id = articles.category_id', 'left')
+                ->where('article_tags.tag_id', $tag->id)
+                ->where('articles.status', 'published')
+                ->orderBy('articles.published_at', 'DESC')
+                ->limit($perPage, $offset)
+                ->findAll();
+
+            return [
+                'success' => true,
+                'message' => 'Articles retrieved successfully.',
+                'data' => [
+                    'tag' => $tag,
+                    'articles' => $articles,
+                    'pager' => null,
+                ]
+            ];
+        } catch (\Throwable $e) {
+            return [
+                'success' => false,
+                'message' => 'Error retrieving articles by tag: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    public function searchArticles(string $keyword, int $limit = 10): array
+    {
+        try {
+            $articles = $this->articleModel->search($keyword, $limit);
+            return [
+                'success' => true,
+                'message' => 'Search completed successfully.',
+                'data' => $articles
+            ];
+        } catch (\Throwable $e) {
+            return [
+                'success' => false,
+                'message' => 'Error searching articles: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    public function getPublishedArticles(int $limit = 10, int $offset = 0): array
+    {
+        try {
+            $articles = $this->articleModel->getPublished($limit, $offset);
+            return [
+                'success' => true,
+                'message' => 'Articles retrieved successfully.',
+                'data' => $articles
+            ];
+        } catch (\Throwable $e) {
+            return [
+                'success' => false,
+                'message' => 'Error retrieving articles: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    // ── Portfolios ─────────────────────────────────────────
+
     public function createPortfolio(array $data): array
     {
         try {
@@ -243,90 +438,6 @@ class CMSService
             return [
                 'success' => false,
                 'message' => 'Error deleting portfolio: ' . $e->getMessage()
-            ];
-        }
-    }
-
-    public function searchArticles(string $keyword, int $limit = 10): array
-    {
-        try {
-            $articles = $this->articleModel->search($keyword, $limit);
-            return [
-                'success' => true,
-                'message' => 'Search completed successfully.',
-                'data' => $articles
-            ];
-        } catch (\Throwable $e) {
-            return [
-                'success' => false,
-                'message' => 'Error searching articles: ' . $e->getMessage()
-            ];
-        }
-    }
-
-    public function getArticleBySlug(string $slug): array
-    {
-        try {
-            $article = $this->articleModel->where('slug', $slug)
-                ->where('status', 'published')
-                ->first();
-
-            if (!$article) {
-                return [
-                    'success' => false,
-                    'message' => 'Article not found.'
-                ];
-            }
-
-            // Get category name
-            $category = null;
-            if ($article->category_id) {
-                $category = $this->categoryModel->find($article->category_id);
-            }
-
-            // Get tags
-            $tags = [];
-            $db = \Config\Database::connect();
-            $tags = $db->table('article_tags')
-                ->select('tags.name, tags.slug')
-                ->join('tags', 'tags.id = article_tags.tag_id')
-                ->where('article_tags.article_id', $article->id)
-                ->get()
-                ->getResult();
-
-            return [
-                'success' => true,
-                'message' => 'Article retrieved successfully.',
-                'data' => (object) array_merge(
-                    (array) $article,
-                    [
-                        'category_name' => $category ? $category->name : null,
-                        'category_slug' => $category ? $category->slug : null,
-                        'tags' => $tags,
-                    ]
-                )
-            ];
-        } catch (\Throwable $e) {
-            return [
-                'success' => false,
-                'message' => 'Error retrieving article: ' . $e->getMessage()
-            ];
-        }
-    }
-
-    public function getPublishedArticles(int $limit = 10, int $offset = 0): array
-    {
-        try {
-            $articles = $this->articleModel->getPublished($limit, $offset);
-            return [
-                'success' => true,
-                'message' => 'Articles retrieved successfully.',
-                'data' => $articles
-            ];
-        } catch (\Throwable $e) {
-            return [
-                'success' => false,
-                'message' => 'Error retrieving articles: ' . $e->getMessage()
             ];
         }
     }
