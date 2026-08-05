@@ -14,25 +14,25 @@
 
 <!-- Stats Overview -->
 <div class="row mb-4">
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-3 mb-3">
         <div class="stat-card" style="border-left-color: #1ABB9C;">
             <h3><?= number_format($stats['total_revenue'] ?? 0) ?></h3>
             <p><i class="fas fa-chart-line me-2"></i>Total Revenue</p>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-3 mb-3">
         <div class="stat-card" style="border-left-color: #3498DB;">
             <h3><?= number_format($stats['total_orders'] ?? 0) ?></h3>
             <p><i class="fas fa-shopping-cart me-2"></i>Total Orders</p>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-3 mb-3">
         <div class="stat-card" style="border-left-color: #E74C3C;">
             <h3><?= number_format($stats['total_customers'] ?? 0) ?></h3>
             <p><i class="fas fa-users me-2"></i>Total Customers</p>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-3 mb-3">
         <div class="stat-card" style="border-left-color: #F39C12;">
             <h3><?= number_format($stats['total_products'] ?? 0) ?></h3>
             <p><i class="fas fa-box me-2"></i>Total Products</p>

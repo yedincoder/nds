@@ -90,7 +90,19 @@ $routes->group('midtrans', function ($routes) {
 });
 
 // ================================================================
-// SUPPORT / TICKET
+// CLIENT AREA SUPPORT
+// ================================================================
+$routes->group('client/support', ['filter' => 'auth'], function ($routes) {
+    $routes->get('tickets', '\App\Modules\ClientArea\Controllers\SupportController::index');
+    $routes->get('ticket/create', '\App\Modules\ClientArea\Controllers\SupportController::create');
+    $routes->post('ticket/create', '\App\Modules\ClientArea\Controllers\SupportController::store');
+    $routes->get('ticket/(:any)', '\App\Modules\ClientArea\Controllers\SupportController::detail/$1');
+    $routes->post('ticket/(:any)', '\App\Modules\ClientArea\Controllers\SupportController::reply/$1');
+    $routes->get('ticket/(:any)/close', '\App\Modules\ClientArea\Controllers\SupportController::close/$1');
+});
+
+// ================================================================
+// ADMIN SUPPORT
 // ================================================================
 $routes->group('support', ['filter' => 'auth'], function ($routes) {
     $routes->get('tickets', '\App\Modules\Support\Controllers\TicketController::index');
