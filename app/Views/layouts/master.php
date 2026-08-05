@@ -122,9 +122,25 @@
                     <li class="nav-item">
                         <a class="nav-link <?= ($page ?? '') === 'contact' ? 'active' : '' ?>" href="/contact">Contact</a>
                     </li>
+                    <?php if (session()->get('isLoggedIn')): ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle btn-nav" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-1"></i><?= esc(session()->get('username') ?? 'Account') ?>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="/client/dashboard"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                            <li><a class="dropdown-item" href="/client/orders"><i class="fas fa-shopping-bag me-2"></i>My Orders</a></li>
+                            <li><a class="dropdown-item" href="/client/invoices"><i class="fas fa-file-invoice me-2"></i>My Invoices</a></li>
+                            <li><a class="dropdown-item" href="/client/profile"><i class="fas fa-user-cog me-2"></i>Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="/auth/logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                    <?php else: ?>
                     <li class="nav-item">
                         <a class="nav-link btn-nav" href="/auth/login"><i class="fas fa-sign-in-alt me-1"></i>Login</a>
                     </li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>

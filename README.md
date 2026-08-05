@@ -162,4 +162,4 @@ Kode aplikasi & dokumentasi project ini milik **PT. YEDIN DIGITAL MANDIRI**.
 
 ---
 
-© 2026 PT. YEDIN DIGITAL MANDIRI · Jl. RA. Kartini No.23L, Rangkasbitung, Lebak, Banten 42314 · 08977487315 · info@ngappid.com
+© 2026 NgAppID Digital · Jl. RA. Kartini No.23L, Rangkasbitung, Lebak, Banten 42314 · 08977487315 · info@ngappid.com
