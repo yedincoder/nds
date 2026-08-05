@@ -263,7 +263,7 @@ class CustomerService
     {
         $db = \Config\Database::connect();
         $download = $db->table('downloads')
-            ->where('token', $token)
+            ->where('download_token', $token)
             ->where('user_id', $userId)
             ->get()
             ->getRow();
@@ -272,15 +272,50 @@ class CustomerService
             return ['success' => false, 'message' => 'Download not found.'];
         }
 
-        $filePath = WRITEPATH . 'uploads/' . $download->file_path;
-        if (!file_exists($filePath)) {
+        // Check download limit
+        if (($download->download_count ?? 0) >= ($download->max_downloads ?? 0)) {
+            return ['success' => false, 'message' => 'Download limit reached.'];
+        }
+
+        // Check expiry
+        if (!empty($download->expires_at) && strtotime($download->expires_at) < time()) {
+            return ['success' => false, 'message' => 'Download has expired.'];
+        }
+
+        // Get file from product_files table
+        $file = $db->table('product_files')
+            ->where('product_id', $download->product_id)
+            ->where('status', 'active')
+            ->orderBy('id', 'ASC')
+            ->limit(1)
+            ->get()
+            ->getRow();
+
+        if (!$file) {
+            return ['success' => false, 'message' => 'File not found for this product.'];
+        }
+
+        // File path: check public/downloads or writable/uploads
+        $publicPath = FCPATH . ltrim($file->file_path, '/');
+        $writablePath = WRITEPATH . 'uploads/' . ltrim($file->file_path, '/');
+
+        if (file_exists($publicPath)) {
+            $filePath = $publicPath;
+        } elseif (file_exists($writablePath)) {
+            $filePath = $writablePath;
+        } else {
             return ['success' => false, 'message' => 'File not found on server.'];
         }
+
+        // Increment download count
+        $db->table('downloads')
+            ->where('id', $download->id)
+            ->update(['download_count' => ($download->download_count ?? 0) + 1]);
 
         return [
             'success' => true,
             'data' => [
-                'file' => $download,
+                'file' => $file,
                 'file_path' => $filePath,
             ],
         ];

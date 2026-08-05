@@ -16,7 +16,7 @@
                 <td>#<?= esc($dl->order_number ?? '') ?></td>
                 <td><?= ($dl->max_downloads ?? 0) - ($dl->download_count ?? 0) ?> / <?= $dl->max_downloads ?? 0 ?></td>
                 <td><?= $dl->expires_at ? date('d M Y', strtotime($dl->expires_at)) : 'Never' ?></td>
-                <td><a href="/client/download/<?= esc($dl->token ?? $dl->id) ?>" class="btn btn-sm btn-primary">Download</a></td>
+                <td><a href="/client/download/<?= esc($dl->download_token ?? $dl->id) ?>" class="btn btn-sm btn-primary">Download</a></td>
             </tr>
             <?php endforeach; ?>
             </tbody>
