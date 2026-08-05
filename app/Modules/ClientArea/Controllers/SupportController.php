@@ -65,6 +65,7 @@ class SupportController extends BaseController
             'category_id' => $this->request->getPost('category_id'),
             'subject' => $this->request->getPost('subject'),
             'message' => $this->request->getPost('message'),
+            'priority' => $this->request->getPost('priority') ?? 'medium',
         ]);
 
         if (!$result['success']) {

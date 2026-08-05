@@ -59,7 +59,7 @@
                 <?php endforeach; ?>
                 </tbody>
             </table>
-        </div>
+</div>
         <?php else: ?>
         <div class="text-center py-5">
             <i class="fas fa-inbox fa-3x text-muted mb-3"></i>

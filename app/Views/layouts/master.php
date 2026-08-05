@@ -102,16 +102,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link <?= ($page ?? '') === 'home' ? 'active' : '' ?>" href="/">Home</a>
+                        <a class="nav-link <?= ($page ?? '') === 'home' ? 'active' : '' ?>" href="/">Beranda</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= ($page ?? '') === 'about' ? 'active' : '' ?>" href="/about">About</a>
+                        <a class="nav-link <?= ($page ?? '') === 'about' ? 'active' : '' ?>" href="/about">Tentang Kami</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= ($page ?? '') === 'services' ? 'active' : '' ?>" href="/services">Services</a>
+                        <a class="nav-link <?= ($page ?? '') === 'services' ? 'active' : '' ?>" href="/services">Layanan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= ($page ?? '') === 'products' ? 'active' : '' ?>" href="/products">Products</a>
+                        <a class="nav-link <?= ($page ?? '') === 'products' ? 'active' : '' ?>" href="/products">Produk</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= ($page ?? '') === 'blog' ? 'active' : '' ?>" href="/blog">Blog</a>
@@ -120,7 +120,7 @@
                         <a class="nav-link <?= ($page ?? '') === 'portfolio' ? 'active' : '' ?>" href="/portfolio">Portfolio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= ($page ?? '') === 'contact' ? 'active' : '' ?>" href="/contact">Contact</a>
+                        <a class="nav-link <?= ($page ?? '') === 'contact' ? 'active' : '' ?>" href="/contact">Kontak</a>
                     </li>
                     <?php if (session()->get('isLoggedIn')): ?>
                     <li class="nav-item dropdown">
@@ -164,19 +164,23 @@
                 <div class="col-md-2 mb-4">
                     <h5>Navigate</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="/">Home</a></li>
-                        <li class="mb-2"><a href="/about">About</a></li>
-                        <li class="mb-2"><a href="/services">Services</a></li>
-                        <li class="mb-2"><a href="/products">Products</a></li>
+                        <li class="mb-2"><a href="/">Beranda</a></li>
+                        <li class="mb-2"><a href="/about">Tentang Kami</a></li>
+                        <li class="mb-2"><a href="/team">Team</a></li>
+                        <li class="mb-2"><a href="/services">Layanan</a></li>
+                        <li class="mb-2"><a href="/program-kemitraan">Program Kemitraan</a></li>
+                        <li class="mb-2"><a href="/pembayaran">Ketentuan Pembayaran</a></li>
+                        <li class="mb-2"><a href="/kebijakan-ketentuan">Ketentuan & Kebijakan</a></li>
+                        <li class="mb-2"><a href="/contact">Kontak</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3 mb-4">
                     <h5>Resources</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="/blog">Blog</a></li>
+                        <li class="mb-2"><a href="/products">Produk</a></li>
                         <li class="mb-2"><a href="/portfolio">Portfolio</a></li>
-                        <li class="mb-2"><a href="/contact">Contact</a></li>
-                        <li class="mb-2"><a href="/auth/register">Register</a></li>
+                        <li class="mb-2"><a href="/blog">Blog</a></li>
+                        <li class="mb-2"><a href="/auth/register">Daftar</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3 mb-4">

@@ -123,7 +123,7 @@ $routes->group('client', ['filter' => 'auth'], function ($routes) {
     $routes->get('invoices', '\App\Modules\ClientArea\Controllers\DashboardController::invoices');
     $routes->get('downloads', '\App\Modules\ClientArea\Controllers\DashboardController::downloads');
     $routes->get('download/(:any)', '\App\Modules\ClientArea\Controllers\DownloadController::download/$1');
-    $routes->get('tickets', '\App\Modules\ClientArea\Controllers\DashboardController::tickets');
+    $routes->get('tickets', '\App\Modules\ClientArea\Controllers\SupportController::index');
     $routes->get('profile', '\App\Modules\ClientArea\Controllers\ProfileController::index');
     $routes->post('profile/update', '\App\Modules\ClientArea\Controllers\ProfileController::update');
     $routes->post('profile/change-password', '\App\Modules\ClientArea\Controllers\ProfileController::changePassword');
@@ -216,7 +216,43 @@ $routes->group('api/v1', function ($routes) {
 	
 });
 
+
+// ================================================================
+// PRODUCT (detail)
+// ================================================================
+$routes->group('product', ['namespace' => 'App\Modules\Product\Controllers'], function ($routes) {
+    $routes->get('category/(:any)', 'ProductController::category/$1');
+    $routes->get('search', 'ProductController::search');
+    $routes->get('(:any)', 'ProductController::detail/$1');
+});
+
+// ================================================================
+// SERVICE (detail)
+// ================================================================
+$routes->group('service', function ($routes) {
+    $routes->get('(:any)', 'Service\Controllers\ServiceController::detail/$1');
+    $routes->post('(:any)/quote', 'Service\Controllers\ServiceController::requestQuote/$1');
+});
+
+// ================================================================
+// BLOG (detail)
+// ================================================================
+$routes->group('blog', function ($routes) {
+    $routes->get('search', 'Blog\Controllers\BlogController::search');
+    $routes->get('(:any)', 'Blog\Controllers\BlogController::detail/$1');
+});
+
+// ================================================================
+// PORTFOLIO (detail)
+// ================================================================
+$routes->group('portfolio', function ($routes) {
+    $routes->get('category/(:any)', 'Portfolio\Controllers\PortfolioController::category/$1');
+    $routes->get('(:any)', 'Portfolio\Controllers\PortfolioController::detail/$1');
+});
+
+// ================================================================
 // Load rute modular dari app/Modules/Routes.php
+// ================================================================
 $modularRoutes = APPPATH . 'Modules/Routes.php';
 if (file_exists($modularRoutes)) {
     require $modularRoutes;

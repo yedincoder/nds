@@ -87,7 +87,7 @@
             <a class="nav-link <?= strpos($page ?? '', 'client/downloads') === 0 ? 'is-active' : '' ?>" href="/client/downloads">
                 <i class="fas fa-download" style="width:18px"></i><span>Downloads</span>
             </a>
-            <a class="nav-link <?= strpos($page ?? '', 'client/tickets') === 0 ? 'is-active' : '' ?>" href="/client/tickets">
+            <a class="nav-link <?= strpos($page ?? '', 'client/support') === 0 ? 'is-active' : '' ?>" href="/client/support/tickets">
                 <i class="fas fa-headset" style="width:18px"></i><span>Support</span>
             </a>
         </nav>
