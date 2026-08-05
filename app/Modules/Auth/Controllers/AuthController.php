@@ -2,10 +2,10 @@
 
 namespace App\Modules\Auth\Controllers;
 
-use App\Controllers\FrontBaseController;
+use App\Controllers\BaseController;
 use CodeIgniter\HTTP\RedirectResponse;
 
-class AuthController extends FrontBaseController
+class AuthController extends BaseController
 {
     public function index(): string|RedirectResponse
     {
@@ -27,7 +27,7 @@ class AuthController extends FrontBaseController
         return view('auth/login', $data);
     }
 
-    public function login(): \CodeIgniter\HTTP\RedirectResponse
+    public function login(): RedirectResponse
     {
         $login = $this->request->getPost('login');
         $password = $this->request->getPost('password');
@@ -60,7 +60,6 @@ class AuthController extends FrontBaseController
         session()->regenerate();
 
         // Determine user role
-        $db = \Config\Database::connect();
         $role = $db->table('user_roles ur')
             ->select('r.slug')
             ->join('roles r', 'r.id = ur.role_id')
@@ -97,7 +96,7 @@ class AuthController extends FrontBaseController
         return view('auth/register', ['title' => 'Register']);
     }
 
-    public function register(): \CodeIgniter\HTTP\RedirectResponse
+    public function register(): RedirectResponse
     {
         $full_name = $this->request->getPost('full_name');
         $email = $this->request->getPost('email');
@@ -143,7 +142,7 @@ class AuthController extends FrontBaseController
             ->with('success', 'Account created. Please login.');
     }
 
-    public function logout(): \CodeIgniter\HTTP\RedirectResponse
+    public function logout(): RedirectResponse
     {
         session()->destroy();
         return redirect()->to('auth/login')

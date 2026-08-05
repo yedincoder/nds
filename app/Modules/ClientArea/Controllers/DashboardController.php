@@ -3,10 +3,10 @@
 namespace App\Modules\ClientArea\Controllers;
 
 use App\Controllers\BaseController;
-use App\Modules\Customer\Services\CustomerService;
-use App\Modules\Order\Services\OrderService;
-use App\Modules\Invoice\Services\InvoiceService;
-use App\Modules\Support\Services\SupportService;
+use App\Modules\ClientArea\Services\CustomerService;
+use App\Modules\FrontArea\Services\OrderService;
+use App\Modules\FrontArea\Services\InvoiceService;
+use App\Modules\AdminArea\Services\SupportService;
 
 class DashboardController extends BaseController
 {

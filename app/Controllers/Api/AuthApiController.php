@@ -3,7 +3,7 @@
 namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
-use App\Modules\Authentication\Services\AuthService;
+use App\Modules\Auth\Services\AuthService;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class AuthApiController extends BaseController

@@ -3,7 +3,7 @@
 namespace App\Modules\ClientArea\Controllers;
 
 use App\Controllers\BaseController;
-use App\Modules\Customer\Services\CustomerService;
+use App\Modules\ClientArea\Services\CustomerService;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class ProfileController extends BaseController

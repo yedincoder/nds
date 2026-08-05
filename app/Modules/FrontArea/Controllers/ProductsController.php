@@ -3,7 +3,7 @@
 namespace App\Modules\FrontArea\Controllers;
 
 use App\Controllers\FrontBaseController;
-use App\Modules\Product\Services\ProductService;
+use App\Modules\FrontArea\Services\ProductService;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class ProductsController extends FrontBaseController

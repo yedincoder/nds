@@ -30,63 +30,63 @@ $routes->group('auth', function ($routes) {
 // ================================================================
 // CMS / BLOG / PORTFOLIO
 // ================================================================
-$routes->get('article/category/(:any)', '\App\Modules\CMS\Controllers\ArticleController::category/$1');
-$routes->get('article/tag/(:any)', '\App\Modules\CMS\Controllers\ArticleController::tag/$1');
-$routes->get('articles', '\App\Modules\CMS\Controllers\ArticleController::index');
-$routes->get('article/(:any)', '\App\Modules\CMS\Controllers\ArticleController::detail/$1');
+$routes->get('article/category/(:any)', '\App\Modules\FrontArea\Controllers\ArticleController::category/$1');
+$routes->get('article/tag/(:any)', '\App\Modules\FrontArea\Controllers\ArticleController::tag/$1');
+$routes->get('articles', '\App\Modules\FrontArea\Controllers\ArticleController::index');
+$routes->get('article/(:any)', '\App\Modules\FrontArea\Controllers\ArticleController::detail/$1');
 $routes->get('portfolio/(:any)', 'HomeController::portfolioDetail/$1');
 $routes->get('portfolio', 'HomeController::portfolio');
-$routes->get('page/(:any)', '\App\Modules\CMS\Controllers\PageController::page/$1');
+$routes->get('page/(:any)', '\App\Modules\FrontArea\Controllers\PageController::page/$1');
 
 // ================================================================
 // ECOMMERCE
 // ================================================================
-$routes->get('cart', '\App\Modules\Cart\Controllers\CartController::index');
-$routes->post('cart/add', '\App\Modules\Cart\Controllers\CartController::add');
-$routes->post('cart/update', '\App\Modules\Cart\Controllers\CartController::update');
-$routes->get('cart/remove/(:num)', '\App\Modules\Cart\Controllers\CartController::remove/$1');
-$routes->get('cart/clear', '\App\Modules\Cart\Controllers\CartController::clear');
-$routes->get('checkout', '\App\Modules\Checkout\Controllers\CheckoutController::index');
-$routes->post('checkout/process', '\App\Modules\Checkout\Controllers\CheckoutController::process');
-$routes->get('checkout/success/(:any)', '\App\Modules\Checkout\Controllers\CheckoutController::success/$1');
+$routes->get('cart', '\App\Modules\FrontArea\Controllers\CartController::index');
+$routes->post('cart/add', '\App\Modules\FrontArea\Controllers\CartController::add');
+$routes->post('cart/update', '\App\Modules\FrontArea\Controllers\CartController::update');
+$routes->get('cart/remove/(:num)', '\App\Modules\FrontArea\Controllers\CartController::remove/$1');
+$routes->get('cart/clear', '\App\Modules\FrontArea\Controllers\CartController::clear');
+$routes->get('checkout', '\App\Modules\FrontArea\Controllers\CheckoutController::index');
+$routes->post('checkout/process', '\App\Modules\FrontArea\Controllers\CheckoutController::process');
+$routes->get('checkout/success/(:any)', '\App\Modules\FrontArea\Controllers\CheckoutController::success/$1');
 
 // ================================================================
 // BILLING & INVOICE
 // ================================================================
 $routes->group('billing', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', '\App\Modules\Billing\Controllers\BillingController::index');
-    $routes->get('(:any)', '\App\Modules\Billing\Controllers\BillingController::detail/$1');
+    $routes->get('/', '\App\Modules\FrontArea\Controllers\BillingController::index');
+    $routes->get('(:any)', '\App\Modules\FrontArea\Controllers\BillingController::detail/$1');
 });
 $routes->group('invoice', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', '\App\Modules\Invoice\Controllers\InvoiceController::index');
-    $routes->get('download/(:any)', '\App\Modules\Invoice\Controllers\InvoiceController::download/$1');
-    $routes->get('print/(:any)', '\App\Modules\Invoice\Controllers\InvoiceController::print/$1');
-    $routes->get('(:any)', '\App\Modules\Invoice\Controllers\InvoiceController::detail/$1');
+    $routes->get('/', '\App\Modules\FrontArea\Controllers\InvoiceController::index');
+    $routes->get('download/(:any)', '\App\Modules\FrontArea\Controllers\InvoiceController::download/$1');
+    $routes->get('print/(:any)', '\App\Modules\FrontArea\Controllers\InvoiceController::print/$1');
+    $routes->get('(:any)', '\App\Modules\FrontArea\Controllers\InvoiceController::detail/$1');
 });
 
 // ================================================================
 // PAYMENT
 // ================================================================
 $routes->group('payment', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', '\App\Modules\Payment\Controllers\PaymentController::index');
-    $routes->get('invoice/(:any)', '\App\Modules\Payment\Controllers\PaymentController::process/$1');
-    $routes->post('invoice/(:any)', '\App\Modules\Payment\Controllers\PaymentController::process/$1');
-    $routes->get('(:any)', '\App\Modules\Payment\Controllers\PaymentController::process/$1');
-    $routes->post('(:any)', '\App\Modules\Payment\Controllers\PaymentController::process/$1');
-    $routes->get('success/(:any)', '\App\Modules\Payment\Controllers\PaymentController::success/$1');
-    $routes->get('failed/(:any)', '\App\Modules\Payment\Controllers\PaymentController::failed/$1');
+    $routes->get('/', '\App\Modules\FrontArea\Controllers\PaymentController::index');
+    $routes->get('invoice/(:any)', '\App\Modules\FrontArea\Controllers\PaymentController::process/$1');
+    $routes->post('invoice/(:any)', '\App\Modules\FrontArea\Controllers\PaymentController::process/$1');
+    $routes->get('(:any)', '\App\Modules\FrontArea\Controllers\PaymentController::process/$1');
+    $routes->post('(:any)', '\App\Modules\FrontArea\Controllers\PaymentController::process/$1');
+    $routes->get('success/(:any)', '\App\Modules\FrontArea\Controllers\PaymentController::success/$1');
+    $routes->get('failed/(:any)', '\App\Modules\FrontArea\Controllers\PaymentController::failed/$1');
 });
 
 // ================================================================
 // MIDTRANS PAYMENT
 // ================================================================
 $routes->group('midtrans', function ($routes) {
-    $routes->get('initiate/(:any)', '\App\Modules\Midtrans\Controllers\MidtransController::initiate/$1', ['filter' => 'auth']);
-    $routes->get('status/(:any)', '\App\Modules\Midtrans\Controllers\MidtransController::status/$1', ['filter' => 'auth']);
-    $routes->get('success', '\App\Modules\Midtrans\Controllers\MidtransController::success', ['filter' => 'auth']);
-    $routes->get('pending', '\App\Modules\Midtrans\Controllers\MidtransController::pending', ['filter' => 'auth']);
-    $routes->get('error', '\App\Modules\Midtrans\Controllers\MidtransController::error', ['filter' => 'auth']);
-    $routes->post('notification', '\App\Modules\Midtrans\Controllers\MidtransController::notification');
+    $routes->get('initiate/(:any)', '\App\Modules\FrontArea\Controllers\MidtransController::initiate/$1', ['filter' => 'auth']);
+    $routes->get('status/(:any)', '\App\Modules\FrontArea\Controllers\MidtransController::status/$1', ['filter' => 'auth']);
+    $routes->get('success', '\App\Modules\FrontArea\Controllers\MidtransController::success', ['filter' => 'auth']);
+    $routes->get('pending', '\App\Modules\FrontArea\Controllers\MidtransController::pending', ['filter' => 'auth']);
+    $routes->get('error', '\App\Modules\FrontArea\Controllers\MidtransController::error', ['filter' => 'auth']);
+    $routes->post('notification', '\App\Modules\FrontArea\Controllers\MidtransController::notification');
 });
 
 // ================================================================
@@ -105,12 +105,12 @@ $routes->group('client/support', ['filter' => 'auth'], function ($routes) {
 // ADMIN SUPPORT
 // ================================================================
 $routes->group('support', ['filter' => 'auth'], function ($routes) {
-    $routes->get('tickets', '\App\Modules\Support\Controllers\TicketController::index');
-    $routes->get('ticket/create', '\App\Modules\Support\Controllers\TicketController::create');
-    $routes->post('ticket/create', '\App\Modules\Support\Controllers\TicketController::create');
-    $routes->get('ticket/(:any)', '\App\Modules\Support\Controllers\TicketController::detail/$1');
-    $routes->post('ticket/(:any)', '\App\Modules\Support\Controllers\TicketController::detail/$1');
-    $routes->get('ticket/close/(:any)', '\App\Modules\Support\Controllers\TicketController::close/$1');
+    $routes->get('tickets', '\App\Modules\AdminArea\Controllers\TicketController::index');
+    $routes->get('ticket/create', '\App\Modules\AdminArea\Controllers\TicketController::create');
+    $routes->post('ticket/create', '\App\Modules\AdminArea\Controllers\TicketController::create');
+    $routes->get('ticket/(:any)', '\App\Modules\AdminArea\Controllers\TicketController::detail/$1');
+    $routes->post('ticket/(:any)', '\App\Modules\AdminArea\Controllers\TicketController::detail/$1');
+    $routes->get('ticket/close/(:any)', '\App\Modules\AdminArea\Controllers\TicketController::close/$1');
 });
 
 // ================================================================
@@ -136,61 +136,61 @@ $routes->group('client', ['filter' => 'auth'], function ($routes) {
 // ADMIN PANEL
 // ================================================================
 $routes->group('admin', ['filter' => 'permission:users.read'], function ($routes) {
-    $routes->get('dashboard', '\App\Modules\Dashboard\Controllers\AdminDashboardController::index');
-    $routes->get('customers', '\App\Modules\Dashboard\Controllers\AdminDashboardController::customers');
-    $routes->get('products', '\App\Modules\Dashboard\Controllers\AdminDashboardController::products');
-    $routes->get('orders', '\App\Modules\Dashboard\Controllers\AdminDashboardController::orders');
-    $routes->get('invoices', '\App\Modules\Dashboard\Controllers\AdminDashboardController::invoices');
-    $routes->get('reports', '\App\Modules\Dashboard\Controllers\AdminDashboardController::reports');
-    $routes->get('portfolio', '\App\Modules\Dashboard\Controllers\AdminDashboardController::portfolio');
-    $routes->get('services', '\App\Modules\Dashboard\Controllers\AdminDashboardController::services');
-    $routes->get('settings', '\App\Modules\Dashboard\Controllers\AdminDashboardController::settings');
-    $routes->get('payments', '\App\Modules\Dashboard\Controllers\AdminDashboardController::payments');
-    $routes->get('media', '\App\Modules\MediaManager\Controllers\MediaController::index');
-    $routes->get('support', '\App\Modules\Support\Controllers\TicketController::index');
-    $routes->get('support/create', '\App\Modules\Support\Controllers\TicketController::create');
-    $routes->post('support/create', '\App\Modules\Support\Controllers\TicketController::create');
-    $routes->get('support/ticket/(:num)', '\App\Modules\Support\Controllers\TicketController::detail/$1');
-    $routes->post('support/ticket/(:num)', '\App\Modules\Support\Controllers\TicketController::detail/$1');
-    $routes->get('support/ticket/(:num)/close', '\App\Modules\Support\Controllers\TicketController::close/$1');
-    $routes->get('billing', '\App\Modules\Billing\Controllers\BillingController::index');
-    $routes->get('auth', '\App\Modules\Authentication\Controllers\AuthController::index');
+    $routes->get('dashboard', '\App\Modules\AdminArea\Controllers\AdminDashboardController::index');
+    $routes->get('customers', '\App\Modules\AdminArea\Controllers\AdminDashboardController::customers');
+    $routes->get('products', '\App\Modules\AdminArea\Controllers\AdminDashboardController::products');
+    $routes->get('orders', '\App\Modules\AdminArea\Controllers\AdminDashboardController::orders');
+    $routes->get('invoices', '\App\Modules\AdminArea\Controllers\AdminDashboardController::invoices');
+    $routes->get('reports', '\App\Modules\AdminArea\Controllers\AdminDashboardController::reports');
+    $routes->get('portfolio', '\App\Modules\AdminArea\Controllers\AdminDashboardController::portfolio');
+    $routes->get('services', '\App\Modules\AdminArea\Controllers\AdminDashboardController::services');
+    $routes->get('settings', '\App\Modules\AdminArea\Controllers\AdminDashboardController::settings');
+    $routes->get('payments', '\App\Modules\AdminArea\Controllers\AdminDashboardController::payments');
+    $routes->get('media', '\App\Modules\AdminArea\Controllers\MediaController::index');
+    $routes->get('support', '\App\Modules\AdminArea\Controllers\TicketController::index');
+    $routes->get('support/create', '\App\Modules\AdminArea\Controllers\TicketController::create');
+    $routes->post('support/create', '\App\Modules\AdminArea\Controllers\TicketController::create');
+    $routes->get('support/ticket/(:num)', '\App\Modules\AdminArea\Controllers\TicketController::detail/$1');
+    $routes->post('support/ticket/(:num)', '\App\Modules\AdminArea\Controllers\TicketController::detail/$1');
+    $routes->get('support/ticket/(:num)/close', '\App\Modules\AdminArea\Controllers\TicketController::close/$1');
+    $routes->get('billing', '\App\Modules\FrontArea\Controllers\BillingController::index');
+    $routes->get('auth', '\App\Modules\Auth\Controllers\AuthController::index');
     
     // Testimonials
-    $routes->get('testimonials', '\App\Modules\Testimonial\Controllers\Admin\TestimonialController::index');
-    $routes->get('testimonials/create', '\App\Modules\Testimonial\Controllers\Admin\TestimonialController::create');
-    $routes->post('testimonials/create', '\App\Modules\Testimonial\Controllers\Admin\TestimonialController::store');
-    $routes->get('testimonials/edit/(:num)', '\App\Modules\Testimonial\Controllers\Admin\TestimonialController::edit/$1');
-    $routes->post('testimonials/update/(:num)', '\App\Modules\Testimonial\Controllers\Admin\TestimonialController::update/$1');
-    $routes->get('testimonials/status/(:num)', '\App\Modules\Testimonial\Controllers\Admin\TestimonialController::toggleStatus/$1');
-    $routes->get('testimonials/delete/(:num)', '\App\Modules\Testimonial\Controllers\Admin\TestimonialController::delete/$1');
+    $routes->get('testimonials', '\App\Modules\AdminArea\Controllers\TestimonialController::index');
+    $routes->get('testimonials/create', '\App\Modules\AdminArea\Controllers\TestimonialController::create');
+    $routes->post('testimonials/create', '\App\Modules\AdminArea\Controllers\TestimonialController::store');
+    $routes->get('testimonials/edit/(:num)', '\App\Modules\AdminArea\Controllers\TestimonialController::edit/$1');
+    $routes->post('testimonials/update/(:num)', '\App\Modules\AdminArea\Controllers\TestimonialController::update/$1');
+    $routes->get('testimonials/status/(:num)', '\App\Modules\AdminArea\Controllers\TestimonialController::toggleStatus/$1');
+    $routes->get('testimonials/delete/(:num)', '\App\Modules\AdminArea\Controllers\TestimonialController::delete/$1');
     
     // CMS Management
     $routes->group('cms', function ($routes) {
-        $routes->get('dashboard', '\App\Modules\CMS\Controllers\Admin\DashboardController::index');
-        $routes->get('pages', '\App\Modules\CMS\Controllers\Admin\DashboardController::pages');
-        $routes->get('pages/create', '\App\Modules\CMS\Controllers\Admin\DashboardController::createPage');
-        $routes->post('pages/create', '\App\Modules\CMS\Controllers\Admin\DashboardController::storePage');
-        $routes->get('pages/(:num)/edit', '\App\Modules\CMS\Controllers\Admin\DashboardController::editPage/$1');
-        $routes->post('pages/(:num)/update', '\App\Modules\CMS\Controllers\Admin\DashboardController::updatePage/$1');
-        $routes->get('pages/(:num)/delete', '\App\Modules\CMS\Controllers\Admin\DashboardController::deletePage/$1');
+        $routes->get('dashboard', '\App\Modules\AdminArea\Controllers\CMSDashboardController::index');
+        $routes->get('pages', '\App\Modules\AdminArea\Controllers\CMSDashboardController::pages');
+        $routes->get('pages/create', '\App\Modules\AdminArea\Controllers\CMSDashboardController::createPage');
+        $routes->post('pages/create', '\App\Modules\AdminArea\Controllers\CMSDashboardController::storePage');
+        $routes->get('pages/(:num)/edit', '\App\Modules\AdminArea\Controllers\CMSDashboardController::editPage/$1');
+        $routes->post('pages/(:num)/update', '\App\Modules\AdminArea\Controllers\CMSDashboardController::updatePage/$1');
+        $routes->get('pages/(:num)/delete', '\App\Modules\AdminArea\Controllers\CMSDashboardController::deletePage/$1');
         
-        $routes->get('articles', '\App\Modules\CMS\Controllers\Admin\DashboardController::articles');
-        $routes->get('articles/create', '\App\Modules\CMS\Controllers\Admin\DashboardController::createArticle');
-        $routes->post('articles/create', '\App\Modules\CMS\Controllers\Admin\DashboardController::storeArticle');
-        $routes->get('articles/(:num)/edit', '\App\Modules\CMS\Controllers\Admin\DashboardController::editArticle/$1');
-        $routes->post('articles/(:num)/update', '\App\Modules\CMS\Controllers\Admin\DashboardController::updateArticle/$1');
-        $routes->get('articles/(:num)/delete', '\App\Modules\CMS\Controllers\Admin\DashboardController::deleteArticle/$1');
+        $routes->get('articles', '\App\Modules\AdminArea\Controllers\CMSDashboardController::articles');
+        $routes->get('articles/create', '\App\Modules\AdminArea\Controllers\CMSDashboardController::createArticle');
+        $routes->post('articles/create', '\App\Modules\AdminArea\Controllers\CMSDashboardController::storeArticle');
+        $routes->get('articles/(:num)/edit', '\App\Modules\AdminArea\Controllers\CMSDashboardController::editArticle/$1');
+        $routes->post('articles/(:num)/update', '\App\Modules\AdminArea\Controllers\CMSDashboardController::updateArticle/$1');
+        $routes->get('articles/(:num)/delete', '\App\Modules\AdminArea\Controllers\CMSDashboardController::deleteArticle/$1');
         
-        $routes->get('categories', '\App\Modules\CMS\Controllers\Admin\DashboardController::categories');
-        $routes->post('categories/create', '\App\Modules\CMS\Controllers\Admin\DashboardController::storeCategory');
-        $routes->get('categories/(:num)/delete', '\App\Modules\CMS\Controllers\Admin\DashboardController::deleteCategory/$1');
+        $routes->get('categories', '\App\Modules\AdminArea\Controllers\CMSDashboardController::categories');
+        $routes->post('categories/create', '\App\Modules\AdminArea\Controllers\CMSDashboardController::storeCategory');
+        $routes->get('categories/(:num)/delete', '\App\Modules\AdminArea\Controllers\CMSDashboardController::deleteCategory/$1');
         
-        $routes->get('tags', '\App\Modules\CMS\Controllers\Admin\DashboardController::tags');
-        $routes->post('tags/create', '\App\Modules\CMS\Controllers\Admin\DashboardController::storeTag');
-        $routes->get('tags/(:num)/delete', '\App\Modules\CMS\Controllers\Admin\DashboardController::deleteTag/$1');
+        $routes->get('tags', '\App\Modules\AdminArea\Controllers\CMSDashboardController::tags');
+        $routes->post('tags/create', '\App\Modules\AdminArea\Controllers\CMSDashboardController::storeTag');
+        $routes->get('tags/(:num)/delete', '\App\Modules\AdminArea\Controllers\CMSDashboardController::deleteTag/$1');
     });
-    $routes->post('cms/upload-image', '\App\Modules\CMS\Controllers\Admin\DashboardController::uploadImage');
+    $routes->post('cms/upload-image', '\App\Modules\AdminArea\Controllers\CMSDashboardController::uploadImage');
 });
 
 // ================================================================
@@ -226,27 +226,27 @@ $routes->get('product/search', '\App\Modules\FrontArea\Controllers\ProductsContr
 $routes->get('product/(:any)', '\App\Modules\FrontArea\Controllers\ProductsController::detail/$1');
 
 // ================================================================
-// SERVICE (detail)
+// SERVICE (FrontArea)
 // ================================================================
 $routes->group('service', function ($routes) {
-    $routes->get('(:any)', 'Service\Controllers\ServiceController::detail/$1');
-    $routes->post('(:any)/quote', 'Service\Controllers\ServiceController::requestQuote/$1');
+    $routes->get('(:any)', '\App\Modules\FrontArea\Controllers\ServiceController::detail/$1');
+    $routes->post('(:any)/quote', '\App\Modules\FrontArea\Controllers\ServiceController::requestQuote/$1');
 });
 
 // ================================================================
-// BLOG (detail)
+// BLOG (FrontArea)
 // ================================================================
 $routes->group('blog', function ($routes) {
-    $routes->get('search', 'Blog\Controllers\BlogController::search');
-    $routes->get('(:any)', 'Blog\Controllers\BlogController::detail/$1');
+    $routes->get('search', '\App\Modules\FrontArea\Controllers\BlogController::search');
+    $routes->get('(:any)', '\App\Modules\FrontArea\Controllers\BlogController::detail/$1');
 });
 
 // ================================================================
-// PORTFOLIO (detail)
+// PORTFOLIO (FrontArea)
 // ================================================================
 $routes->group('portfolio', function ($routes) {
-    $routes->get('category/(:any)', 'Portfolio\Controllers\PortfolioController::category/$1');
-    $routes->get('(:any)', 'Portfolio\Controllers\PortfolioController::detail/$1');
+    $routes->get('category/(:any)', '\App\Modules\FrontArea\Controllers\PortfolioController::category/$1');
+    $routes->get('(:any)', '\App\Modules\FrontArea\Controllers\PortfolioController::detail/$1');
 });
 
 // ================================================================

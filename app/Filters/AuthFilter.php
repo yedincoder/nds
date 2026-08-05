@@ -10,7 +10,7 @@ class AuthFilter implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
-        $authService = new \App\Modules\Authentication\Services\AuthService();
+        $authService = new \App\Modules\Auth\Services\AuthService();
 
         if (!$authService->isLoggedIn()) {
             return redirect()->to('auth/login')

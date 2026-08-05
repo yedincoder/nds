@@ -3,7 +3,7 @@
 namespace App\Modules\ClientArea\Controllers;
 
 use App\Controllers\BaseController;
-use App\Modules\Support\Services\SupportService;
+use App\Modules\AdminArea\Services\SupportService;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class SupportController extends BaseController

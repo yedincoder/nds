@@ -3,7 +3,7 @@
 namespace App\Modules\ClientArea\Controllers;
 
 use App\Controllers\BaseController;
-use App\Modules\Order\Services\OrderService;
+use App\Modules\FrontArea\Services\OrderService;
 
 class OrderController extends BaseController
 {

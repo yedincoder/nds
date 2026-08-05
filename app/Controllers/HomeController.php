@@ -3,8 +3,8 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Modules\Payment\Models\TransactionModel;
-use App\Modules\Payment\Models\PaymentMethodModel;
+use App\Modules\FrontArea\Models\TransactionModel;
+use App\Modules\FrontArea\Models\PaymentMethodModel;
 
 class HomeController extends BaseController
 {
