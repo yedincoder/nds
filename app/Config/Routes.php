@@ -142,6 +142,7 @@ $routes->group('admin', ['filter' => 'permission:users.read'], function ($routes
     $routes->get('invoices', '\App\Modules\AdminArea\Controllers\AdminDashboardController::invoices');
     $routes->get('reports', '\App\Modules\AdminArea\Controllers\AdminDashboardController::reports');
     $routes->get('settings', '\App\Modules\AdminArea\Controllers\AdminDashboardController::settings');
+    $routes->post('settings/update', '\App\Modules\AdminArea\Controllers\AdminDashboardController::updateSettings');
     $routes->post('settings/factory-reset', '\App\Modules\AdminArea\Controllers\AdminDashboardController::factoryReset');
     $routes->get('payments', '\App\Modules\AdminArea\Controllers\AdminDashboardController::payments');
     $routes->get('media', '\App\Modules\AdminArea\Controllers\MediaController::index');
@@ -194,6 +195,11 @@ $routes->group('admin', ['filter' => 'permission:users.read'], function ($routes
         $routes->get('edit/(:num)', '\App\Modules\AdminArea\Controllers\ServiceController::edit/$1');
         $routes->post('update/(:num)', '\App\Modules\AdminArea\Controllers\ServiceController::update/$1');
         $routes->get('delete/(:num)', '\App\Modules\AdminArea\Controllers\ServiceController::delete/$1');
+        $routes->get('(:num)/package/create', '\App\Modules\AdminArea\Controllers\ServiceController::packageCreate/$1');
+        $routes->post('(:num)/package/create', '\App\Modules\AdminArea\Controllers\ServiceController::packageStore/$1');
+        $routes->get('(:num)/package/edit/(:num)', '\App\Modules\AdminArea\Controllers\ServiceController::packageEdit/$1/$2');
+        $routes->post('(:num)/package/update/(:num)', '\App\Modules\AdminArea\Controllers\ServiceController::packageUpdate/$1/$2');
+        $routes->get('(:num)/package/delete/(:num)', '\App\Modules\AdminArea\Controllers\ServiceController::packageDelete/$1/$2');
     });
     
     // Testimonials

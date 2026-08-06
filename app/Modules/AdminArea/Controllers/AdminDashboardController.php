@@ -403,4 +403,59 @@ class AdminDashboardController extends AdminBaseController
         return redirect()->to('/admin/settings')
             ->with('success', 'Database berhasil di-rebuild (factory reset).');
     }
+
+    public function updateSettings()
+    {
+        if ($this->request->getMethod() !== 'post') {
+            return redirect()->to('/admin/settings')
+                ->with('error', 'Invalid request.');
+        }
+
+        $db = \Config\Database::connect();
+
+        // Save/update app settings in the settings table
+        $fields = [
+            'site_name' => 'Site Name',
+            'site_description' => 'Site Description',
+            'contact_email' => 'Contact Email',
+            'phone_number' => 'Phone Number',
+            'currency' => 'Currency',
+            'timezone' => 'Timezone',
+        ];
+
+        foreach ($fields as $key => $label) {
+            $value = $this->request->getPost($key);
+            $existing = $db->table('settings')->where('key', $key)->get()->getRow();
+            if ($existing) {
+                $db->table('settings')->where('id', $existing->id)->update(['value' => $value, 'updated_at' => date('Y-m-d H:i:s')]);
+            } else {
+                $db->table('settings')->insert([
+                    'uuid' => date('YmdHis') . substr(md5(uniqid('', true)), 0, 8),
+                    'group' => 'general',
+                    'key' => $key,
+                    'value' => $value,
+                    'type' => 'string',
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ]);
+            }
+        }
+
+        // Log activity
+        try {
+            $db->table('activity_logs')->insert([
+                'uuid' => date('YmdHis') . substr(md5(uniqid('', true)), 0, 8),
+                'user_id' => session()->get('user_id'),
+                'activity_type' => 'settings_update',
+                'description' => 'Settings updated',
+                'ip_address' => $this->request->getIPAddress(),
+                'created_at' => date('Y-m-d H:i:s'),
+            ]);
+        } catch (\Throwable $e) {
+            // ignore log failure
+        }
+
+        return redirect()->to('/admin/settings')
+            ->with('success', 'Settings saved successfully.');
+    }
 }

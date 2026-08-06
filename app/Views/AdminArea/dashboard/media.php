@@ -48,9 +48,9 @@
                         <?php foreach ($media as $i => $m): ?>
                             <tr>
                                 <td><?= $i + 1 ?></td>
-                                <td><strong><?= esc($m->filename ?? '-') ?></strong></td>
+                                <td><strong><?= esc($m->file_name ?? '-') ?></strong></td>
                                 <td><?= esc($m->mime_type ?? '-') ?></td>
-                                <td><?= number_format(($m->size ?? 0) / 1024, 1) ?> KB</td>
+                                <td><?= number_format(($m->file_size ?? 0) / 1024, 1) ?> KB</td>
                                 <td><?= date('d M Y', strtotime($m->created_at ?? '')) ?></td>
                                 <td>
                                     <div class="btn-group">

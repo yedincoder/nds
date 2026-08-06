@@ -157,4 +157,90 @@ class ServiceController extends \App\Controllers\AdminBaseController
         return redirect()->to('/admin/services')
             ->with('success', 'Service deleted successfully.');
     }
+
+    // ===================== SERVICE PACKAGES =====================
+    public function packageCreate(int $serviceId): string|RedirectResponse
+    {
+        $service = $this->serviceModel->find($serviceId);
+        if (!$service) {
+            return redirect()->to('/admin/services')
+                ->with('error', 'Service not found.');
+        }
+
+        $data = [
+            'title' => 'Add Service Package',
+            'page'  => 'admin/services',
+            'service' => $service,
+        ];
+
+        return view('AdminArea/dashboard/package_form', $data);
+    }
+
+    public function packageStore(int $serviceId): RedirectResponse
+    {
+        $service = $this->serviceModel->find($serviceId);
+        if (!$service) {
+            return redirect()->to('/admin/services')
+                ->with('error', 'Service not found.');
+        }
+
+        $db = \Config\Database::connect();
+        $db->table('service_packages')->insert([
+            'uuid' => date('YmdHis') . substr(md5(uniqid('', true)), 0, 8),
+            'service_id' => $serviceId,
+            'package_name' => $this->request->getPost('package_name'),
+            'description' => $this->request->getPost('description'),
+            'price' => $this->request->getPost('price') ?: 0,
+        ]);
+
+        return redirect()->to('/admin/services/edit/' . $serviceId)
+            ->with('success', 'Package added successfully.');
+    }
+
+    public function packageEdit(int $serviceId, int $packageId): string|RedirectResponse
+    {
+        $db = \Config\Database::connect();
+        $package = $db->table('service_packages')->where('id', $packageId)->where('service_id', $serviceId)->get()->getRow();
+        if (!$package) {
+            return redirect()->to('/admin/services/edit/' . $serviceId)
+                ->with('error', 'Package not found.');
+        }
+
+        $data = [
+            'title' => 'Edit Service Package',
+            'page'  => 'admin/services',
+            'service' => $this->serviceModel->find($serviceId),
+            'package' => $package,
+        ];
+
+        return view('AdminArea/dashboard/package_form', $data);
+    }
+
+    public function packageUpdate(int $serviceId, int $packageId): RedirectResponse
+    {
+        $db = \Config\Database::connect();
+        $package = $db->table('service_packages')->where('id', $packageId)->where('service_id', $serviceId)->get()->getRow();
+        if (!$package) {
+            return redirect()->to('/admin/services/edit/' . $serviceId)
+                ->with('error', 'Package not found.');
+        }
+
+        $db->table('service_packages')->where('id', $packageId)->update([
+            'package_name' => $this->request->getPost('package_name'),
+            'description' => $this->request->getPost('description'),
+            'price' => $this->request->getPost('price') ?: 0,
+        ]);
+
+        return redirect()->to('/admin/services/edit/' . $serviceId)
+            ->with('success', 'Package updated successfully.');
+    }
+
+    public function packageDelete(int $serviceId, int $packageId): RedirectResponse
+    {
+        $db = \Config\Database::connect();
+        $db->table('service_packages')->where('id', $packageId)->where('service_id', $serviceId)->delete();
+
+        return redirect()->to('/admin/services/edit/' . $serviceId)
+            ->with('success', 'Package deleted successfully.');
+    }
 }

@@ -7,7 +7,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/admin/dashboard">Admin</a></li>
-            <li class="breadcrumb-item"><a href="/admin/testimonial">Testimonials</a></li>
+            <li class="breadcrumb-item"><a href="/admin/testimonials">Testimonials</a></li>
             <li class="breadcrumb-item active"><?= !empty($testimonial) ? 'Edit' : 'Add' ?></li>
         </ol>
     </nav>
@@ -87,7 +87,7 @@
             </div>
             <div class="d-flex gap-2 mt-4">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i><?= !empty($testimonial->id) ? 'Update' : 'Save' ?> Testimonial</button>
-                <a href="/admin/testimonial" class="btn btn-secondary">Cancel</a>
+                <a href="/admin/testimonials" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div>
