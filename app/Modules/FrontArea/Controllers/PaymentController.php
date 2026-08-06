@@ -59,7 +59,7 @@ class PaymentController extends BaseController
                     'error' => $paymentResult['message'],
                 ];
 
-                return view('payment/process', $data);
+                return view('FrontArea/payment/process', $data);
             }
 
             // Redirect user DIRECTLY to Midtrans hosted payment page
@@ -98,7 +98,7 @@ class PaymentController extends BaseController
             'paymentMethods' => $this->paymentService->getPaymentMethods()['data'] ?? [],
         ];
 
-        return view('payment/process', $data);
+        return view('FrontArea/payment/process', $data);
     }
 
     public function success(string $transactionId)

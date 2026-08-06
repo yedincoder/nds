@@ -117,7 +117,7 @@ class ServiceController extends \App\Controllers\AdminBaseController
             'status' => 'required|in_list[draft,active,inactive,archived]',
         ];
 
-        if (!$this->validate($rules)) {
+        if (!$this->validate($rules, [], $this->request->getPost() + ['id' => $id])) {
             return redirect()->back()
                 ->with('errors', $this->validator->getErrors())
                 ->withInput();

@@ -39,11 +39,12 @@ class MediaController extends AdminBaseController
         $db = \Config\Database::connect();
         $db->table('media')->insert([
             'uuid' => $this->generateUuid(),
-            'filename' => $newName,
+            'file_name' => $newName,
+            'file_path' => 'uploads/media/' . $newName,
             'original_name' => $file->getClientName(),
             'mime_type' => $file->getClientMimeType(),
-            'size' => $file->getSize(),
-            'path' => 'uploads/media/' . $newName,
+            'file_size' => $file->getSize(),
+            'file_type' => $file->getClientMimeType(),
             'created_at' => date('Y-m-d H:i:s'),
         ]);
 

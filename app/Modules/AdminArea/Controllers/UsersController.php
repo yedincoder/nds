@@ -123,7 +123,7 @@ class UsersController extends \App\Controllers\AdminBaseController
             $rules['password'] = 'min_length[8]|max_length[255]';
         }
 
-        if (!$this->validate($rules)) {
+        if (!$this->validate($rules, [], $this->request->getPost() + ['id' => $id])) {
             return redirect()->back()
                 ->with('errors', $this->validator->getErrors())
                 ->withInput();

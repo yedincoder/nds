@@ -6,6 +6,7 @@ use App\Modules\FrontArea\Models\ArticleModel;
 use App\Modules\FrontArea\Models\CategoryModel;
 use App\Modules\FrontArea\Models\TagModel;
 use App\Controllers\AdminBaseController;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class CMSDashboardController extends \App\Controllers\AdminBaseController
 {
@@ -380,7 +381,7 @@ class CMSDashboardController extends \App\Controllers\AdminBaseController
             'slug' => 'required|min_length[2]|max_length[100]|is_unique[tags.slug,id,{id}]',
         ];
 
-        if (!$this->validate($rules)) {
+        if (!$this->validate($rules, [], $this->request->getPost() + ['id' => $id])) {
             return redirect()->back()
                 ->with('errors', $this->validator->getErrors())
                 ->withInput();
