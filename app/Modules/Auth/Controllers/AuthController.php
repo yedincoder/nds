@@ -75,15 +75,16 @@ class AuthController extends BaseController
             'username' => $user->username,
             'email' => $user->email,
             'role' => $roleSlug,
+            'user_role' => $roleSlug,
         ]);
 
         $db->table('users')->where('id', $user->id)->update([
             'last_login_at' => date('Y-m-d H:i:s'),
         ]);
 
-        $isAdmin = in_array($roleSlug, ['super-administrator', 'administrator'], true);
+        $isAdmin = in_array($roleSlug, ['super-administrator', 'administrator', 'mitra'], true);
 
-        return redirect()->to($isAdmin ? 'admin/dashboard' : 'client/dashboard')
+        return redirect()->to($isAdmin ? ($roleSlug === 'mitra' ? 'mitra/dashboard' : 'admin/dashboard') : 'client/dashboard')
             ->with('success', 'Login successful');
     }
 
