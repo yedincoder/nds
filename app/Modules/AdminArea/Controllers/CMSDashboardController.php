@@ -379,6 +379,7 @@ class CMSDashboardController extends \App\Controllers\AdminBaseController
         $rules = [
             'name' => 'required|min_length[2]|max_length[100]',
             'slug' => 'required|min_length[2]|max_length[100]|is_unique[tags.slug,id,{id}]',
+            'id'   => 'permit_empty|integer',
         ];
 
         $validationData = $this->request->getPost();

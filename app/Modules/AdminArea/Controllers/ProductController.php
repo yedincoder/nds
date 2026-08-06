@@ -162,6 +162,7 @@ class ProductController extends \App\Controllers\AdminBaseController
             'status' => 'required|in_list[draft,active,inactive,archived]',
             'price' => 'permit_empty|decimal',
             'discount_price' => 'permit_empty|decimal',
+            'id' => 'permit_empty|integer',
         ];
 
         $validationData = $this->request->getPost();

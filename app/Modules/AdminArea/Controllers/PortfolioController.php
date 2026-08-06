@@ -106,6 +106,7 @@ class PortfolioController extends \App\Controllers\AdminBaseController
             'title' => 'required|min_length[2]|max_length[255]',
             'slug' => 'required|min_length[2]|max_length[255]|is_unique[portfolios.slug,id,{id}]',
             'status' => 'required|in_list[draft,published,featured,archived]',
+            'id' => 'permit_empty|integer',
         ];
 
         $validationData = $this->request->getPost();

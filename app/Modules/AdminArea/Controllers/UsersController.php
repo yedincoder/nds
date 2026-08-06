@@ -116,6 +116,7 @@ class UsersController extends \App\Controllers\AdminBaseController
             'username' => 'required|min_length[3]|max_length[100]|is_unique[users.username,id,{id}]',
             'email'    => 'required|valid_email|max_length[255]|is_unique[users.email,id,{id}]',
             'status'   => 'required|in_list[active,inactive,suspended]',
+            'id'       => 'permit_empty|integer',
         ];
 
         $password = $this->request->getPost('password');

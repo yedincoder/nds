@@ -115,6 +115,7 @@ class ServiceController extends \App\Controllers\AdminBaseController
             'name' => 'required|min_length[2]|max_length[255]',
             'slug' => 'required|min_length[2]|max_length[255]|is_unique[services.slug,id,{id}]',
             'status' => 'required|in_list[draft,active,inactive,archived]',
+            'id' => 'permit_empty|integer',
         ];
 
         $validationData = $this->request->getPost();
