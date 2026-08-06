@@ -175,17 +175,17 @@
                                             <div class="text-success"><?= number_format($orderStatus['pending']) ?></div>
                                         </div>
                                         <div class="progress">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: <?= min(100, (($orderStatus['pending'] ?? 0) / ((($orderStatus['pending'] ?? 0) + ($orderStatus['pending_invoices'] ?? 0)) ?: 1)) * 100) ?>%"></div>
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: <?= min(100, (($stats['pending_orders'] ?? 0) / ($stats['total_orders'] ?: 1)) * 100) ?>%"></div>
                                         </div>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="d-flex justify-content-between">
                                     <div>Waiting Payment</div>
-                                    <div class="text-success"><?= number_format($orderStatus['pending_invoices']) ?></div>
+                                    <div class="text-success"><?= number_format($stats['pending_invoices'] ?? 0) ?></div>
                                 </div>
                                 <div class="progress">
-                                    <div class="progress-bar bg-warning" role="progressbar" style="width: <?= min(100, ($orderStatus['pending_invoices'] / $orderStatus['total_orders'] ?? 1) * 100) ?>%"></div>
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: <?= min(100, (($stats['pending_invoices'] ?? 0) / ($stats['total_orders'] ?: 1)) * 100) ?>%"></div>
                                 </div>
                             </div>
                         </div>
@@ -203,7 +203,7 @@
                                             <div class="text-success"><?= number_format($paymentStatus['success']) ?></div>
                                         </div>
                                         <div class="progress">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: <?= (empty($paymentStatus['success']) ? 0 : ($paymentStatus['success'] / ($paymentStatus['success'] + $paymentStatus['unpaid'] ?? 1) * 100)) ?>%"></div>
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: <?= (empty($paymentStatus['success']) ? 0 : ($paymentStatus['success'] / (($paymentStatus['success'] ?? 0) + ($paymentStatus['unpaid'] ?? 0)) ?: 1) * 100) ?>%"></div>
                                         </div>
                                     </div>
                                 </div>
