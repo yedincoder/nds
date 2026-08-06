@@ -24,7 +24,7 @@ class PaymentController extends BaseController
             'payments' => $result['data']['payments'] ?? [],
         ];
 
-        return view('payment/index', $data);
+        return view('FrontArea/payment/index', $data);
     }
 
     public function process(string $invoiceId)

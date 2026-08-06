@@ -35,7 +35,7 @@ class PortfolioController extends BaseController
             'categories' => $this->portfolioService->getCategories()['data'] ?? [],
         ];
 
-        return view('Portfolio/index', $data);
+        return view('FrontArea/Portfolio/index', $data);
     }
 
     public function detail(string $slug)
@@ -51,7 +51,7 @@ class PortfolioController extends BaseController
             'portfolio' => $result['data'],
         ];
 
-        return view('Portfolio/detail', $data);
+        return view('FrontArea/Portfolio/detail', $data);
     }
 
     public function category(string $slug)
@@ -75,6 +75,7 @@ class PortfolioController extends BaseController
             'category' => $result['data']['category'] ?? null,
         ];
 
-        return view('Portfolio/index', $data);
+        return view('FrontArea/Portfolio/index', $data);
     }
 }
+

@@ -72,7 +72,7 @@ class HomeController extends BaseController
             'serviceColors' => $serviceColors,
         ];
 
-        return view('home', $data);
+        return view('FrontArea/home/index', $data);
     }
 
     public function about(): string
@@ -86,7 +86,7 @@ class HomeController extends BaseController
             'total_articles'  => $db->table('articles')->where('status', 'published')->countAllResults(),
         ];
 
-        return view('about', ['title' => 'About Us', 'page' => 'about', 'stats' => $stats]);
+        return view('FrontArea/about', ['title' => 'About Us', 'page' => 'about', 'stats' => $stats]);
     }
 
     public function services(): string
@@ -101,7 +101,7 @@ class HomeController extends BaseController
             ->get()
             ->getResult();
 
-        return view('services', ['title' => 'Our Services', 'page' => 'services', 'services' => $services]);
+        return view('FrontArea/services', ['title' => 'Our Services', 'page' => 'services', 'services' => $services]);
     }
 
     public function products(): string
@@ -117,7 +117,7 @@ class HomeController extends BaseController
             ->get()
             ->getResult();
 
-        return view('products', ['title' => 'Our Products', 'page' => 'products', 'products' => $products]);
+        return view('FrontArea/products', ['title' => 'Our Products', 'page' => 'products', 'products' => $products]);
     }
 
     public function portfolio(): string
@@ -131,7 +131,7 @@ class HomeController extends BaseController
             ->get()
             ->getResult();
 
-        return view('portfolio', ['title' => 'Our Portfolio', 'page' => 'portfolio', 'portfolios' => $portfolios]);
+        return view('FrontArea/portfolio', ['title' => 'Our Portfolio', 'page' => 'portfolio', 'portfolios' => $portfolios]);
     }
 
     public function portfolioDetail(string $slug): string
@@ -150,7 +150,7 @@ class HomeController extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        return view('portfolio_detail', [
+        return view('FrontArea/portfolio_detail', [
             'title' => $portfolio->title ?? 'Portfolio',
             'page' => 'portfolio',
             'portfolio' => $portfolio,
@@ -175,12 +175,12 @@ class HomeController extends BaseController
             ->get()
             ->getResult();
 
-        return view('blog', ['title' => 'Blog', 'page' => 'blog', 'articles' => $articles, 'categories' => $categories]);
+        return view('FrontArea/blog', ['title' => 'Blog', 'page' => 'blog', 'articles' => $articles, 'categories' => $categories]);
     }
 
     public function contact(): string
     {
-        return view('contact', ['title' => 'Contact Us', 'page' => 'contact']);
+        return view('FrontArea/contact', ['title' => 'Contact Us', 'page' => 'contact']);
     }
 
     public function contactStore()
