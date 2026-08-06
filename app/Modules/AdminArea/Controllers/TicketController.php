@@ -2,10 +2,10 @@
 
 namespace App\Modules\AdminArea\Controllers;
 
-use App\Controllers\BaseController;
+use App\Controllers\AdminBaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class TicketController extends BaseController
+class TicketController extends AdminBaseController
 {
     public function index(): string
     {
@@ -22,7 +22,7 @@ class TicketController extends BaseController
             'tickets' => $tickets,
         ];
 
-        return view('Dashboard/support', $data);
+        return view('AdminArea/dashboard/support', $data);
     }
 
     public function create()
@@ -64,7 +64,7 @@ class TicketController extends BaseController
             'categories' => $db->table('categories')->get()->getResult(),
         ];
 
-        return view('Dashboard/support_create', $data);
+        return view('AdminArea/dashboard/support_create', $data);
     }
 
     public function detail(string $ticketId)
@@ -103,7 +103,7 @@ class TicketController extends BaseController
             'replies' => $replies,
         ];
 
-        return view('Dashboard/support_detail', $data);
+        return view('AdminArea/dashboard/support_detail', $data);
     }
 
     public function close(string $ticketId)

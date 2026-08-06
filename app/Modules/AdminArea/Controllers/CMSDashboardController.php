@@ -5,10 +5,9 @@ use App\Modules\FrontArea\Models\PageModel;
 use App\Modules\FrontArea\Models\ArticleModel;
 use App\Modules\FrontArea\Models\CategoryModel;
 use App\Modules\FrontArea\Models\TagModel;
-use CodeIgniter\HTTP\RedirectResponse;
-use CodeIgniter\HTTP\ResponseInterface;
+use App\Controllers\AdminBaseController;
 
-class CMSDashboardController extends \App\Controllers\BaseController
+class CMSDashboardController extends \App\Controllers\AdminBaseController
 {
     protected PageModel $pageModel;
     protected ArticleModel $articleModel;
@@ -37,7 +36,7 @@ class CMSDashboardController extends \App\Controllers\BaseController
             'recent_articles' => $this->articleModel->orderBy('created_at', 'DESC')->limit(5)->findAll(),
         ];
 
-        return view('Dashboard/cms_dashboard', $data);
+        return view('AdminArea/cms/index', $data);
     }
 
     // ==============================
@@ -56,7 +55,7 @@ class CMSDashboardController extends \App\Controllers\BaseController
             'pager' => $this->pageModel->pager,
         ];
 
-        return view('Dashboard/cms_pages', $data);
+        return view('AdminArea/cms/pages', $data);
     }
 
     public function createPage(): string
@@ -66,7 +65,7 @@ class CMSDashboardController extends \App\Controllers\BaseController
             'categories' => $this->categoryModel->findAll(),
         ];
 
-        return view('Dashboard/cms_page_form', $data);
+        return view('AdminArea/cms/page_form', $data);
     }
 
     public function storePage(): RedirectResponse
@@ -111,7 +110,7 @@ class CMSDashboardController extends \App\Controllers\BaseController
             'categories' => $this->categoryModel->findAll(),
         ];
 
-        return view('Dashboard/cms_page_form', $data);
+        return view('AdminArea/cms/page_form', $data);
     }
 
     public function updatePage($id = null): RedirectResponse
@@ -149,7 +148,7 @@ class CMSDashboardController extends \App\Controllers\BaseController
             'pager' => $this->articleModel->pager,
         ];
 
-        return view('Dashboard/cms_articles', $data);
+        return view('AdminArea/cms/articles', $data);
     }
 
     public function createArticle(): string
@@ -160,7 +159,7 @@ class CMSDashboardController extends \App\Controllers\BaseController
             'tags' => $this->tagModel->findAll(),
         ];
 
-        return view('Dashboard/cms_article_form', $data);
+        return view('AdminArea/cms/article_form', $data);
     }
 
     public function storeArticle(): RedirectResponse
@@ -214,7 +213,7 @@ class CMSDashboardController extends \App\Controllers\BaseController
             'tags' => $this->tagModel->findAll(),
         ];
 
-        return view('Dashboard/cms_article_form', $data);
+        return view('AdminArea/cms/article_form', $data);
     }
 
     public function updateArticle($id = null): RedirectResponse
@@ -252,7 +251,7 @@ class CMSDashboardController extends \App\Controllers\BaseController
             'categories' => $this->categoryModel->findAll(),
         ];
 
-        return view('Dashboard/cms_categories', $data);
+        return view('AdminArea/cms/categories', $data);
     }
 
     public function createCategory(): RedirectResponse
@@ -285,7 +284,7 @@ class CMSDashboardController extends \App\Controllers\BaseController
             'tags' => $this->tagModel->findAll(),
         ];
 
-        return view('Dashboard/cms_tags', $data);
+        return view('AdminArea/cms/tags', $data);
     }
 
     public function createTag(): RedirectResponse

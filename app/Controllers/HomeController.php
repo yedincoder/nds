@@ -72,7 +72,7 @@ class HomeController extends BaseController
             'serviceColors' => $serviceColors,
         ];
 
-        return view('welcome_message', $data);
+        return view('home', $data);
     }
 
     public function about(): string

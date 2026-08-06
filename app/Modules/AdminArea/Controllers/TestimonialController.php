@@ -2,11 +2,11 @@
 
 namespace App\Modules\AdminArea\Controllers;
 
-use App\Controllers\BaseController;
+use App\Controllers\AdminBaseController;
 use App\Modules\AdminArea\Models\TestimonialModel;
 use CodeIgniter\HTTP\RedirectResponse;
 
-class TestimonialController extends BaseController
+class TestimonialController extends AdminBaseController
 {
     protected TestimonialModel $testimonialModel;
 
@@ -40,7 +40,7 @@ class TestimonialController extends BaseController
             ],
         ];
 
-        return view('Testimonial/index', $data);
+        return view('AdminArea/Testimonial/index', $data);
     }
 
     public function create(): string
@@ -48,7 +48,7 @@ class TestimonialController extends BaseController
         $data = [
             'title' => 'Add Testimonial',
         ];
-        return view('Testimonial/form', $data);
+        return view('AdminArea/Testimonial/form', $data);
     }
 
     public function store(): RedirectResponse
@@ -97,7 +97,7 @@ class TestimonialController extends BaseController
             'title' => 'Edit Testimonial',
             'testimonial' => $testimonial,
         ];
-        return view('Testimonial/form', $data);
+        return view('AdminArea/Testimonial/form', $data);
     }
 
     public function update($id = null): RedirectResponse

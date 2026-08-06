@@ -8,7 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 // LANDING PAGE
 // ================================================================
 $routes->get('/', 'HomeController::index');
-$routes->get('/about', 'HomeController::about');
+$routes->get('/about', '\App\Modules\FrontArea\Controllers\PageController::about');
 $routes->get('/services', 'HomeController::services');
 $routes->get('/products', '\App\Modules\FrontArea\Controllers\ProductsController::index');
 $routes->get('/portfolio', 'HomeController::portfolio');

@@ -2,10 +2,10 @@
 
 namespace App\Modules\AdminArea\Controllers;
 
-use App\Controllers\BaseController;
+use App\Controllers\AdminBaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class MediaController extends BaseController
+class MediaController extends AdminBaseController
 {
     public function index(): string
     {
@@ -20,7 +20,7 @@ class MediaController extends BaseController
             'media' => $media,
         ];
 
-        return view('Dashboard/media', $data);
+        return view('AdminArea/dashboard/media', $data);
     }
 
     public function upload(): ResponseInterface

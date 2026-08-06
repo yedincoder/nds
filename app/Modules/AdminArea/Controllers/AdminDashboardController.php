@@ -2,13 +2,13 @@
 
 namespace App\Modules\AdminArea\Controllers;
 
-use App\Controllers\BaseController;
+use App\Controllers\AdminBaseController;
 use App\Modules\FrontArea\Models\ProductModel;
 use App\Modules\FrontArea\Models\OrderModel;
 use App\Modules\ClientArea\Models\UserProfileModel;
 use App\Modules\FrontArea\Models\InvoiceModel;
 
-class AdminDashboardController extends BaseController
+class AdminDashboardController extends AdminBaseController
 {
     protected ProductModel $productModel;
     protected OrderModel $orderModel;
@@ -162,7 +162,7 @@ class AdminDashboardController extends BaseController
             'recentActivity'    => $recentActivity,
         ];
 
-        return view('Dashboard/dashboard', $data);
+        return view('AdminArea/dashboard/index', $data);
     }
 
     public function customers()
@@ -181,7 +181,7 @@ class AdminDashboardController extends BaseController
             'pager' => $this->userProfileModel->pager,
         ];
 
-        return view('Dashboard/customers', $data);
+        return view('AdminArea/dashboard/customers', $data);
     }
 
     public function products()
@@ -198,7 +198,7 @@ class AdminDashboardController extends BaseController
             'pager' => $this->productModel->pager,
         ];
 
-        return view('Dashboard/products', $data);
+        return view('AdminArea/dashboard/products', $data);
     }
 
     public function orders()
@@ -215,7 +215,7 @@ class AdminDashboardController extends BaseController
             'pager' => $this->orderModel->pager,
         ];
 
-        return view('Dashboard/orders', $data);
+        return view('AdminArea/dashboard/orders', $data);
     }
 
     public function invoices()
@@ -232,7 +232,7 @@ class AdminDashboardController extends BaseController
             'pager' => $this->invoiceModel->pager,
         ];
 
-        return view('Dashboard/invoices', $data);
+        return view('AdminArea/dashboard/invoices', $data);
     }
 
     public function payments()
@@ -256,7 +256,7 @@ class AdminDashboardController extends BaseController
             'payments' => $payments,
         ];
 
-        return view('Dashboard/payments', $data);
+        return view('AdminArea/dashboard/payments', $data);
     }
 
     public function services()
@@ -274,7 +274,7 @@ class AdminDashboardController extends BaseController
             'services' => $services,
         ];
 
-        return view('Dashboard/services', $data);
+        return view('AdminArea/dashboard/services', $data);
     }
 
     public function portfolio()
@@ -290,7 +290,7 @@ class AdminDashboardController extends BaseController
             'portfolios' => $portfolios,
         ];
 
-        return view('Dashboard/portfolio', $data);
+        return view('AdminArea/dashboard/portfolio', $data);
     }
 
     public function reports()
@@ -327,7 +327,7 @@ class AdminDashboardController extends BaseController
             'revenueChart' => $revenueChart,
         ];
 
-        return view('Dashboard/reports', $data);
+        return view('AdminArea/dashboard/reports', $data);
     }
 
     public function settings()
@@ -336,6 +336,6 @@ class AdminDashboardController extends BaseController
             'title' => 'Settings',
         ];
 
-        return view('Dashboard/settings', $data);
+        return view('AdminArea/dashboard/settings', $data);
     }
 }
