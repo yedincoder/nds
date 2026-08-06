@@ -315,4 +315,41 @@ class CMSDashboardController extends \App\Controllers\AdminBaseController
         return redirect()->to('/admin/cms/tags')
             ->with('success', 'Tag deleted successfully');
     }
+
+    // =====================================================
+    // IMAGE UPLOAD (for WYSIWYG editor)
+    // =====================================================
+    public function uploadImage(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $file = $this->request->getFile('upload');
+        $field = $this->request->getPost('CKEditorFuncNum');
+
+        if (!$file || !$file->isValid()) {
+            $message = 'Invalid file upload.';
+            return $this->response->setBody("<script>window.parent.CKEDITOR.tools.callFunction($field, '', '" . esc($message) . "');</script>");
+        }
+
+        $allowedTypes = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        if (!in_array(strtolower($file->getExtension()), $allowedTypes, true)) {
+            $message = 'Only image files are allowed (jpg, png, gif, webp).';
+            return $this->response->setBody("<script>window.parent.CKEDITOR.tools.callFunction($field, '', '" . esc($message) . "');</script>");
+        }
+
+        $newName = $file->getRandomName();
+        $file->move(WRITEPATH . 'uploads/media', $newName);
+
+        $db = \Config\Database::connect();
+        $db->table('media')->insert([
+            'uuid' => date('YmdHis') . substr(md5(uniqid('', true)), 0, 8),
+            'filename' => $newName,
+            'original_name' => $file->getClientName(),
+            'mime_type' => $file->getClientMimeType(),
+            'size' => $file->getSize(),
+            'path' => 'uploads/media/' . $newName,
+            'created_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        $url = base_url('uploads/media/' . $newName);
+        return $this->response->setBody("<script>window.parent.CKEDITOR.tools.callFunction($field, '$url');</script>");
+    }
 }

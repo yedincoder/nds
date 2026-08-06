@@ -153,8 +153,15 @@ $routes->group('admin', ['filter' => 'permission:users.read'], function ($routes
     $routes->get('support/ticket/(:num)', '\App\Modules\AdminArea\Controllers\TicketController::detail/$1');
     $routes->post('support/ticket/(:num)', '\App\Modules\AdminArea\Controllers\TicketController::detail/$1');
     $routes->get('support/ticket/(:num)/close', '\App\Modules\AdminArea\Controllers\TicketController::close/$1');
-    $routes->get('billing', '\App\Modules\FrontArea\Controllers\BillingController::index');
-    $routes->get('auth', '\App\Modules\Auth\Controllers\AuthController::index');
+    $routes->get('billing', '\App\Modules\AdminArea\Controllers\BillingController::index');
+    $routes->get('billing/(:any)', '\App\Modules\AdminArea\Controllers\BillingController::detail/$1');
+    $routes->get('auth', '\App\Modules\AdminArea\Controllers\UsersController::index');
+    $routes->get('auth/create', '\App\Modules\AdminArea\Controllers\UsersController::create');
+    $routes->post('auth/create', '\App\Modules\AdminArea\Controllers\UsersController::store');
+    $routes->get('auth/edit/(:num)', '\App\Modules\AdminArea\Controllers\UsersController::edit/$1');
+    $routes->post('auth/update/(:num)', '\App\Modules\AdminArea\Controllers\UsersController::update/$1');
+    $routes->get('auth/status/(:num)', '\App\Modules\AdminArea\Controllers\UsersController::toggleStatus/$1');
+    $routes->get('auth/delete/(:num)', '\App\Modules\AdminArea\Controllers\UsersController::delete/$1');
     
     // Testimonials
     $routes->get('testimonials', '\App\Modules\AdminArea\Controllers\TestimonialController::index');
