@@ -19,6 +19,7 @@ class TicketController extends AdminBaseController
 
         $data = [
             'title' => 'Support Tickets',
+            'page'  => 'admin/support',
             'tickets' => $tickets,
         ];
 
@@ -61,6 +62,7 @@ class TicketController extends AdminBaseController
         $db = \Config\Database::connect();
         $data = [
             'title' => 'Create New Ticket',
+            'page'  => 'admin/support',
             'categories' => $db->table('categories')->get()->getResult(),
         ];
 
@@ -99,6 +101,7 @@ class TicketController extends AdminBaseController
 
         $data = [
             'title' => 'Ticket #' . $ticket->ticket_number,
+            'page'  => 'admin/support',
             'ticket' => $ticket,
             'replies' => $replies,
         ];

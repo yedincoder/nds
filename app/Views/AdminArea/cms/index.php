@@ -1,138 +1,137 @@
-<?php
-/** @ var \CodeIgniter\View\View $this */
-?>
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CMS Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #E65C00;
-            --secondary: #1A1A2E;
-            --light-bg: #FFFAF5;
-            --text-dark: #2D2D2D;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Inter, sans-serif; color: var(--text-dark); background: var(--light-bg); }
-        .sidebar { width: 260px; background: var(--secondary); height: 100vh; position: fixed; top: 0; left: 0; z-index: 1000; transition: all 0.3s; }
-        .sidebar.collapsed { width: 70px; }
-        .sidebar-header { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .brand-logo { width: 40px; height: 40px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; margin: 0 auto 12px; }
-        .brand-text { color: white; font-weight: 700; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .sidebar.collapsed .brand-text { display: none; }
-        .nav-section { padding: 0 16px; margin-top: 20px; }
-        .nav-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.4); padding: 0 16px; margin-bottom: 8px; }
-        .nav-link { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: rgba(255,255,255,0.7); text-decoration: none; border-radius: 8px; margin-bottom: 4px; transition: all 0.2s; }
-        .nav-link:hover, .nav-link.active { background: rgba(230,92,0,0.15); color: var(--primary); }
-        .nav-link i { width: 20px; text-align: center; font-size: 1.1rem; }
-        .main-content { margin-left: 260px; padding: 30px; min-height: 100vh; }
-        .topbar { background: white; border-bottom: 1px solid #eee; padding: 16px 32px; position: sticky; top: 0; z-index: 100; }
-        .topbar .user-menu { display: flex; align-items: center; gap: 16px; }
-        .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; }
-        .card { border: 1px solid #eee; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .stat-card { background: #fff; border-radius: 12px; padding: 25px; border: 1px solid #FFE8D6; text-align: center; transition: 0.3s; }
-        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
-        .stat-card .stat-icon { width: 60px; height: 60px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 15px; background: #FFF0E6; color: #E65C00; }
-        .stat-card h3 { font-size: 28px; font-weight: 700; color: #1A1A2E; margin-bottom: 5px; }
-        .stat-card p { color: #6B7B8D; font-size: 13px; margin: 0; }
-        .page-title { font-size: 24px; font-weight: 700; color: #1A1A2E; margin-bottom: 25px; }
-    </style>
-</head>
-<body data-active="cms">
-    <div class="shell d-flex">
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="brand-logo"><i class="fas fa-tachometer-alt"></i></div>
-                <div class="brand-text">NgAppID Admin</div>
+<?= $this->extend('layout/layout_adminarea') ?>
+
+<?= $this->section('content') ?>
+
+<div class="page-title">
+    <h3>CMS Dashboard</h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin/dashboard">Admin</a></li>
+            <li class="breadcrumb-item active">CMS</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:var(--primary-soft);color:var(--primary)"><i class="fas fa-file-alt"></i></div>
+                    <div class="kpi-label">Pages</div>
+                </div>
             </div>
-            <nav class="nav-section">
-                <div class="nav-label">Menu Utama</div>
-                <a class="nav-link" href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-                <a class="nav-link" href="/admin/customers"><i class="fas fa-users"></i><span>Customers</span></a>
-                <a class="nav-link" href="/admin/products"><i class="fas fa-box"></i><span>Products</span></a>
-                <a class="nav-link" href="/admin/orders"><i class="fas fa-shopping-cart"></i><span>Orders</span></a>
-                <a class="nav-link" href="/admin/invoices"><i class="fas fa-file-invoice"></i><span>Invoices</span></a>
-                <a class="nav-link" href="/admin/reports"><i class="fas fa-chart-bar"></i><span>Reports</span></a>
-                <a class="nav-link" href="/admin/settings"><i class="fas fa-cog"></i><span>Settings</span></a>
-                <a class="nav-link" href="/admin/media"><i class="fas fa-images"></i><span>Media</span></a>
-            </nav>
-            <nav class="nav-section">
-                <div class="nav-label">CMS</div>
-                <a class="nav-link active" href="/admin/cms"><i class="fas fa-file-alt"></i><span>CMS Dashboard</span></a>
-                <a class="nav-link" href="/admin/cms/pages"><i class="fas fa-file"></i><span>Pages</span></a>
-                <a class="nav-link" href="/admin/cms/articles"><i class="fas fa-newspaper"></i><span>Articles</span></a>
-            </nav>
-            <nav class="nav-section">
-                <div class="nav-label">Lainnya</div>
-                <a class="nav-link" href="/admin/testimonial"><i class="fas fa-quote-left"></i><span>Testimonials</span></a>
-                <a class="nav-link" href="/admin/support"><i class="fas fa-life-ring"></i><span>Support</span></a>
-                <a class="nav-link" href="/auth/logout"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
-            </nav>
-        </aside>
-        <div class="main-content">
-            <header class="topbar">
-                <button class="sidebar-toggle" data-sidebar-toggle><i class="fas fa-bars"></i></button>
-                <div class="user-menu">
-                    <div class="user-avatar">A</div>
-                    <span class="text-dark">Admin</span>
-                </div>
-            </header>
-            <main class="content" style="padding: 30px;">
-                <div class="page-title mb-4">Admin Dashboard</div>
-                <div class="row g-3 mb-5">
-                    <div class="col-md-3">
-                        <div class="stat-card">
-                            <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
-                            <h3>Content Items</h3>
-                            <p><?= $stats['total_pages'] ?? 0 ?></h3>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="stat-card">
-                            <div class="stat-icon"><i class="fas fa-newspaper"></i></div>
-                            <h3>Articles</h3>
-                            <p><?= $stats['total_articles'] ?? 0 ?></p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="stat-card">
-                            <div class="stat-icon"><i class="fas fa-tags"></i></div>
-                            <h3>Pages</h3>
-                            <p><?= $stats['total_pages'] ?? 0 ?></p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="stat-card">
-                            <div class="stat-icon"><i class="fas fa-tag"></i></div>
-                            <h3>Tags</h3>
-                            <p><?= $stats['total_tags'] ?? 0 ?></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <div class="d-grid gap-3">
-                        <a href="/admin/cms/pages" class="btn btn-primary"><i class="fas fa-file"></i> Manage Pages</a>
-                        <a href="/admin/cms/articles" class="btn btn-primary"><i class="fas fa-newspaper"></i> Manage Articles</a>
-                    </div>
-                </div>
-            </main>
+            <div class="kpi-value"><?= number_format($stats['pages'] ?? 0) ?></div>
+            <div class="kpi-subtext">Total halaman</div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const toggle = document.querySelector("[data-sidebar-toggle]");
-            const sidebar = document.getElementById("sidebar");
-            toggle?.addEventListener("click", function() {
-                sidebar.classList.toggle("collapsed");
-                document.body.classList.toggle("sidebar-collapsed");
-            });
-        });
-    </script>
-</body>
-</html>
-</path>
+    <div class="col-md-3 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:var(--primary-soft);color:var(--primary)"><i class="fas fa-newspaper"></i></div>
+                    <div class="kpi-label">Articles</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['articles'] ?? 0) ?></div>
+            <div class="kpi-subtext">Total artikel</div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:var(--primary-soft);color:var(--primary)"><i class="fas fa-folder"></i></div>
+                    <div class="kpi-label">Categories</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['categories'] ?? 0) ?></div>
+            <div class="kpi-subtext">Total kategori</div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:var(--primary-soft);color:var(--primary)"><i class="fas fa-tags"></i></div>
+                    <div class="kpi-label">Tags</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['tags'] ?? 0) ?></div>
+            <div class="kpi-subtext">Total tag</div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Recent Pages</div>
+                <a href="/admin/cms/pages" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body" style="padding:8px 16px">
+                <?php if (!empty($recent_pages)): ?>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr><th>Title</th><th>Status</th><th>Date</th></tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($recent_pages as $pg): ?>
+                            <tr>
+                                <td><strong><?= esc($pg->title ?? '-') ?></strong></td>
+                                <td>
+                                    <?php $pc = ($pg->status ?? 'draft') === 'published' ? 'bg-success' : 'bg-secondary'; ?>
+                                    <span class="badge <?= $pc ?>"><?= ucfirst(esc($pg->status ?? 'draft')) ?></span>
+                                </td>
+                                <td><?= date('d M Y', strtotime($pg->created_at ?? '')) ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php else: ?>
+                <p class="text-muted text-center py-3">Belum ada halaman</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Recent Articles</div>
+                <a href="/admin/cms/articles" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body" style="padding:8px 16px">
+                <?php if (!empty($recent_articles)): ?>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr><th>Title</th><th>Status</th><th>Date</th></tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($recent_articles as $art): ?>
+                            <tr>
+                                <td><strong><?= esc($art->title ?? '-') ?></strong></td>
+                                <td>
+                                    <?php $ac = match($art->status ?? 'pending') {
+                                        'approved' => 'bg-success', 'pending' => 'bg-warning', default => 'bg-secondary'
+                                    }; ?>
+                                    <span class="badge <?= $ac ?>"><?= ucfirst(esc($art->status ?? 'pending')) ?></span>
+                                </td>
+                                <td><?= date('d M Y', strtotime($art->created_at ?? '')) ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php else: ?>
+                <p class="text-muted text-center py-3">Belum ada artikel</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?= $this->endSection() ?>

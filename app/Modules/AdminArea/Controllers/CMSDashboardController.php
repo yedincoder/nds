@@ -26,6 +26,7 @@ class CMSDashboardController extends \App\Controllers\AdminBaseController
     {
         $data = [
             'title' => 'CMS Dashboard',
+            'page'  => 'admin/cms',
             'stats' => [
                 'pages' => $this->pageModel->countAllResults(),
                 'articles' => $this->articleModel->countAllResults(),
@@ -49,6 +50,7 @@ class CMSDashboardController extends \App\Controllers\AdminBaseController
 
         $data = [
             'title' => 'Manage Pages',
+            'page'  => 'admin/cms/pages',
             'pages' => $this->pageModel->orderBy('created_at', 'DESC')
                 ->limit($perPage, ($page - 1) * $perPage)
                 ->findAll(),
@@ -62,6 +64,7 @@ class CMSDashboardController extends \App\Controllers\AdminBaseController
     {
         $data = [
             'title' => 'Create Page',
+            'page'  => 'admin/cms/pages',
             'categories' => $this->categoryModel->findAll(),
         ];
 
@@ -106,7 +109,8 @@ class CMSDashboardController extends \App\Controllers\AdminBaseController
 
         $data = [
             'title' => 'Edit Page',
-            'page' => $page,
+            'page'  => 'admin/cms/pages',
+            'pageData' => $page,
             'categories' => $this->categoryModel->findAll(),
         ];
 
@@ -142,6 +146,7 @@ class CMSDashboardController extends \App\Controllers\AdminBaseController
 
         $data = [
             'title' => 'Manage Articles',
+            'page'  => 'admin/cms/articles',
             'articles' => $this->articleModel
                 ->orderBy('created_at', 'DESC')
                 ->paginate($perPage),
@@ -155,6 +160,7 @@ class CMSDashboardController extends \App\Controllers\AdminBaseController
     {
         $data = [
             'title' => 'Create Article',
+            'page'  => 'admin/cms/articles',
             'categories' => $this->categoryModel->findAll(),
             'tags' => $this->tagModel->findAll(),
         ];
@@ -208,6 +214,7 @@ class CMSDashboardController extends \App\Controllers\AdminBaseController
 
         $data = [
             'title' => 'Edit Article',
+            'page'  => 'admin/cms/articles',
             'article' => $article,
             'categories' => $this->categoryModel->findAll(),
             'tags' => $this->tagModel->findAll(),
@@ -248,6 +255,7 @@ class CMSDashboardController extends \App\Controllers\AdminBaseController
     {
         $data = [
             'title' => 'Manage Categories',
+            'page'  => 'admin/cms/categories',
             'categories' => $this->categoryModel->findAll(),
         ];
 
@@ -281,6 +289,7 @@ class CMSDashboardController extends \App\Controllers\AdminBaseController
     {
         $data = [
             'title' => 'Manage Tags',
+            'page'  => 'admin/cms/tags',
             'tags' => $this->tagModel->findAll(),
         ];
 

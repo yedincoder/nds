@@ -30,6 +30,7 @@ class TestimonialController extends AdminBaseController
 
         $data = [
             'title' => 'Testimonials',
+            'page'  => 'admin/testimonials',
             'testimonials' => $testimonials,
             'pager' => $this->testimonialModel->pager,
             'current_status' => $status ?? 'all',
@@ -47,6 +48,7 @@ class TestimonialController extends AdminBaseController
     {
         $data = [
             'title' => 'Add Testimonial',
+            'page'  => 'admin/testimonials',
         ];
         return view('AdminArea/Testimonial/form', $data);
     }
@@ -95,6 +97,7 @@ class TestimonialController extends AdminBaseController
 
         $data = [
             'title' => 'Edit Testimonial',
+            'page'  => 'admin/testimonials',
             'testimonial' => $testimonial,
         ];
         return view('AdminArea/Testimonial/form', $data);

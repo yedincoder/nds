@@ -17,6 +17,7 @@ class MediaController extends AdminBaseController
 
         $data = [
             'title' => 'Media Manager',
+            'page'  => 'admin/media',
             'media' => $media,
         ];
 

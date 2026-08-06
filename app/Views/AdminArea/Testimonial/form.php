@@ -1,166 +1,95 @@
-<?php
-/** @var \CodeIgniter\View\View $this */
-?>
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Testimonial</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #E65C00;
-            --secondary: #1A1A2E;
-            --light-bg: #FFFAF5;
-            --text-dark: #2D2D2D;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Inter, sans-serif; color: var(--text-dark); background: var(--light-bg); }
-        .sidebar { width: 260px; background: var(--secondary); height: 100vh; position: fixed; top: 0; left: 0; z-index: 1000; transition: all 0.3s; }
-        .sidebar.collapsed { width: 70px; }
-        .sidebar-header { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .brand-logo { width: 40px; height: 40px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; margin: 0 auto 12px; }
-        .brand-text { color: white; font-weight: 700; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .sidebar.collapsed .brand-text { display: none; }
-        .nav-section { padding: 0 16px; margin-top: 20px; }
-        .nav-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.4); padding: 0 16px; margin-bottom: 8px; }
-        .nav-link { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: rgba(255,255,255,0.7); text-decoration: none; border-radius: 8px; margin-bottom: 4px; transition: all 0.2s; }
-        .nav-link:hover, .nav-link.active { background: rgba(230,92,0,0.15); color: var(--primary); }
-        .nav-link i { width: 20px; text-align: center; font-size: 1.1rem; }
-        .main-content { margin-left: 260px; padding: 30px; min-height: 100vh; }
-        .topbar { background: white; border-bottom: 1px solid #eee; padding: 16px 32px; position: sticky; top: 0; z-index: 100; }
-        .topbar .user-menu { display: flex; align-items: center; gap: 16px; }
-        .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; }
-        .card { border: 1px solid #eee; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .form-label { font-weight: 600; }
-        .form-control { border: 1px solid #ced4da; border-radius: 8px; }
-        .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 0.25rem rgba(230,92,0,0.25); }
-        .btn-primary { background: var(--primary); border-color: var(--primary); }
-        .btn-primary:hover { background: #C44900; border-color: #C44900; }
-        .badge-status { font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 600; }
-        .badge-pending { background: #fff3cd; color: #856404; }
-        .badge-approved { background: #d4edda; color: #15803d; }
-        .badge-rejected { background: #f8d7da; color: #dc3545; }
-    </style>
-</head>
-<body data-active="testimonial-form">
-    <div class="shell d-flex">
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="brand-logo"><i class="fas fa-quote-left"></i></div>
-                <div class="brand-text">NgAppID Admin</div>
+<?= $this->extend('layout/layout_adminarea') ?>
+
+<?= $this->section('content') ?>
+
+<div class="page-title">
+    <h3><?= !empty($testimonial) ? 'Edit Testimonial' : 'Add Testimonial' ?></h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/admin/dashboard">Admin</a></li>
+            <li class="breadcrumb-item"><a href="/admin/testimonial">Testimonials</a></li>
+            <li class="breadcrumb-item active"><?= !empty($testimonial) ? 'Edit' : 'Add' ?></li>
+        </ol>
+    </nav>
+</div>
+
+<?php if (session()->getFlashdata('errors')): ?>
+<div class="alert alert-danger">
+    <ul class="mb-0">
+        <?php foreach (session('errors') as $e): ?>
+        <li><?= esc($e) ?></li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+<?php endif; ?>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title"><?= !empty($testimonial) ? 'Edit Testimonial' : 'Add Testimonial' ?></div>
+    </div>
+    <div class="card-body">
+        <?php $testimonial = $testimonial ?? new stdClass(); ?>
+        <form method="post" action="<?= !empty($testimonial->id) ? "/admin/testimonials/update/{$testimonial->id}" : "/admin/testimonials/create" ?>">
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Customer Name *</label>
+                    <input type="text" class="form-control" name="customer_name" value="<?= esc($testimonial->customer_name ?? set_value('customer_name')) ?>" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Customer Email</label>
+                    <input type="email" class="form-control" name="customer_email" value="<?= esc($testimonial->customer_email ?? set_value('customer_email')) ?>">
+                </div>
             </div>
-            <nav class="nav-section">
-                <div class="nav-label">Menu Utama</div>
-                <a class="nav-link" href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-                <a class="nav-link" href="/admin/customers"><i class="fas fa-users"></i><span>Customers</span></a>
-                <a class="nav-link" href="/admin/products"><i class="fas fa-box"></i><span>Products</span></a>
-                <a class="nav-link" href="/admin/orders"><i class="fas fa-shopping-cart"></i><span>Orders</span></a>
-                <a class="nav-link" href="/admin/invoices"><i class="fas fa-file-invoice"></i><span>Invoices</span></a>
-                <a class="nav-link" href="/admin/reports"><i class="fas fa-chart-bar"></i><span>Reports</span></a>
-                <a class="nav-link" href="/admin/settings"><i class="fas fa-cog"></i><span>Settings</span></a>
-                <a class="nav-link" href="/admin/media"><i class="fas fa-images"></i><span>Media</span></a>
-            </nav>
-            <nav class="nav-section">
-                <div class="nav-label">CMS</div>
-                <a class="nav-link" href="/admin/cms"><i class="fas fa-tachometer-alt"></i><span>CMS Dashboard</span></a>
-                <a class="nav-link" href="/admin/cms/pages"><i class="fas fa-file"></i><span>Pages</span></a>
-                <a class="nav-link" href="/admin/cms/articles"><i class="fas fa-newspaper"></i><span>Articles</span></a>
-            </nav>
-            <nav class="nav-section">
-                <div class="nav-label">Lainnya</div>
-                <a class="nav-link active" href="/admin/testimonial"><i class="fas fa-quote-left"></i><span>Testimonials</span></a>
-                <a class="nav-link" href="/admin/support"><i class="fas fa-life-ring"></i><span>Support</span></a>
-                <a class="nav-link" href="/auth/logout"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
-            </nav>
-        </aside>
-        <div class="main-content">
-            <header class="topbar">
-                <button class="sidebar-toggle" data-sidebar-toggle><i class="fas fa-bars"></i></button>
-                <div class="user-menu">
-                    <div class="user-avatar">A</div>
-                    <span class="text-dark">Admin</span>
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Company</label>
+                    <input type="text" class="form-control" name="company" value="<?= esc($testimonial->company ?? set_value('company')) ?>">
                 </div>
-            </header>
-            <main class="content" style="padding: 30px;">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h1 class="section-title mb-0">Add Testimonial</h1>
+                <div class="col-md-6">
+                    <label class="form-label">Position</label>
+                    <input type="text" class="form-control" name="position" value="<?= esc($testimonial->position ?? set_value('position')) ?>">
                 </div>
-                <div class="card">
-                    <div class="card-body">
-                        <form method="post" action="/admin/testimonial/store">
-                            <div class="mb-3">
-                                <label class="form-label">Customer Name *</label>
-                                <input type="text" class="form-control" name="customer_name" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Customer Email</label>
-                                <input type="email" class="form-control" name="customer_email" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Company</label>
-                                <input type="text" class="form-control" name="company">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Position</label>
-                                <input type="text" class="form-control" name="position">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Title *</label>
-                                <input type="text" class="form-control" name="title" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Message *</label>
-                                <textarea class="form-control" name="message" rows="5" required></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Rating *</label>
-                                <div class="d-flex justify-content-center">
-                                    <div class="star-rating" id="rating1">
-                                        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
-                                    </div>
-                                    <input type="hidden" name="rating" id="rating_value" value="0">
-                                    <input type="hidden" name="featured" value="0">
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Status *</label>
-                                <select class="form-select" name="status" required>
-                                    <option value="pending">Pending</option>
-                                    <option value="approved">Approved</option>
-                                    <option value="rejected">Rejected</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Featured</label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="featured" name="featured">
-                                    <label class="form-check-label" for="featured">Featured on homepage</label>
-                                </div>
-                            </div>
-                            <div class="mt-4">
-                                <button type="submit" class="btn btn-primary">Save Testimonial</button>
-                                <a href="/admin/testimonial" class="btn btn-secondary">Cancel</a>
-                            </div>
-                        </form>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Title *</label>
+                <input type="text" class="form-control" name="title" value="<?= esc($testimonial->title ?? set_value('title')) ?>" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Message *</label>
+                <textarea class="form-control" name="message" rows="5" required><?= esc($testimonial->message ?? set_value('message')) ?></textarea>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Rating *</label>
+                    <select class="form-select" name="rating" required>
+                        <option value="5" <?= ($testimonial->rating ?? set_value('rating', '5')) == 5 ? 'selected' : '' ?>>5 - Excellent</option>
+                        <option value="4" <?= ($testimonial->rating ?? '') == 4 ? 'selected' : '' ?>>4 - Good</option>
+                        <option value="3" <?= ($testimonial->rating ?? '') == 3 ? 'selected' : '' ?>>3 - Average</option>
+                        <option value="2" <?= ($testimonial->rating ?? '') == 2 ? 'selected' : '' ?>>2 - Poor</option>
+                        <option value="1" <?= ($testimonial->rating ?? '') == 1 ? 'selected' : '' ?>>1 - Very Poor</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Status *</label>
+                    <select class="form-select" name="status" required>
+                        <option value="pending" <?= ($testimonial->status ?? set_value('status', 'pending')) === 'pending' ? 'selected' : '' ?>>Pending</option>
+                        <option value="approved" <?= ($testimonial->status ?? '') === 'approved' ? 'selected' : '' ?>>Approved</option>
+                        <option value="rejected" <?= ($testimonial->status ?? '') === 'rejected' ? 'selected' : '' ?>>Rejected</option>
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="featured" name="featured" value="1" <?= !empty($testimonial->featured) ? 'checked' : '' ?>>
+                        <label class="form-check-label" for="featured">Featured on homepage</label>
                     </div>
                 </div>
-            </main>
-        </div>
+            </div>
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i><?= !empty($testimonial->id) ? 'Update' : 'Save' ?> Testimonial</button>
+                <a href="/admin/testimonial" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const toggle = document.querySelector("[data-sidebar-toggle]");
-            const sidebar = document.getElementById("sidebar");
-            toggle?.addEventListener("click", function() {
-                sidebar.classList.toggle("collapsed");
-                document.body.classList.toggle("sidebar-collapsed");
-            });
-        });
-    </script>
-</body>
-</html>
-</path>
+</div>
+
+<?= $this->endSection() ?>

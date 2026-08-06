@@ -149,6 +149,7 @@ class AdminDashboardController extends AdminBaseController
 
         $data = [
             'title'             => 'Admin Dashboard',
+            'page'              => 'admin/dashboard',
             'stats'             => $stats,
             'revenueChart'      => $revenueChart,
             'orderStatus'       => $orderStatus,
@@ -177,6 +178,7 @@ class AdminDashboardController extends AdminBaseController
 
         $data = [
             'title' => 'Customers',
+            'page'  => 'admin/customers',
             'customers' => $customers,
             'pager' => $this->userProfileModel->pager,
         ];
@@ -194,6 +196,7 @@ class AdminDashboardController extends AdminBaseController
 
         $data = [
             'title' => 'Products',
+            'page'  => 'admin/products',
             'products' => $products,
             'pager' => $this->productModel->pager,
         ];
@@ -211,6 +214,7 @@ class AdminDashboardController extends AdminBaseController
 
         $data = [
             'title' => 'Orders',
+            'page'  => 'admin/orders',
             'orders' => $orders,
             'pager' => $this->orderModel->pager,
         ];
@@ -228,6 +232,7 @@ class AdminDashboardController extends AdminBaseController
 
         $data = [
             'title' => 'Invoices',
+            'page'  => 'admin/invoices',
             'invoices' => $invoices,
             'pager' => $this->invoiceModel->pager,
         ];
@@ -253,6 +258,7 @@ class AdminDashboardController extends AdminBaseController
 
         $data = [
             'title' => 'Payments',
+            'page'  => 'admin/payments',
             'payments' => $payments,
         ];
 
@@ -271,6 +277,7 @@ class AdminDashboardController extends AdminBaseController
 
         $data = [
             'title' => 'Services',
+            'page'  => 'admin/services',
             'services' => $services,
         ];
 
@@ -287,6 +294,7 @@ class AdminDashboardController extends AdminBaseController
 
         $data = [
             'title' => 'Portfolio',
+            'page'  => 'admin/portfolio',
             'portfolios' => $portfolios,
         ];
 
@@ -312,6 +320,7 @@ class AdminDashboardController extends AdminBaseController
 
         $data = [
             'title' => 'Reports',
+            'page'  => 'admin/reports',
             'stats' => [
                 'total_revenue'      => $db->table('transactions')->where('status', 'success')->selectSum('amount')->get()->getRow()->amount ?? 0,
                 'total_orders'       => $db->table('orders')->countAllResults(),
@@ -334,6 +343,7 @@ class AdminDashboardController extends AdminBaseController
     {
         $data = [
             'title' => 'Settings',
+            'page'  => 'admin/settings',
         ];
 
         return view('AdminArea/dashboard/settings', $data);
