@@ -24,7 +24,7 @@ class ServiceController extends BaseController
             'services' => $result['data'] ?? [],
         ];
 
-        return view('service/index', $data);
+        return view('FrontArea/service/index', $data);
     }
 
     public function detail(string $slug)
@@ -40,7 +40,7 @@ class ServiceController extends BaseController
             'service' => $result['data'],
         ];
 
-        return view('service/detail', $data);
+        return view('FrontArea/service/detail', $data);
     }
 
     public function requestQuote(string $slug)
@@ -74,6 +74,6 @@ class ServiceController extends BaseController
             'service' => $result['data'],
         ];
 
-        return view('service/index', $data);
+        return view('FrontArea/service/index', $data);
     }
 }

@@ -1,72 +1,66 @@
-<?= $this->extend('Layout/layout_frontarea') ?>
+<?= $this->extend('Layout/layout_clientarea') ?>
 
 <?= $this->section('content') ?>
 
-<!-- 1. BAGIAN HEADER & BREADCRUMB (Sesuai Struktur) -->
 <section class="page-header">
     <div class="container">
         <h1>Payment</h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item active">Payment</li>
+                <li class="breadcrumb-item"><a href="/payment">Payment</a></li>
+                <li class="breadcrumb-item active">Process</li>
             </ol>
         </nav>
     </div>
 </section>
+
 <section class="py-5">
     <div class="container">
-        <?php if (isset($error) && !empty($error)): ?>
-        <div class="alert alert-danger mb-4">
-            <strong>Error:</strong> <?= esc($error) ?>
-        </div>
+        <?php if (isset($error)): ?>
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle me-2"></i><?= esc($error) ?>
+            </div>
         <?php endif; ?>
 
-        <?php if (session()->getFlashdata('error')): ?>
-        <div class="alert alert-danger mb-4">
-            <strong>Error:</strong> <?= esc(session()->getFlashdata('error')) ?>
-        </div>
-        <?php endif; ?>
-
-        <?php if (session()->getFlashdata('success')): ?>
-        <div class="alert alert-success mb-4">
-            <?= esc(session()->getFlashdata('success')) ?>
-        </div>
-        <?php endif; ?>
-
-        <h1 class="mb-4">Payment - Invoice #<?= esc($invoice->invoice_number) ?></h1>
-
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5>Invoice Total: <span class="text-primary"><?= format_price($invoice->total) ?></span></h5>
-                        <p class="text-muted">Due: <?= esc($invoice->due_date ?? 'Upon receipt') ?></p>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Payment for Invoice <?= esc($invoice->invoice_number ?? '') ?></div>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5>Invoice Detail</h5>
+                        <p><strong>Invoice #:</strong> <?= esc($invoice->invoice_number ?? '') ?></p>
+                        <p><strong>Total:</strong> Rp <?= number_format($invoice->total ?? 0, 0, ',', '.') ?></p>
+                        <p><strong>Status:</strong> 
+                            <?php $st = match($invoice->status ?? 'unpaid') {
+                                'paid' => 'bg-success', 'unpaid' => 'warning',
+                                'expired' => 'danger', default => 'secondary'
+                            }; ?>
+                            <span class="badge bg-<?= $st ?>"><?= ucfirst($invoice->status ?? 'unpaid') ?></span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Payment Methods</h5>
+                        <?php if (!empty($paymentMethods)): ?>
+                            <form method="post" action="/payment/invoice/<?= esc($invoice->uuid ?? $invoice->id) ?>">
+                                <div class="mb-3">
+                                    <label class="form-label">Pilih Metode Pembayaran</label>
+                                    <select name="payment_method_id" class="form-select" required>
+                                        <option value="">Pilih metode...</option>
+                                        <?php foreach ($paymentMethods as $pm): ?>
+                                            <option value="<?= esc($pm->id) ?>"><?= esc($pm->name) ?> (<?= esc($pm->type) ?>)</option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100"><i class="fas fa-credit-card me-1"></i>Bayar Sekarang</button>
+                            </form>
+                        <?php else: ?>
+                            <div class="alert alert-warning">Belum ada metode pembayaran tersedia.</div>
+                        <?php endif; ?>
                     </div>
                 </div>
-
-                <form action="<?= site_url('payment/' . $invoice->invoice_number) ?>" method="POST">
-                    <?= csrf_field() ?>
-                    <div class="card mb-4">
-                        <div class="card-header"><h5>Select Payment Method</h5></div>
-                        <div class="card-body">
-                            <?php if (!empty($paymentMethods)): ?>
-                                <?php foreach ($paymentMethods as $method): ?>
-                                    <div class="form-check mb-3">
-                                        <input type="radio" name="payment_method_id" value="<?= $method->id ?>" class="form-check-input" id="method_<?= $method->id ?>" required>
-                                        <label class="form-check-label" for="method_<?= $method->id ?>">
-                                            <strong><?= esc($method->name) ?></strong><br>
-                                            <small class="text-muted"><?= esc($method->description) ?></small>
-                                        </label>
-                                    </div>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <div class="alert alert-warning">No payment methods available.</div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Proceed to Payment</button>
-                </form>
             </div>
         </div>
     </div>

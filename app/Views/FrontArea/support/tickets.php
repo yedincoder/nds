@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/master') ?>
+﻿<?= $this->extend('Layout/layout_clientarea') ?>
 
 <?= $this->section('content') ?>
 

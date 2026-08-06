@@ -15,6 +15,22 @@ class PageController extends BaseController
         $this->cmsService = new CMSService();
     }
 
+    public function about()
+    {
+        $result = $this->cmsService->getPageBySlug('about');
+
+        if (!$result['success']) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $data = [
+            'title' => $result['data']['title'],
+            'page' => $result['data'],
+        ];
+
+        return view('FrontArea/CMS/page', $data);
+    }
+
     public function page(string $slug)
     {
         $result = $this->cmsService->getPageBySlug($slug);

@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/master') ?>
+﻿<?= $this->extend('Layout/layout_frontarea') ?>
 
 <?= $this->section('content') ?>
 
@@ -56,3 +56,4 @@
 </section>
 
 <?= $this->endSection() ?>
+
