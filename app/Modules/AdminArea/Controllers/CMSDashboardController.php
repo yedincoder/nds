@@ -381,7 +381,10 @@ class CMSDashboardController extends \App\Controllers\AdminBaseController
             'slug' => 'required|min_length[2]|max_length[100]|is_unique[tags.slug,id,{id}]',
         ];
 
-        if (!$this->validate($rules, [], $this->request->getPost() + ['id' => $id])) {
+        $validationData = $this->request->getPost();
+        $validationData['id'] = $id;
+
+        if (!$this->validateData($validationData, $rules)) {
             return redirect()->back()
                 ->with('errors', $this->validator->getErrors())
                 ->withInput();

@@ -164,7 +164,10 @@ class ProductController extends \App\Controllers\AdminBaseController
             'discount_price' => 'permit_empty|decimal',
         ];
 
-        if (!$this->validate($rules, [], $this->request->getPost() + ['id' => $id])) {
+        $validationData = $this->request->getPost();
+        $validationData['id'] = $id;
+
+        if (!$this->validateData($validationData, $rules)) {
             return redirect()->back()
                 ->with('errors', $this->validator->getErrors())
                 ->withInput();

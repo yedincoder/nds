@@ -108,7 +108,10 @@ class PortfolioController extends \App\Controllers\AdminBaseController
             'status' => 'required|in_list[draft,published,featured,archived]',
         ];
 
-        if (!$this->validate($rules, [], $this->request->getPost() + ['id' => $id])) {
+        $validationData = $this->request->getPost();
+        $validationData['id'] = $id;
+
+        if (!$this->validateData($validationData, $rules)) {
             return redirect()->back()
                 ->with('errors', $this->validator->getErrors())
                 ->withInput();
