@@ -1,4 +1,4 @@
-<?= $this->extend('layout/layout_adminarea') ?>
+﻿<?= $this->extend('layout/layout_adminarea') ?>
 
 <?= $this->section('content') ?>
 
@@ -31,7 +31,8 @@
             </div>
             <div class="card-body">
                 <?php $user = $user ?? new stdClass(); ?>
-                <form method="post" action="<?= !empty($user->id) ? "/admin/auth/update/{$user->id}" : "/admin/auth/create" ?>">
+<form method="post" action="<?= !empty($user->id) ? "/admin/auth/update/{$user->id}" : "/admin/auth/create" ?>">
+                    <?= csrf_field() ?>
                     <div class="mb-3">
                         <label class="form-label">Username *</label>
                         <input type="text" class="form-control" name="username" value="<?= esc($user->username ?? set_value('username')) ?>" required>

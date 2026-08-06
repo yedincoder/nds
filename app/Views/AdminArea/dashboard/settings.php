@@ -1,4 +1,4 @@
-<?= $this->extend('layout/layout_adminarea') ?>
+﻿<?= $this->extend('layout/layout_adminarea') ?>
 
 <?= $this->section('content') ?>
 
@@ -20,6 +20,7 @@
             </div>
             <div class="card-body">
                 <form method="post" action="/admin/settings/update">
+                    <?= csrf_field() ?>
                     <div class="mb-3">
                         <label class="form-label">Site Name</label>
                         <input type="text" class="form-control" name="site_name" value="NgAppID" required>
@@ -66,6 +67,7 @@
             <div class="card-body">
                 <p class="text-muted mb-4">Factory Reset will drop all tables and re-run all migrations. This action is irreversible.</p>
                 <form method="post" action="/admin/settings/factory-reset" onsubmit="return confirm('Yakin ingin Factory Reset database? Semua data akan terhapus dan migrasi akan dijalankan ulang.')">
+                    <?= csrf_field() ?>
                     <div class="mb-3">
                         <label class="form-label">Admin Password *</label>
                         <input type="password" class="form-control" name="password" required placeholder="Masukkan password admin">

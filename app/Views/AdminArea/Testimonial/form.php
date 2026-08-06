@@ -1,4 +1,4 @@
-<?= $this->extend('layout/layout_adminarea') ?>
+﻿<?= $this->extend('layout/layout_adminarea') ?>
 
 <?= $this->section('content') ?>
 
@@ -29,7 +29,8 @@
     </div>
     <div class="card-body">
         <?php $testimonial = $testimonial ?? new stdClass(); ?>
-        <form method="post" action="<?= !empty($testimonial->id) ? "/admin/testimonials/update/{$testimonial->id}" : "/admin/testimonials/create" ?>">
+<form method="post" action="<?= !empty($testimonial->id) ? "/admin/testimonials/update/{$testimonial->id}" : "/admin/testimonials/create" ?>">
+            <?= csrf_field() ?>
             <div class="row g-3 mb-3">
                 <div class="col-md-6">
                     <label class="form-label">Customer Name *</label>

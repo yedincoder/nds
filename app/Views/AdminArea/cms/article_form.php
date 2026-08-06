@@ -1,4 +1,4 @@
-<?= $this->extend('layout/layout_adminarea') ?>
+﻿<?= $this->extend('layout/layout_adminarea') ?>
 
 <?= $this->section('content') ?>
 
@@ -30,6 +30,7 @@
     <div class="card-body">
         <?php $article = $article ?? new stdClass(); ?>
         <form method="post" action="<?= !empty($article->id) ? "/admin/cms/articles/{$article->id}/update" : "/admin/cms/articles/create" ?>">
+            <?= csrf_field() ?>
             <div class="mb-3">
                 <label class="form-label">Title *</label>
                 <input type="text" class="form-control" name="title" value="<?= esc($article->title ?? set_value('title')) ?>" required>
@@ -67,15 +68,13 @@
                     <input type="text" class="form-control" name="author" value="<?= esc($article->author ?? set_value('author')) ?>" required>
                 </div>
             </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">Excerpt *</label>
-                    <input type="text" class="form-control" name="excerpt" value="<?= esc($article->excerpt ?? set_value('excerpt')) ?>" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Published At</label>
-                    <input type="date" class="form-control" name="published_at" value="<?= esc($article->published_at ?? set_value('published_at')) ?>">
-                </div>
+            <div class="mb-3">
+                <label class="form-label">Excerpt *</label>
+                <input type="text" class="form-control" name="excerpt" value="<?= esc($article->excerpt ?? set_value('excerpt')) ?>" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Published At</label>
+                <input type="date" class="form-control" name="published_at" value="<?= esc($article->published_at ?? set_value('published_at')) ?>">
             </div>
             <div class="row g-3 mb-3">
                 <div class="col-md-6">
@@ -87,10 +86,21 @@
                     <input type="text" class="form-control" name="meta_description" value="<?= esc($article->meta_description ?? set_value('meta_description')) ?>">
                 </div>
             </div>
-            <div class="d-flex gap-2 mt-4">
-                <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i><?= !empty($article->id) ? 'Update' : 'Create' ?> Article</button>
-                <a href="/admin/cms/articles" class="btn btn-secondary">Cancel</a>
+            <div class="mb-3">
+                <label class="form-label">Tags</label>
+                <div>
+                    <?php if (!empty($tags)): ?>
+                        <?php foreach ($tags as $tag): ?>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="tags[]" value="<?= esc($tag->id) ?>" id="tag_<?= esc($tag->id) ?>">
+                            <label class="form-check-label" for="tag_<?= esc($tag->id) ?>"><?= esc($tag->name) ?></label>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
             </div>
+            <button type="submit" class="btn btn-primary mt-3"><?= !empty($article->id) ? 'Update' : 'Create' ?> Article</button>
+            <a href="/admin/cms/articles" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </div>
@@ -100,8 +110,10 @@
 <?= $this->section('scripts') ?>
 <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
 <script>
-document.querySelectorAll('.ckeditor').forEach(function(el) {
-    ClassicEditor.create(el).catch(function(err) { console.error(err); });
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.ckeditor').forEach(function(el) {
+        ClassicEditor.create(el).catch(function(err) { console.error(err); });
+    });
 });
 </script>
 <?= $this->endSection() ?>

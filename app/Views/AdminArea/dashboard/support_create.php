@@ -1,4 +1,4 @@
-<?= $this->extend('layout/layout_adminarea') ?>
+﻿<?= $this->extend('layout/layout_adminarea') ?>
 
 <?= $this->section('content') ?>
 
@@ -29,6 +29,7 @@
     </div>
     <div class="card-body">
         <form method="post" action="/admin/support/create">
+                    <?= csrf_field() ?>
             <div class="mb-3">
                 <label class="form-label">Category *</label>
                 <select class="form-select" name="category_id" required>

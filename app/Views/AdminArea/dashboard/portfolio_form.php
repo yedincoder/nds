@@ -1,4 +1,4 @@
-<?= $this->extend('layout/layout_adminarea') ?>
+﻿<?= $this->extend('layout/layout_adminarea') ?>
 
 <?= $this->section('content') ?>
 
@@ -33,6 +33,7 @@
             </div>
             <div class="card-body">
                 <form method="post" action="<?= !empty($portfolio->id) ? "/admin/portfolio/update/{$portfolio->id}" : "/admin/portfolio/create" ?>">
+                    <?= csrf_field() ?>
                     <div class="row g-3 mb-3">
                         <div class="col-md-8">
                             <label class="form-label">Title *</label>

@@ -1,4 +1,4 @@
-<?= $this->extend('layout/layout_adminarea') ?>
+﻿<?= $this->extend('layout/layout_adminarea') ?>
 
 <?= $this->section('content') ?>
 
@@ -25,7 +25,7 @@
                 <span class="badge <?= $sc ?>"><?= ucfirst(str_replace('_', ' ', $ticket->status ?? 'open')) ?></span>
             </div>
             <div class="card-body">
-                <p class="text-muted mb-3"><strong><?= esc($ticket->username ?? 'Guest') ?></strong> · <?= date('d M Y H:i', strtotime($ticket->created_at ?? '')) ?></p>
+                <p class="text-muted mb-3"><strong><?= esc($ticket->username ?? 'Guest') ?></strong> Â· <?= date('d M Y H:i', strtotime($ticket->created_at ?? '')) ?></p>
                 <p style="line-height:1.7"><?= nl2br(esc($ticket->message ?? '')) ?></p>
 
                 <hr>
@@ -34,7 +34,7 @@
                 <h5 style="font-size:14px;font-weight:600;margin:16px 0">Replies</h5>
                 <?php foreach ($replies as $reply): ?>
                 <div class="py-2 border-bottom">
-                    <p class="mb-1"><strong><?= esc($reply->username ?? 'System') ?></strong> <small class="text-muted">· <?= date('d M Y H:i', strtotime($reply->created_at ?? '')) ?></small></p>
+                    <p class="mb-1"><strong><?= esc($reply->username ?? 'System') ?></strong> <small class="text-muted">Â· <?= date('d M Y H:i', strtotime($reply->created_at ?? '')) ?></small></p>
                     <p class="mb-0" style="line-height:1.6"><?= nl2br(esc($reply->message ?? '')) ?></p>
                 </div>
                 <?php endforeach; ?>
@@ -49,6 +49,7 @@
             </div>
             <div class="card-body">
                 <form method="post" action="/admin/support/ticket/<?= esc($ticket->id) ?>">
+                    <?= csrf_field() ?>
                     <div class="mb-3">
                         <label class="form-label">Message</label>
                         <textarea class="form-control" name="message" rows="4" required></textarea>

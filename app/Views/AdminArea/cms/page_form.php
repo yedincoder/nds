@@ -1,4 +1,4 @@
-<?= $this->extend('layout/layout_adminarea') ?>
+﻿<?= $this->extend('layout/layout_adminarea') ?>
 
 <?= $this->section('content') ?>
 
@@ -30,6 +30,7 @@
     <div class="card-body">
         <?php $pageData = $pageData ?? new stdClass(); ?>
         <form method="post" action="<?= !empty($pageData->id) ? "/admin/cms/pages/{$pageData->id}/update" : "/admin/cms/pages/create" ?>">
+            <?= csrf_field() ?>
             <div class="mb-3">
                 <label class="form-label">Title *</label>
                 <input type="text" class="form-control" name="title" value="<?= esc($pageData->title ?? set_value('title')) ?>" required>
@@ -89,8 +90,10 @@
 <?= $this->section('scripts') ?>
 <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
 <script>
-document.querySelectorAll('.ckeditor').forEach(function(el) {
-    ClassicEditor.create(el).catch(function(err) { console.error(err); });
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.ckeditor').forEach(function(el) {
+        ClassicEditor.create(el).catch(function(err) { console.error(err); });
+    });
 });
 </script>
 <?= $this->endSection() ?>

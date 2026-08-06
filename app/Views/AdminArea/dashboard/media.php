@@ -1,4 +1,4 @@
-<?= $this->extend('layout/layout_adminarea') ?>
+﻿<?= $this->extend('layout/layout_adminarea') ?>
 
 <?= $this->section('content') ?>
 
@@ -25,6 +25,7 @@
     <div class="card-header">
         <div class="card-title">Media Manager</div>
         <form method="post" action="/admin/media/upload" enctype="multipart/form-data" class="d-flex gap-2 align-items-center">
+                    <?= csrf_field() ?>
             <input type="file" name="file" class="form-control" style="max-width:250px" required>
             <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-upload me-1"></i>Upload</button>
         </form>

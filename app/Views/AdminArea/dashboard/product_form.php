@@ -1,4 +1,4 @@
-<?= $this->extend('layout/layout_adminarea') ?>
+﻿<?= $this->extend('layout/layout_adminarea') ?>
 
 <?= $this->section('content') ?>
 
@@ -33,6 +33,7 @@
             </div>
             <div class="card-body">
                 <form method="post" enctype="multipart/form-data" action="<?= !empty($product->id) ? "/admin/products/update/{$product->id}" : "/admin/products/create" ?>">
+                    <?= csrf_field() ?>
                     <div class="row g-3 mb-3">
                         <div class="col-md-8">
                             <label class="form-label">Name *</label>
@@ -123,7 +124,7 @@
                     <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
                         <div>
                             <strong style="font-size:13px"><?= esc($f->file_name) ?></strong>
-                            <br><small class="text-muted"><?= number_format(($f->file_size ?? 0) / 1048576, 2) ?> MB · v<?= esc($f->version ?? '1.0') ?></small>
+                            <br><small class="text-muted"><?= number_format(($f->file_size ?? 0) / 1048576, 2) ?> MB Â· v<?= esc($f->version ?? '1.0') ?></small>
                         </div>
                         <div class="btn-group">
                             <a href="/admin/products/file/delete/<?= esc($f->id) ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this file?')"><i class="fas fa-trash"></i></a>
@@ -141,7 +142,8 @@
                 <div class="card-title">License / API / Token</div>
             </div>
             <div class="card-body">
-                <form method="post" action="/admin/products/license/create/<?= esc($product->id) ?>">
+<form method="post" action="/admin/products/license/create/<?= esc($product->id) ?>">
+                    <?= csrf_field() ?>
                     <div class="mb-3">
                         <label class="form-label">Type</label>
                         <select class="form-select" name="license_type">
@@ -178,7 +180,7 @@
                     <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
                         <div>
                             <strong style="font-size:12px"><?= esc($lic->license_key) ?></strong>
-                            <br><small class="text-muted"><?= esc($lic->license_type) ?> · <?= ucfirst($lic->status ?? 'active') ?></small>
+                            <br><small class="text-muted"><?= esc($lic->license_type) ?> Â· <?= ucfirst($lic->status ?? 'active') ?></small>
                         </div>
                         <a href="/admin/products/license/delete/<?= esc($lic->id) ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this license?')"><i class="fas fa-trash"></i></a>
                     </div>

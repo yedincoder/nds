@@ -1,4 +1,4 @@
-<?= $this->extend('layout/layout_adminarea') ?>
+﻿<?= $this->extend('layout/layout_adminarea') ?>
 
 <?= $this->section('content') ?>
 
@@ -21,6 +21,7 @@
             </div>
             <div class="card-body">
                 <form method="post" action="/admin/cms/categories/update/<?= esc($category->id) ?>">
+                    <?= csrf_field() ?>
                     <div class="mb-3">
                         <label class="form-label">Name *</label>
                         <input type="text" class="form-control" name="name" value="<?= esc($category->name) ?>" required>
