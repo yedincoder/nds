@@ -2,37 +2,54 @@
 
 namespace App\Modules\AdminArea\Controllers;
 
+use App\Modules\FrontArea\Models\InvoiceModel;
 use CodeIgniter\HTTP\RedirectResponse;
 
 class BillingController extends \App\Controllers\AdminBaseController
 {
+    protected InvoiceModel $invoiceModel;
+
+    public function __construct()
+    {
+        $this->invoiceModel = new InvoiceModel();
+    }
+
     public function index(): string
     {
-        $db = \Config\Database::connect();
         $perPage = 15;
         $page = $this->request->getGet('page') ?? 1;
         $search = $this->request->getGet('search');
         $status = $this->request->getGet('status');
 
-        $builder = $db->table('invoices i')
-            ->select('i.*, u.username, u.email')
-            ->join('users u', 'u.id = i.user_id', 'left')
-            ->orderBy('i.created_at', 'DESC');
+        $builder = $this->invoiceModel
+            ->select('invoices.*, users.username, users.email')
+            ->join('users', 'users.id = invoices.user_id', 'left')
+            ->orderBy('invoices.created_at', 'DESC');
 
         if (!empty($search)) {
             $builder->groupStart()
-                ->like('i.invoice_number', $search)
-                ->orLike('u.username', $search)
-                ->orLike('u.email', $search)
+                ->like('invoices.invoice_number', $search)
+                ->orLike('users.username', $search)
+                ->orLike('users.email', $search)
             ->groupEnd();
         }
 
         if (!empty($status)) {
-            $builder->where('i.status', $status);
+            $builder->where('invoices.status', $status);
         }
 
         $billings = $builder->paginate($perPage, 'default', $page);
-        $pager = $db->table('invoices')->pager;
+        $pager = $this->invoiceModel->pager;
+
+        // Recalculate stats (separate queries to avoid affecting pagination)
+        $db = \Config\Database::connect();
+        $stats = [
+            'total' => $db->table('invoices')->countAllResults(),
+            'paid' => $db->table('invoices')->where('status', 'paid')->countAllResults(),
+            'unpaid' => $db->table('invoices')->where('status', 'unpaid')->countAllResults(),
+            'expired' => $db->table('invoices')->where('status', 'expired')->countAllResults(),
+            'total_revenue' => $db->table('invoices')->where('status', 'paid')->selectSum('total')->get()->getRow()->total ?? 0,
+        ];
 
         $data = [
             'title' => 'Billing',
@@ -41,13 +58,7 @@ class BillingController extends \App\Controllers\AdminBaseController
             'pager' => $pager,
             'search' => $search,
             'current_status' => $status ?? 'all',
-            'stats' => [
-                'total' => $db->table('invoices')->countAllResults(),
-                'paid' => $db->table('invoices')->where('status', 'paid')->countAllResults(),
-                'unpaid' => $db->table('invoices')->where('status', 'unpaid')->countAllResults(),
-                'expired' => $db->table('invoices')->where('status', 'expired')->countAllResults(),
-                'total_revenue' => $db->table('invoices')->where('status', 'paid')->selectSum('total')->get()->getRow()->total ?? 0,
-            ],
+            'stats' => $stats,
         ];
 
         return view('AdminArea/dashboard/billing', $data);
@@ -55,17 +66,17 @@ class BillingController extends \App\Controllers\AdminBaseController
 
     public function detail(string $uuid): string
     {
-        $db = \Config\Database::connect();
-        $billing = $db->table('invoices i')
-            ->select('i.*, u.username, u.email, u.phone')
-            ->join('users u', 'u.id = i.user_id', 'left')
-            ->where('i.uuid', $uuid)
-            ->get()
-            ->getRow();
+        $billing = $this->invoiceModel
+            ->select('invoices.*, users.username, users.email, users.phone')
+            ->join('users', 'users.id = invoices.user_id', 'left')
+            ->where('invoices.uuid', $uuid)
+            ->first();
 
         if (!$billing) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
+
+        $db = \Config\Database::connect();
 
         // Get invoice items
         $items = $db->table('invoice_items')

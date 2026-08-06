@@ -52,8 +52,7 @@ class CMSDashboardController extends \App\Controllers\AdminBaseController
             'title' => 'Manage Pages',
             'page'  => 'admin/cms/pages',
             'pages' => $this->pageModel->orderBy('created_at', 'DESC')
-                ->limit($perPage, ($page - 1) * $perPage)
-                ->findAll(),
+                ->paginate($perPage, 'default', $page),
             'pager' => $this->pageModel->pager,
         ];
 
