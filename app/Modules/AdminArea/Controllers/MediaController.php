@@ -41,10 +41,10 @@ class MediaController extends AdminBaseController
             'uuid' => $this->generateUuid(),
             'file_name' => $newName,
             'file_path' => 'uploads/media/' . $newName,
-            'original_name' => $file->getClientName(),
-            'mime_type' => $file->getClientMimeType(),
+            'file_type' => $file->getClientMimeType() ?: $file->getExtension(),
             'file_size' => $file->getSize(),
-            'file_type' => $file->getClientMimeType(),
+            'mime_type' => $file->getClientMimeType(),
+            'uploaded_by' => session()->get('user_id'),
             'created_at' => date('Y-m-d H:i:s'),
         ]);
 
@@ -58,7 +58,7 @@ class MediaController extends AdminBaseController
         $media = $db->table('media')->where('id', $id)->get()->getRow();
 
         if ($media) {
-            $filepath = WRITEPATH . $media->path;
+            $filepath = WRITEPATH . $media->file_path;
             if (file_exists($filepath)) {
                 unlink($filepath);
             }

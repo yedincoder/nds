@@ -426,11 +426,12 @@ class CMSDashboardController extends \App\Controllers\AdminBaseController
         $db = \Config\Database::connect();
         $db->table('media')->insert([
             'uuid' => date('YmdHis') . substr(md5(uniqid('', true)), 0, 8),
-            'filename' => $newName,
-            'original_name' => $file->getClientName(),
+            'file_name' => $newName,
+            'file_path' => 'uploads/media/' . $newName,
+            'file_type' => $file->getClientMimeType() ?: $file->getExtension(),
+            'file_size' => $file->getSize(),
             'mime_type' => $file->getClientMimeType(),
-            'size' => $file->getSize(),
-            'path' => 'uploads/media/' . $newName,
+            'uploaded_by' => session()->get('user_id'),
             'created_at' => date('Y-m-d H:i:s'),
         ]);
 
