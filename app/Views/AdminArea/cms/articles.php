@@ -27,6 +27,7 @@
                         <th>Category</th>
                         <th>Status</th>
                         <th>Created</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,10 +44,16 @@
                                     <span class="badge <?= $sc ?>"><?= ucfirst(esc($article->status ?? 'pending')) ?></span>
                                 </td>
                                 <td><?= date('d M Y', strtotime($article->created_at ?? '')) ?></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="/admin/cms/articles/<?= esc($article->id) ?>/edit" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
+                                        <a href="/admin/cms/articles/<?= esc($article->id) ?>/delete" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this article?')"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <tr><td colspan="5" class="text-center py-4">Belum ada artikel</td></tr>
+                        <tr><td colspan="6" class="text-center py-4">Belum ada artikel</td></tr>
                     <?php endif; ?>
                 </tbody>
             </table>

@@ -27,6 +27,7 @@
                         <th>Slug</th>
                         <th>Status</th>
                         <th>Created</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,10 +42,16 @@
                                     <span class="badge <?= $st ?>"><?= ucfirst(esc($page->status ?? 'draft')) ?></span>
                                 </td>
                                 <td><?= date('d M Y', strtotime($page->created_at ?? '')) ?></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="/admin/cms/pages/<?= esc($page->id) ?>/edit" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
+                                        <a href="/admin/cms/pages/<?= esc($page->id) ?>/delete" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this page?')"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <tr><td colspan="5" class="text-center py-4">Belum ada halaman</td></tr>
+                        <tr><td colspan="6" class="text-center py-4">Belum ada halaman</td></tr>
                     <?php endif; ?>
                 </tbody>
             </table>

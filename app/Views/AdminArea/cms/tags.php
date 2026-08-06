@@ -29,10 +29,6 @@
                         <label class="form-label">Slug</label>
                         <input type="text" class="form-control" name="slug">
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Description</label>
-                        <textarea class="form-control" name="description" rows="3"></textarea>
-                    </div>
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-plus me-1"></i>Add Tag</button>
                     </div>
@@ -49,7 +45,7 @@
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
-                            <tr><th>#</th><th>Name</th><th>Slug</th><th>Description</th><th>Actions</th></tr>
+                            <tr><th>#</th><th>Name</th><th>Slug</th><th>Actions</th></tr>
                         </thead>
                         <tbody>
                             <?php if (!empty($tags)): ?>
@@ -58,14 +54,16 @@
                                     <td><?= $i + 1 ?></td>
                                     <td><strong><?= esc($tag->name) ?></strong></td>
                                     <td><?= esc($tag->slug) ?></td>
-                                    <td><?= esc($tag->description ?? '-') ?></td>
                                     <td>
-                                        <a href="/admin/cms/tags/<?= esc($tag->id) ?>/delete" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
+                                        <div class="btn-group">
+                                            <a href="/admin/cms/tags/edit/<?= esc($tag->id) ?>" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
+                                            <a href="/admin/cms/tags/<?= esc($tag->id) ?>/delete" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
+                                        </div>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <tr><td colspan="5" class="text-center py-4">Belum ada tag</td></tr>
+                                <tr><td colspan="4" class="text-center py-4">Belum ada tag</td></tr>
                             <?php endif; ?>
                         </tbody>
                     </table>

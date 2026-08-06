@@ -145,6 +145,8 @@ $routes->group('admin', ['filter' => 'permission:users.read'], function ($routes
     $routes->post('settings/factory-reset', '\App\Modules\AdminArea\Controllers\AdminDashboardController::factoryReset');
     $routes->get('payments', '\App\Modules\AdminArea\Controllers\AdminDashboardController::payments');
     $routes->get('media', '\App\Modules\AdminArea\Controllers\MediaController::index');
+    $routes->post('media/upload', '\App\Modules\AdminArea\Controllers\MediaController::upload');
+    $routes->get('media/delete/(:num)', '\App\Modules\AdminArea\Controllers\MediaController::delete/$1');
     $routes->get('support', '\App\Modules\AdminArea\Controllers\TicketController::index');
     $routes->get('support/create', '\App\Modules\AdminArea\Controllers\TicketController::create');
     $routes->post('support/create', '\App\Modules\AdminArea\Controllers\TicketController::create');
@@ -228,6 +230,8 @@ $routes->group('admin', ['filter' => 'permission:users.read'], function ($routes
         
         $routes->get('tags', '\App\Modules\AdminArea\Controllers\CMSDashboardController::tags');
         $routes->post('tags/create', '\App\Modules\AdminArea\Controllers\CMSDashboardController::createTag');
+        $routes->get('tags/edit/(:num)', '\App\Modules\AdminArea\Controllers\CMSDashboardController::editTag/$1');
+        $routes->post('tags/update/(:num)', '\App\Modules\AdminArea\Controllers\CMSDashboardController::updateTag/$1');
         $routes->get('tags/(:num)/delete', '\App\Modules\AdminArea\Controllers\CMSDashboardController::deleteTag/$1');
     });
     $routes->post('cms/upload-image', '\App\Modules\AdminArea\Controllers\CMSDashboardController::uploadImage');

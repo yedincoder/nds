@@ -350,6 +350,52 @@ class CMSDashboardController extends \App\Controllers\AdminBaseController
             ->with('success', 'Tag deleted successfully');
     }
 
+    public function editTag(int $id): string|RedirectResponse
+    {
+        $tag = $this->tagModel->find($id);
+        if (!$tag) {
+            return redirect()->to('/admin/cms/tags')
+                ->with('error', 'Tag not found.');
+        }
+
+        $data = [
+            'title' => 'Edit Tag',
+            'page'  => 'admin/cms/tags',
+            'tag' => $tag,
+        ];
+
+        return view('AdminArea/cms/tag_form', $data);
+    }
+
+    public function updateTag(int $id): RedirectResponse
+    {
+        $tag = $this->tagModel->find($id);
+        if (!$tag) {
+            return redirect()->to('/admin/cms/tags')
+                ->with('error', 'Tag not found.');
+        }
+
+        $rules = [
+            'name' => 'required|min_length[2]|max_length[100]',
+            'slug' => 'required|min_length[2]|max_length[100]|is_unique[tags.slug,id,{id}]',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()
+                ->with('errors', $this->validator->getErrors())
+                ->withInput();
+        }
+
+        $this->tagModel->update($id, [
+            'name' => $this->request->getPost('name'),
+            'slug' => $this->request->getPost('slug'),
+            'description' => $this->request->getPost('description'),
+        ]);
+
+        return redirect()->to('/admin/cms/tags')
+            ->with('success', 'Tag updated successfully');
+    }
+
     // =====================================================
     // IMAGE UPLOAD (for WYSIWYG editor)
     // =====================================================
