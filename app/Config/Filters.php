@@ -80,6 +80,7 @@ class Filters extends BaseFilters
                 'api/*',
                 'midtrans/*',
                 'payment/*',
+                'admin/support/*',
             ]],
             // 'invalidchars',
         ],
