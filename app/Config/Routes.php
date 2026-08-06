@@ -306,3 +306,36 @@ $modularRoutes = APPPATH . 'Modules/Routes.php';
 if (file_exists($modularRoutes)) {
     require $modularRoutes;
 }
+
+// ================================================================
+// MITRA AREA (Partner Dashboard)
+// ================================================================
+$routes->group('mitra', ['filter' => 'auth'], function ($routes) {
+    $routes->get('dashboard', '\App\Modules\MitraArea\Controllers\MitraController::dashboard');
+    
+    // E-Commerce
+    $routes->group('ecommerce', function ($routes) {
+        $routes->get('products', '\App\Modules\MitraArea\Controllers\MitraController::products');
+        $routes->get('orders', '\App\Modules\MitraArea\Controllers\MitraController::orders');
+    });
+    
+    // Pesanan
+    $routes->group('orders', function ($routes) {
+        $routes->get('/', '\App\Modules\MitraArea\Controllers\MitraController::ordersAll');
+        $routes->get('success', '\App\Modules\MitraArea\Controllers\MitraController::ordersSuccess');
+        $routes->get('cancelled', '\App\Modules\MitraArea\Controllers\MitraController::ordersCancelled');
+    });
+    
+    // Pendapatan
+    $routes->group('pendapatan', function ($routes) {
+        $routes->get('balance', '\App\Modules\MitraArea\Controllers\MitraController::balance');
+        $routes->get('withdrawals', '\App\Modules\MitraArea\Controllers\MitraController::withdrawals');
+        $routes->post('withdraw', '\App\Modules\MitraArea\Controllers\MitraController::requestWithdrawal');
+    });
+    
+    // Akun
+    $routes->group('akun', function ($routes) {
+        $routes->get('profile', '\App\Modules\MitraArea\Controllers\MitraController::profile');
+        $routes->get('logout', '\App\Modules\MitraArea\Controllers\MitraController::logout');
+    });
+});
