@@ -1,237 +1,455 @@
-﻿<?php
-/** @var \CodeIgniter\View\View $this */
-?>
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #E65C00;
-            --primary-dark: #C44900;
-            --primary-light: #FF8533;
-            --secondary: #1A1A2E;
-            --secondary-light: #16213E;
-            --accent: #FF6B35;
-            --dark: #0F0F1A;
-            --light-bg: #FFFAF5;
-            --text-muted: #6B7B8D;
-            --text-dark: #2D2D2D;
-            --card-border: #FFE8D6;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; color: var(--text-dark); background: var(--light-bg); }
-        .sidebar { width: 260px; background: var(--secondary); height: 100vh; position: fixed; top: 0; left: 0; z-index: 1000; transition: all 0.3s; }
-        .sidebar.collapsed { width: 70px; }
-        .sidebar-header { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .brand-logo { width: 40px; height: 40px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; margin: 0 auto 12px; }
-        .brand-text { color: white; font-weight: 700; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .sidebar.collapsed .brand-text { display: none; }
-        .nav-section { padding: 0 16px; margin-top: 20px; }
-        .nav-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.4); padding: 0 16px; margin-bottom: 8px; }
-        .nav-link { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: rgba(255,255,255,0.7); text-decoration: none; border-radius: 8px; margin-bottom: 4px; transition: all 0.2s; }
-        .nav-link:hover, .nav-link.active { background: rgba(230,92,0,0.15); color: var(--primary); }
-        .nav-link i { width: 20px; text-align: center; font-size: 1.1rem; }
-        .main-content { margin-left: 260px; padding: 30px; min-height: 100vh; }
-        .topbar { background: white; border-bottom: 1px solid #eee; padding: 16px 32px; position: sticky; top: 0; z-index: 100; }
-        .topbar .user-menu { display: flex; align-items: center; gap: 16px; }
-        .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; }
-        .card { border: 1px solid #eee; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .table th { background: #f8f9fa; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-card { background: #fff; border-radius: 12px; padding: 25px; border: 1px solid var(--card-border); text-align: center; transition: 0.3s; }
-        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
-        .stat-card .stat-icon { width: 60px; height: 60px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 15px; background: var(--orange-soft); color: var(--primary); }
-        .stat-card h3 { font-size: 28px; font-weight: 700; color: var(--secondary); margin-bottom: 5px; }
-        .stat-card p { color: var(--text-muted); font-size: 13px; margin: 0; }
-        .section-title { font-size: 24px; font-weight: 700; color: var(--secondary); margin-bottom: 20px; }
-        .recent-table th { background: #f8f9fa; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; border: none; }
-        .recent-table td { vertical-align: middle; }
-        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-        .status-paid { background: #d4edda; color: #15803d; }
-        .status-unpaid { background: #f8d7da; color: #dc3545; }
-        .status-pending { background: #fff3cd; color: #856404; }
-        .status-completed { background: #d4edda; color: #15803d; }
-        .chart-bar { height: 30px; background: var(--primary); border-radius: 4px; display: flex; align-items: flex-end; justify-content: center; color: #fff; font-size: 10px; font-weight: 600; }
-        .chart-row { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 8px; }
-        .chart-label { font-size: 11px; color: var(--text-muted); min-width: 80px; }
-        .chart-value { font-size: 12px; font-weight: 600; color: var(--text-dark); }
-    </style>
-</head>
-<body data-active="dashboard">
-    <div class="shell d-flex">
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="brand-logo"><i class="fas fa-cube"></i></div>
-                <div class="brand-text">NgAppID Admin</div>
-            </div>
-            <nav class="nav-section">
-                <div class="nav-label">Menu Utama</div>
-                <a class="nav-link active" href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-                <a class="nav-link" href="/admin/customers"><i class="fas fa-users"></i><span>Customers</span></a>
-                <a class="nav-link" href="/admin/products"><i class="fas fa-box"></i><span>Products</span></a>
-                <a class="nav-link" href="/admin/orders"><i class="fas fa-shopping-cart"></i><span>Orders</span></a>
-                <a class="nav-link" href="/admin/invoices"><i class="fas fa-file-invoice"></i><span>Invoices</span></a>
-                <a class="nav-link" href="/admin/reports"><i class="fas fa-chart-bar"></i><span>Reports</span></a>
-                <a class="nav-link" href="/admin/settings"><i class="fas fa-cog"></i><span>Settings</span></a>
-                <a class="nav-link" href="/admin/media"><i class="fas fa-images"></i><span>Media</span></a>
-            </nav>
-            <nav class="nav-section">
-                <div class="nav-label">CMS</div>
-                <a class="nav-link" href="/admin/cms"><i class="fas fa-tachometer-alt"></i><span>CMS Dashboard</span></a>
-                <a class="nav-link" href="/admin/cms/pages"><i class="fas fa-file"></i><span>Pages</span></a>
-                <a class="nav-link" href="/admin/cms/articles"><i class="fas fa-newspaper"></i><span>Articles</span></a>
-            </nav>
-            <nav class="nav-section">
-                <div class="nav-label">Lainnya</div>
-                <a class="nav-link" href="/admin/testimonial"><i class="fas fa-quote-left"></i><span>Testimonials</span></a>
-                <a class="nav-link" href="/admin/support"><i class="fas fa-life-ring"></i><span>Support</span></a>
-                <a class="nav-link" href="/auth/logout"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
-            </nav>
-        </aside>
-        <div class="main-content">
-            <header class="topbar">
-                <button class="sidebar-toggle" data-sidebar-toggle><i class="fas fa-bars"></i></button>
-                <div class="user-menu">
-                    <div class="user-avatar"><?= esc(strtoupper(substr(session()->get('username') ?? 'A', 0, 1))) ?></div>
-                    <span class="text-dark"><?= esc(session()->get('username') ?? 'Admin') ?></span>
-                </div>
-            </header>
-            <main class="content" style="padding: 30px;">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Customers</h5>
-                                <p class="card-text"><?= number_format($stats['total_customers']) ?></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Products</h5>
-                                <p class="card-text"><?= number_format($stats['total_products']) ?></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Services</h5>
-                                <p class="card-text"><?= number_format($stats['total_services']) ?></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Portfolios</h5>
-                                <p class="card-text"><?= number_format($stats['total_portfolios']) ?></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Orders</h5>
-                                <p class="card-text"><?= number_format($stats['total_orders']) ?></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Invoices</h5>
-                                <p class="card-text"><?= number_format($stats['total_invoices']) ?></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Revenue</h5>
-                                <p class="card-text">Rp <?= number_format($stats['total_revenue']) ?></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+﻿<?= $this->extend('layout/layout_adminarea') ?>
 
-                <div class="row mt-5">
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header bg-primary text-white">
-                                <h5 class="card-title mb-0">Order Status Breakdown</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>Pending</div>
-                                            <div class="text-success"><?= number_format($orderStatus['pending'] ?? 0) ?></div>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: <?= min(100, (($stats['pending_orders'] ?? 0) / ($stats['total_orders'] ?: 1)) * 100) ?>%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="d-flex justify-content-between">
-                                    <div>Waiting Payment</div>
-                                    <div class="text-success"><?= number_format($stats['pending_invoices'] ?? 0) ?></div>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar bg-warning" role="progressbar" style="width: <?= min(100, (($stats['pending_invoices'] ?? 0) / ($stats['total_orders'] ?: 1)) * 100) ?>%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header bg-primary text-white">
-                                <h5 class="card-title mb-0">Payment Status Breakdown</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>Success</div>
-                                            <div class="text-success"><?= number_format($paymentStatus['success'] ?? 0) ?></div>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: <?= (empty($paymentStatus['success']) ? 0 : ($paymentStatus['success'] / (($paymentStatus['success'] ?? 0) + ($paymentStatus['unpaid'] ?? 0)) ?: 1) * 100) ?>%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="d-flex justify-content-between">
-                                    <div>Unpaid</div>
-                                    <div class="text-danger"><?= number_format($paymentStatus['unpaid'] ?? 0) ?></div>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar bg-danger" role="progressbar" style="width: <?= min(100, (($paymentStatus['unpaid'] ?? 0) / (($paymentStatus['success'] ?? 0) + ($paymentStatus['unpaid'] ?? 0) ?: 1)) * 100) ?>%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<?= $this->section('content') ?>
+
+<div class="page-title">
+    <h3>Dashboard</h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+    </nav>
+</div>
+
+<!-- Stats Cards - 1 row x 4 columns -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-3 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:var(--primary-soft);color:var(--primary)"><i class="fas fa-users"></i></div>
+                    <div class="kpi-label">Customers</div>
                 </div>
-            </main>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['total_customers'] ?? 0) ?></div>
+            <div class="kpi-subtext">Total pelanggan terdaftar</div>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggle = document.querySelector('[data-sidebar-toggle]');
-            const sidebar = document.getElementById('sidebar');
-            toggle?.addEventListener('click', function() {
-                sidebar.classList.toggle('collapsed');
-                document.body.classList.toggle('sidebar-collapsed');
-            });
-        });
-    </script>
-</body>
-</html>
-</path>
+    <div class="col-xl-3 col-md-3 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:rgba(56,189,248,.12);color:#0284c7"><i class="fas fa-shopping-cart"></i></div>
+                    <div class="kpi-label">Orders</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['total_orders'] ?? 0) ?></div>
+            <div class="kpi-subtext"><?= $stats['pending_orders'] ?? 0 ?> pending</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-3 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:rgba(16,185,129,.12);color:#059669"><i class="fas fa-money-bill-wave"></i></div>
+                    <div class="kpi-label">Revenue</div>
+                </div>
+            </div>
+            <div class="kpi-value">Rp <?= number_format($stats['total_revenue'] ?? 0, 0, ',', '.') ?></div>
+            <div class="kpi-subtext"><?= $stats['total_payments'] ?? 0 ?> pembayaran sukses</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-3 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:rgba(245,158,11,.14);color:#b45309"><i class="fas fa-clock"></i></div>
+                    <div class="kpi-label">Pending Orders</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['pending_orders'] ?? 0) ?></div>
+            <div class="kpi-subtext"><?= $stats['pending_invoices'] ?? 0 ?> invoice belum bayar</div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Cards - row 2 -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-3 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:var(--primary-soft);color:var(--primary)"><i class="fas fa-box"></i></div>
+                    <div class="kpi-label">Products</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['total_products'] ?? 0) ?></div>
+            <div class="kpi-subtext">Produk aktif</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-3 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:var(--primary-soft);color:var(--primary)"><i class="fas fa-cogs"></i></div>
+                    <div class="kpi-label">Services</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['total_services'] ?? 0) ?></div>
+            <div class="kpi-subtext">Layanan aktif</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-3 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:rgba(239,68,68,.12);color:#dc2626"><i class="fas fa-headset"></i></div>
+                    <div class="kpi-label">Open Tickets</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['pending_tickets'] ?? 0) ?></div>
+            <div class="kpi-subtext">Ticket belum selesai</div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-3 mb-4">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <div class="kpi-identity">
+                    <div class="kpi-icon" style="background:var(--primary-soft);color:var(--primary)"><i class="fas fa-quote-left"></i></div>
+                    <div class="kpi-label">Testimonials</div>
+                </div>
+            </div>
+            <div class="kpi-value"><?= number_format($stats['total_testimonials'] ?? 0) ?></div>
+            <div class="kpi-subtext">Testimoni disetujui</div>
+        </div>
+    </div>
+</div>
+
+<!-- Revenue Chart & Order Status -->
+<div class="row mb-4">
+    <div class="col-xl-8 col-lg-7">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Revenue (6 Bulan Terakhir)</div>
+            </div>
+            <div class="card-body">
+                <canvas id="revenueChart" height="120"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-lg-5">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Order Status</div>
+            </div>
+            <div class="card-body">
+                <?php
+                $orderColors = [
+                    'completed' => '#059669', 'paid' => '#059669',
+                    'processing' => '#0284c7', 'pending' => '#d97706',
+                    'waiting_payment' => '#ea580c', 'cancelled' => '#dc2626',
+                    'expired' => '#64748b',
+                ];
+                $orderLabels = [
+                    'completed' => 'Completed', 'paid' => 'Paid',
+                    'processing' => 'Processing', 'pending' => 'Pending',
+                    'waiting_payment' => 'Waiting Payment', 'cancelled' => 'Cancelled',
+                    'expired' => 'Expired',
+                ];
+                $totalOrders = array_sum($orderStatus) ?: 1;
+                foreach ($orderStatus as $status => $count):
+                    $pct = round(($count / $totalOrders) * 100);
+                    $color = $orderColors[$status] ?? '#64748b';
+                    $label = $orderLabels[$status] ?? ucfirst($status);
+                ?>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span style="color:var(--t-base);font-size:13px"><?= $label ?></span>
+                        <span style="color:<?= $color ?>;font-size:13px"><?= $count ?> (<?= $pct ?>%)</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" style="width:<?= $pct ?>%; background:<?= $color ?>"></div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+                <?php if (empty($orderStatus)): ?>
+                <p class="text-muted text-center">Belum ada order</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Orders & Payments -->
+<div class="row mb-4">
+    <div class="col-xl-8 col-lg-7">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Recent Orders</div>
+                <a href="/admin/orders" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body" style="padding:8px 16px">
+                <?php if (!empty($recentOrders)): ?>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr><th>Order #</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($recentOrders as $order): ?>
+                            <tr>
+                                <td><strong><?= esc($order->order_number ?? '#' . $order->id) ?></strong></td>
+                                <td><?= esc($order->username ?? 'N/A') ?></td>
+                                <td>Rp <?= number_format($order->total ?? 0, 0, ',', '.') ?></td>
+                                <td>
+                                    <?php $sc = match($order->status ?? '') {
+                                        'paid','completed' => 'bg-success', 'pending' => 'bg-warning',
+                                        'processing' => 'bg-info', 'cancelled' => 'bg-danger',
+                                        default => 'bg-secondary'
+                                    }; ?>
+                                    <span class="badge <?= $sc ?>"><?= ucfirst(esc($order->status ?? 'pending')) ?></span>
+                                </td>
+                                <td><?= date('d M Y', strtotime($order->created_at)) ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php else: ?>
+                <div class="text-center py-4"><p class="mb-0">Belum ada order</p></div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4 col-lg-5">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Recent Payments</div>
+                <a href="/admin/payments" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body">
+                <?php if (!empty($recentPayments)): ?>
+                <?php foreach ($recentPayments as $pm): ?>
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <div>
+                        <strong style="font-size:13px"><?= esc($pm->username ?? 'N/A') ?></strong>
+                        <br><small class="text-muted">Rp <?= number_format($pm->amount ?? 0, 0, ',', '.') ?></small>
+                    </div>
+                    <?php $pmc = match($pm->status ?? '') {
+                        'success' => 'bg-success', 'pending' => 'bg-warning',
+                        'failed' => 'bg-danger', default => 'bg-secondary'
+                    }; ?>
+                    <span class="badge <?= $pmc ?>"><?= ucfirst($pm->status ?? '') ?></span>
+                </div>
+                <?php endforeach; ?>
+                <?php else: ?>
+                <p class="text-muted text-center">Belum ada pembayaran</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Invoices & Tickets -->
+<div class="row mb-4">
+    <div class="col-xl-8 col-lg-7">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Recent Invoices</div>
+                <a href="/admin/invoices" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body" style="padding:8px 16px">
+                <?php if (!empty($recentInvoices)): ?>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr><th>Invoice #</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($recentInvoices as $inv): ?>
+                            <tr>
+                                <td><strong><?= esc($inv->invoice_number ?? '#' . $inv->id) ?></strong></td>
+                                <td><?= esc($inv->username ?? 'N/A') ?></td>
+                                <td>Rp <?= number_format($inv->total ?? 0, 0, ',', '.') ?></td>
+                                <td>
+                                    <?php $ic = match($inv->status ?? '') {
+                                        'paid' => 'bg-success', 'unpaid' => 'bg-warning',
+                                        'expired' => 'bg-danger', default => 'bg-secondary'
+                                    }; ?>
+                                    <span class="badge <?= $ic ?>"><?= ucfirst($inv->status ?? 'draft') ?></span>
+                                </td>
+                                <td><?= date('d M Y', strtotime($inv->created_at ?? '')) ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php else: ?>
+                <p class="text-muted text-center">Belum ada invoice</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-lg-5">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Recent Tickets</div>
+                <a href="/admin/support" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body">
+                <?php if (!empty($recentTickets)): ?>
+                <?php foreach ($recentTickets as $tk): ?>
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <div>
+                        <strong style="font-size:13px"><?= esc($tk->subject ?? '') ?></strong>
+                        <br><small class="text-muted"><?= esc($tk->username ?? '') ?> · <?= date('d M Y', strtotime($tk->created_at ?? '')) ?></small>
+                    </div>
+                    <?php $tkc = match($tk->status ?? '') {
+                        'open' => 'bg-warning', 'waiting_response' => 'bg-info',
+                        'resolved' => 'bg-success', 'closed' => 'bg-secondary',
+                        default => 'bg-secondary'
+                    }; ?>
+                    <span class="badge <?= $tkc ?>"><?= ucfirst(str_replace('_', ' ', $tk->status ?? '')) ?></span>
+                </div>
+                <?php endforeach; ?>
+                <?php else: ?>
+                <p class="text-muted text-center">Belum ada ticket</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Testimonials & Top Products & Recent Activity -->
+<div class="row mb-4">
+    <div class="col-xl-4 col-lg-5">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Recent Testimonials</div>
+                <a href="/admin/testimonials" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body">
+                <?php if (!empty($recentTestimonials)): ?>
+                <?php foreach ($recentTestimonials as $tm): ?>
+                <div class="py-2 border-bottom">
+                    <div class="d-flex align-items-center mb-1">
+                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                            <i class="fas fa-star" style="font-size:11px; color:<?= $i <= ($tm->rating ?? 5) ? '#f59e0b' : '#e2e8f0' ?>"></i>
+                        <?php endfor; ?>
+                        <span class="ms-2 fw-bold" style="font-size:13px"><?= esc($tm->customer_name ?? '') ?></span>
+                        <?php $tmc = match($tm->status ?? '') {
+                            'approved' => 'bg-success', 'rejected' => 'bg-danger', default => 'bg-warning'
+                        }; ?>
+                        <span class="badge <?= $tmc ?> ms-2" style="font-size:10px"><?= ucfirst($tm->status ?? '') ?></span>
+                    </div>
+                    <p class="mb-0 text-muted" style="font-size:12px; line-height:1.5"><?= esc(substr($tm->message ?? '', 0, 80)) ?>...</p>
+                </div>
+                <?php endforeach; ?>
+                <?php else: ?>
+                <p class="text-muted text-center">Belum ada testimoni</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-8 col-lg-7">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Top Products</div>
+                <a href="/admin/products" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body" style="padding:8px 16px">
+                <?php if (!empty($topProducts)): ?>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr><th>Product</th><th>Sold</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($topProducts as $tp): ?>
+                            <tr>
+                                <td><strong><?= esc($tp->name ?? '') ?></strong></td>
+                                <td><?= $tp->sold_count ?? 0 ?> orders</td>
+                                <td>
+                                    <?php $tpsc = match($tp->status ?? '') {
+                                        'active' => 'bg-success', default => 'bg-secondary'
+                                    }; ?>
+                                    <span class="badge <?= $tpsc ?>"><?= ucfirst($tp->status ?? '') ?></span>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php else: ?>
+                <p class="text-muted text-center">Belum ada produk</p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Recent Activity</div>
+            </div>
+            <div class="card-body" style="padding:8px 16px">
+                <?php if (!empty($recentActivity)): ?>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr><th>User</th><th>Action</th><th>Description</th><th>Time</th></tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($recentActivity as $act): ?>
+                            <tr>
+                                <td><?= esc($act->username ?? 'System') ?></td>
+                                <td><span class="badge bg-info"><?= esc($act->activity_type ?? '') ?></span></td>
+                                <td><?= esc(substr($act->description ?? '', 0, 50)) ?></td>
+                                <td class="text-nowrap"><?= date('d M H:i', strtotime($act->created_at ?? '')) ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php else: ?>
+                <p class="text-muted text-center">Belum ada aktivitas</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+const revenueData = <?= json_encode($revenueChart ?? []) ?>;
+const labels = revenueData.map(d => d.month);
+const values = revenueData.map(d => d.revenue);
+new Chart(document.getElementById('revenueChart'), {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Revenue (Rp)',
+            data: values,
+            backgroundColor: 'rgba(230, 92, 0, 0.7)',
+            borderColor: '#E65C00',
+            borderWidth: 1,
+            borderRadius: 6,
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                callbacks: { label: ctx => 'Rp ' + ctx.raw.toLocaleString('id-ID') }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: { callback: v => 'Rp ' + v.toLocaleString('id-ID') },
+                grid: { color: 'rgba(0,0,0,0.05)' }
+            },
+            x: { grid: { display: false } }
+        }
+    }
+});
+</script>
+<?= $this->endSection() ?>
