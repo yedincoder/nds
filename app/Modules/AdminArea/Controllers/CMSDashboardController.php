@@ -281,6 +281,41 @@ class CMSDashboardController extends \App\Controllers\AdminBaseController
             ->with('success', 'Category deleted successfully');
     }
 
+    public function editCategory(int $id): string|RedirectResponse
+    {
+        $category = $this->categoryModel->find($id);
+        if (!$category) {
+            return redirect()->to('/admin/cms/categories')
+                ->with('error', 'Category not found.');
+        }
+
+        $data = [
+            'title' => 'Edit Category',
+            'page'  => 'admin/cms/categories',
+            'category' => $category,
+        ];
+
+        return view('AdminArea/cms/category_form', $data);
+    }
+
+    public function updateCategory(int $id): RedirectResponse
+    {
+        $category = $this->categoryModel->find($id);
+        if (!$category) {
+            return redirect()->to('/admin/cms/categories')
+                ->with('error', 'Category not found.');
+        }
+
+        $this->categoryModel->update($id, [
+            'name' => $this->request->getPost('name'),
+            'slug' => $this->request->getPost('slug'),
+            'description' => $this->request->getPost('description'),
+        ]);
+
+        return redirect()->to('/admin/cms/categories')
+            ->with('success', 'Category updated successfully');
+    }
+
     // =====================================================
     // TAGS
     // =====================================================

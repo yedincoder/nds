@@ -15,6 +15,7 @@
 <div class="card">
     <div class="card-header">
         <div class="card-title">Manage Products</div>
+        <a href="/admin/products/create" class="btn btn-sm btn-primary"><i class="fas fa-plus me-1"></i>Add Product</a>
     </div>
     <div class="card-body" style="padding:8px 16px">
         <div class="table-responsive">
@@ -26,6 +27,7 @@
                         <th>Price</th>
                         <th>Status</th>
                         <th>Created</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,14 +38,20 @@
                                 <td><strong><?= esc($product->name ?? '-') ?></strong><br><small class="text-muted"><?= esc($product->slug ?? '') ?></small></td>
                                 <td>Rp <?= number_format($product->price ?? 0, 0, ',', '.') ?></td>
                                 <td>
-                                    <?php $st = ($product->status ?? 'active') === 'active' ? 'bg-success' : 'bg-secondary'; ?>
+                                    <?php $st = ($product->status ?? 'active') === 'active' ? 'bg-success' : ($product->status === 'draft' ? 'bg-secondary' : 'bg-warning'); ?>
                                     <span class="badge <?= $st ?>"><?= ucfirst(esc($product->status ?? 'active')) ?></span>
                                 </td>
                                 <td><?= date('d M Y', strtotime($product->created_at ?? '')) ?></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="/admin/products/edit/<?= esc($product->id) ?>" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
+                                        <a href="/admin/products/delete/<?= esc($product->id) ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this product?')"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <tr><td colspan="5" class="text-center py-4">Belum ada produk</td></tr>
+                        <tr><td colspan="6" class="text-center py-4">Belum ada produk</td></tr>
                     <?php endif; ?>
                 </tbody>
             </table>

@@ -348,4 +348,59 @@ class AdminDashboardController extends AdminBaseController
 
         return view('AdminArea/dashboard/settings', $data);
     }
+
+    public function factoryReset()
+    {
+        if ($this->request->getMethod() !== 'post') {
+            return redirect()->to('/admin/settings')
+                ->with('error', 'Invalid request.');
+        }
+
+        $password = $this->request->getPost('password');
+        if (empty($password)) {
+            return redirect()->to('/admin/settings')
+                ->with('error', 'Password required to rebuild database.');
+        }
+
+        // Verify admin password
+        $db = \Config\Database::connect();
+        $user = $db->table('users')->where('id', session()->get('user_id'))->get()->getRow();
+        if (!$user || !password_verify($password, $user->password_hash)) {
+            return redirect()->to('/admin/settings')
+                ->with('error', 'Password salah. Tidak bisa rebuild database.');
+        }
+
+        // Run fresh migrations (drop all + re-run)
+        $migrate = \Config\Services::migrations();
+        try {
+            $migrate->setSilent(false);
+            $migrate->latest();
+        } catch (\Exception $e) {
+            // Try rollback then latest
+            try {
+                $migrate->regress(0);
+                $migrate->latest();
+            } catch (\Throwable $th) {
+                return redirect()->to('/admin/settings')
+                    ->with('error', 'Database rebuild failed: ' . esc($th->getMessage()));
+            }
+        }
+
+        // Log activity
+        try {
+            $db->table('activity_logs')->insert([
+                'uuid' => date('YmdHis') . substr(md5(uniqid('', true)), 0, 8),
+                'user_id' => session()->get('user_id'),
+                'activity_type' => 'factory_reset',
+                'description' => 'Database rebuilt (factory reset) by ' . ($user->username ?? 'admin'),
+                'ip_address' => $this->request->getIPAddress(),
+                'created_at' => date('Y-m-d H:i:s'),
+            ]);
+        } catch (\Throwable $e) {
+            // ignore log failure
+        }
+
+        return redirect()->to('/admin/settings')
+            ->with('success', 'Database berhasil di-rebuild (factory reset).');
+    }
 }

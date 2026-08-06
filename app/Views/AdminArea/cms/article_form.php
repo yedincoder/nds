@@ -40,7 +40,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Content *</label>
-                <textarea class="form-control" name="content" rows="10" required><?= esc($article->content ?? set_value('content')) ?></textarea>
+                <textarea class="form-control ckeditor" name="content" rows="10" required><?= esc($article->content ?? set_value('content')) ?></textarea>
             </div>
             <div class="row g-3 mb-3">
                 <div class="col-md-4">
@@ -95,4 +95,13 @@
     </div>
 </div>
 
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+<script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
+<script>
+document.querySelectorAll('.ckeditor').forEach(function(el) {
+    ClassicEditor.create(el).catch(function(err) { console.error(err); });
+});
+</script>
 <?= $this->endSection() ?>

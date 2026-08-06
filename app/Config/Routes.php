@@ -138,13 +138,11 @@ $routes->group('client', ['filter' => 'auth'], function ($routes) {
 $routes->group('admin', ['filter' => 'permission:users.read'], function ($routes) {
     $routes->get('dashboard', '\App\Modules\AdminArea\Controllers\AdminDashboardController::index');
     $routes->get('customers', '\App\Modules\AdminArea\Controllers\AdminDashboardController::customers');
-    $routes->get('products', '\App\Modules\AdminArea\Controllers\AdminDashboardController::products');
     $routes->get('orders', '\App\Modules\AdminArea\Controllers\AdminDashboardController::orders');
     $routes->get('invoices', '\App\Modules\AdminArea\Controllers\AdminDashboardController::invoices');
     $routes->get('reports', '\App\Modules\AdminArea\Controllers\AdminDashboardController::reports');
-    $routes->get('portfolio', '\App\Modules\AdminArea\Controllers\AdminDashboardController::portfolio');
-    $routes->get('services', '\App\Modules\AdminArea\Controllers\AdminDashboardController::services');
     $routes->get('settings', '\App\Modules\AdminArea\Controllers\AdminDashboardController::settings');
+    $routes->post('settings/factory-reset', '\App\Modules\AdminArea\Controllers\AdminDashboardController::factoryReset');
     $routes->get('payments', '\App\Modules\AdminArea\Controllers\AdminDashboardController::payments');
     $routes->get('media', '\App\Modules\AdminArea\Controllers\MediaController::index');
     $routes->get('support', '\App\Modules\AdminArea\Controllers\TicketController::index');
@@ -162,6 +160,39 @@ $routes->group('admin', ['filter' => 'permission:users.read'], function ($routes
     $routes->post('auth/update/(:num)', '\App\Modules\AdminArea\Controllers\UsersController::update/$1');
     $routes->get('auth/status/(:num)', '\App\Modules\AdminArea\Controllers\UsersController::toggleStatus/$1');
     $routes->get('auth/delete/(:num)', '\App\Modules\AdminArea\Controllers\UsersController::delete/$1');
+    
+    // Products CRUD
+    $routes->group('products', function ($routes) {
+        $routes->get('/', '\App\Modules\AdminArea\Controllers\ProductController::index');
+        $routes->get('create', '\App\Modules\AdminArea\Controllers\ProductController::create');
+        $routes->post('create', '\App\Modules\AdminArea\Controllers\ProductController::store');
+        $routes->get('edit/(:num)', '\App\Modules\AdminArea\Controllers\ProductController::edit/$1');
+        $routes->post('update/(:num)', '\App\Modules\AdminArea\Controllers\ProductController::update/$1');
+        $routes->get('delete/(:num)', '\App\Modules\AdminArea\Controllers\ProductController::delete/$1');
+        $routes->get('file/delete/(:num)', '\App\Modules\AdminArea\Controllers\ProductController::deleteFile/$1');
+        $routes->post('license/create/(:num)', '\App\Modules\AdminArea\Controllers\ProductController::createLicense/$1');
+        $routes->get('license/delete/(:num)', '\App\Modules\AdminArea\Controllers\ProductController::deleteLicense/$1');
+    });
+
+    // Portfolio CRUD
+    $routes->group('portfolio', function ($routes) {
+        $routes->get('/', '\App\Modules\AdminArea\Controllers\PortfolioController::index');
+        $routes->get('create', '\App\Modules\AdminArea\Controllers\PortfolioController::create');
+        $routes->post('create', '\App\Modules\AdminArea\Controllers\PortfolioController::store');
+        $routes->get('edit/(:num)', '\App\Modules\AdminArea\Controllers\PortfolioController::edit/$1');
+        $routes->post('update/(:num)', '\App\Modules\AdminArea\Controllers\PortfolioController::update/$1');
+        $routes->get('delete/(:num)', '\App\Modules\AdminArea\Controllers\PortfolioController::delete/$1');
+    });
+
+    // Services CRUD
+    $routes->group('services', function ($routes) {
+        $routes->get('/', '\App\Modules\AdminArea\Controllers\ServiceController::index');
+        $routes->get('create', '\App\Modules\AdminArea\Controllers\ServiceController::create');
+        $routes->post('create', '\App\Modules\AdminArea\Controllers\ServiceController::store');
+        $routes->get('edit/(:num)', '\App\Modules\AdminArea\Controllers\ServiceController::edit/$1');
+        $routes->post('update/(:num)', '\App\Modules\AdminArea\Controllers\ServiceController::update/$1');
+        $routes->get('delete/(:num)', '\App\Modules\AdminArea\Controllers\ServiceController::delete/$1');
+    });
     
     // Testimonials
     $routes->get('testimonials', '\App\Modules\AdminArea\Controllers\TestimonialController::index');
@@ -190,11 +221,13 @@ $routes->group('admin', ['filter' => 'permission:users.read'], function ($routes
         $routes->get('articles/(:num)/delete', '\App\Modules\AdminArea\Controllers\CMSDashboardController::deleteArticle/$1');
         
         $routes->get('categories', '\App\Modules\AdminArea\Controllers\CMSDashboardController::categories');
-        $routes->post('categories/create', '\App\Modules\AdminArea\Controllers\CMSDashboardController::storeCategory');
+        $routes->post('categories/create', '\App\Modules\AdminArea\Controllers\CMSDashboardController::createCategory');
+        $routes->get('categories/edit/(:num)', '\App\Modules\AdminArea\Controllers\CMSDashboardController::editCategory/$1');
+        $routes->post('categories/update/(:num)', '\App\Modules\AdminArea\Controllers\CMSDashboardController::updateCategory/$1');
         $routes->get('categories/(:num)/delete', '\App\Modules\AdminArea\Controllers\CMSDashboardController::deleteCategory/$1');
         
         $routes->get('tags', '\App\Modules\AdminArea\Controllers\CMSDashboardController::tags');
-        $routes->post('tags/create', '\App\Modules\AdminArea\Controllers\CMSDashboardController::storeTag');
+        $routes->post('tags/create', '\App\Modules\AdminArea\Controllers\CMSDashboardController::createTag');
         $routes->get('tags/(:num)/delete', '\App\Modules\AdminArea\Controllers\CMSDashboardController::deleteTag/$1');
     });
     $routes->post('cms/upload-image', '\App\Modules\AdminArea\Controllers\CMSDashboardController::uploadImage');

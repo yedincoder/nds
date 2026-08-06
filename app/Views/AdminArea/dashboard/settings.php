@@ -57,4 +57,26 @@
     </div>
 </div>
 
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Database Management</div>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4">Factory Reset will drop all tables and re-run all migrations. This action is irreversible.</p>
+                <form method="post" action="/admin/settings/factory-reset" onsubmit="return confirm('Yakin ingin Factory Reset database? Semua data akan terhapus dan migrasi akan dijalankan ulang.')">
+                    <div class="mb-3">
+                        <label class="form-label">Admin Password *</label>
+                        <input type="password" class="form-control" name="password" required placeholder="Masukkan password admin">
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-danger"><i class="fas fa-database me-1"></i>Factory Reset Database</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?= $this->endSection() ?>
