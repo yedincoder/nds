@@ -172,7 +172,7 @@
                                     <div class="col">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>Pending</div>
-                                            <div class="text-success"><?= number_format($orderStatus['pending']) ?></div>
+                                            <div class="text-success"><?= number_format($orderStatus['pending'] ?? 0) ?></div>
                                         </div>
                                         <div class="progress">
                                             <div class="progress-bar bg-success" role="progressbar" style="width: <?= min(100, (($stats['pending_orders'] ?? 0) / ($stats['total_orders'] ?: 1)) * 100) ?>%"></div>
@@ -200,7 +200,7 @@
                                     <div class="col">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>Success</div>
-                                            <div class="text-success"><?= number_format($paymentStatus['success']) ?></div>
+                                            <div class="text-success"><?= number_format($paymentStatus['success'] ?? 0) ?></div>
                                         </div>
                                         <div class="progress">
                                             <div class="progress-bar bg-success" role="progressbar" style="width: <?= (empty($paymentStatus['success']) ? 0 : ($paymentStatus['success'] / (($paymentStatus['success'] ?? 0) + ($paymentStatus['unpaid'] ?? 0)) ?: 1) * 100) ?>%"></div>
@@ -210,10 +210,10 @@
                                 <hr>
                                 <div class="d-flex justify-content-between">
                                     <div>Unpaid</div>
-                                    <div class="text-danger"><?= number_format($paymentStatus['unpaid']) ?></div>
+                                    <div class="text-danger"><?= number_format($paymentStatus['unpaid'] ?? 0) ?></div>
                                 </div>
                                 <div class="progress">
-                                    <div class="progress-bar bg-danger" role="progressbar" style="width: <?= min(100, ($paymentStatus['unpaid'] / ((($paymentStatus['success'] ?? 0) + ($paymentStatus['unpaid'] ?? 0)) ?: 1)) * 100) ?>%"></div>
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: <?= min(100, (($paymentStatus['unpaid'] ?? 0) / (($paymentStatus['success'] ?? 0) + ($paymentStatus['unpaid'] ?? 0) ?: 1)) * 100) ?>%"></div>
                                 </div>
                             </div>
                         </div>
